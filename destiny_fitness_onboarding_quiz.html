@@ -1,0 +1,456 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  #quiz-root { min-height: 600px; padding: 0; }
+  .screen { display: none; flex-direction: column; min-height: 580px; }
+  .screen.active { display: flex; }
+  .progress-bar-wrap { height: 4px; background: #f5ccd4; border-radius: 2px; margin-bottom: 24px; }
+  .progress-bar-fill { height: 4px; background: linear-gradient(90deg, #e8829a, #c9a84c); border-radius: 2px; transition: width 0.4s ease; }
+  .brand-header { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+  .brand-dot { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(135deg, #e8829a, #c9a84c); }
+  .brand-name { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); letter-spacing: 1.5px; text-transform: uppercase; }
+  .screen-title { font-size: 22px; font-weight: 500; color: var(--color-text-primary); line-height: 1.3; margin-bottom: 6px; }
+  .screen-sub { font-size: 15px; color: var(--color-text-secondary); margin-bottom: 24px; line-height: 1.5; }
+  .options-grid { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .options-grid.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opt-card { background: var(--color-background-primary); border: 1.5px solid var(--color-border-tertiary); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: center; gap: 12px; }
+  .opt-card:hover { border-color: #e8829a; background: #fdf3f5; }
+  .opt-card.selected { border-color: #e8829a; background: #fdf3f5; }
+  .opt-icon { font-size: 20px; min-width: 28px; text-align: center; }
+  .opt-label { font-size: 15px; color: var(--color-text-primary); font-weight: 400; }
+  .opt-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+  .cta-btn { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(135deg, #e8829a, #d4739b, #c9a84c); color: white; font-size: 16px; font-weight: 500; cursor: pointer; margin-top: 20px; letter-spacing: 0.3px; transition: opacity 0.15s; }
+  .cta-btn:hover { opacity: 0.92; }
+  .cta-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .cta-btn-outline { width: 100%; padding: 13px; border-radius: 12px; border: 1.5px solid #e8829a; background: transparent; color: #c9617a; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 10px; transition: all 0.15s; }
+  .cta-btn-outline:hover { background: #fdf3f5; }
+  .welcome-hero { text-align: center; padding: 20px 0 10px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .logo-circle { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, #f5ccd4, #fae8c5); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 2px solid #e8829a; }
+  .logo-text-d { font-size: 36px; color: #c9617a; font-weight: 700; font-style: italic; }
+  .welcome-title { font-size: 28px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 10px; line-height: 1.2; }
+  .welcome-sub { font-size: 16px; color: var(--color-text-secondary); line-height: 1.6; max-width: 320px; margin: 0 auto 8px; }
+  .pill-badge { display: inline-block; background: #fdf3f5; color: #c9617a; font-size: 12px; border-radius: 20px; padding: 4px 12px; border: 1px solid #f5b8c4; margin-bottom: 24px; }
+  .input-wrap { margin-bottom: 14px; }
+  .input-label { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 6px; display: block; }
+  .text-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--color-border-tertiary); border-radius: 10px; font-size: 16px; color: var(--color-text-primary); background: var(--color-background-primary); outline: none; transition: border-color 0.15s; }
+  .text-input:focus { border-color: #e8829a; }
+  .unit-toggle { display: flex; gap: 8px; margin-bottom: 16px; }
+  .unit-btn { padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--color-border-tertiary); background: transparent; font-size: 13px; color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+  .unit-btn.active { border-color: #e8829a; background: #fdf3f5; color: #c9617a; }
+  .processing-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 540px; text-align: center; }
+  .spinner-ring { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #f5ccd4; border-top: 3px solid #e8829a; animation: spin 0.9s linear infinite; margin: 0 auto 24px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing-step { font-size: 16px; color: var(--color-text-secondary); min-height: 28px; transition: opacity 0.3s; }
+  .results-header { background: linear-gradient(135deg, #fdf3f5, #faf4e8); border-radius: 14px; padding: 20px; margin-bottom: 18px; border: 1px solid #f5ccd4; }
+  .result-goal-badge { display: inline-block; background: linear-gradient(135deg, #e8829a, #c9a84c); color: white; font-size: 12px; padding: 4px 14px; border-radius: 20px; font-weight: 500; margin-bottom: 12px; }
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .stat-card { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: 10px; padding: 12px 14px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 500; color: #c9617a; }
+  .stat-lbl { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+  .tier-card { border-radius: 14px; padding: 18px; margin-bottom: 12px; border: 1.5px solid; cursor: pointer; transition: all 0.15s; }
+  .tier-card:hover { transform: translateY(-1px); }
+  .tier-basic { border-color: #d4d4d4; background: var(--color-background-primary); }
+  .tier-pro { border-color: #e8829a; background: #fdf3f5; }
+  .tier-elite { border-color: #c9a84c; background: #faf4e8; }
+  .tier-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+  .tier-basic .tier-badge { background: #f0f0f0; color: #666; }
+  .tier-pro .tier-badge { background: #fde8ed; color: #c9617a; }
+  .tier-elite .tier-badge { background: #fae8c5; color: #9a7224; }
+  .tier-title { font-size: 17px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .tier-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+  .tier-price { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-top: 8px; }
+  .recommended-tag { float: right; background: linear-gradient(135deg, #e8829a, #c9a84c); color: white; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .prediction-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--color-border-tertiary); }
+  .prediction-icon { font-size: 18px; min-width: 28px; }
+  .prediction-text { font-size: 14px; color: var(--color-text-primary); }
+  .back-btn { background: none; border: none; color: var(--color-text-secondary); font-size: 14px; cursor: pointer; padding: 4px 0; display: flex; align-items: center; gap: 4px; margin-bottom: 16px; }
+  .back-btn:hover { color: var(--color-text-primary); }
+  .progress-label { font-size: 12px; color: var(--color-text-secondary); text-align: right; margin-bottom: 6px; }
+</style>
+
+<div id="quiz-root">
+  <div id="s-welcome" class="screen active">
+    <div class="welcome-hero">
+      <div class="logo-circle"><span class="logo-text-d">D</span></div>
+      <div class="pill-badge">only takes 60 seconds</div>
+      <h1 class="welcome-title">Build Your<br>Dream Body</h1>
+      <p class="welcome-sub">Answer a few quick questions so we can personalize your fitness plan just for you</p>
+    </div>
+    <button class="cta-btn" onclick="goTo('s-goal')">Get Started →</button>
+  </div>
+
+  <div id="s-goal" class="screen">
+    <div class="brand-header"><div class="brand-dot"></div><span class="brand-name">Destiny Fitness</span></div>
+    <div class="progress-label" id="pl-goal">Step 1 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:6%"></div></div>
+    <h2 class="screen-title">What's your main goal?</h2>
+    <p class="screen-sub">We'll build your entire plan around this</p>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'goal','fat_loss');autoNext('s-focus')"><span class="opt-icon">🔥</span><div><div class="opt-label">Lose weight / burn fat</div><div class="opt-sub">Calorie deficit + cardio focus</div></div></div>
+      <div class="opt-card" onclick="select(this,'goal','glute_growth');autoNext('s-focus')"><span class="opt-icon">🍑</span><div><div class="opt-label">Grow glutes / build muscle</div><div class="opt-sub">Calorie surplus + strength focus</div></div></div>
+      <div class="opt-card" onclick="select(this,'goal','tone');autoNext('s-focus')"><span class="opt-icon">✨</span><div><div class="opt-label">Tone & sculpt</div><div class="opt-sub">Recomposition + high protein</div></div></div>
+      <div class="opt-card" onclick="select(this,'goal','maintain');autoNext('s-focus')"><span class="opt-icon">💪</span><div><div class="opt-label">Stay fit & maintain</div><div class="opt-sub">Maintenance calories + consistency</div></div></div>
+    </div>
+  </div>
+
+  <div id="s-focus" class="screen">
+    <button class="back-btn" onclick="goTo('s-goal')">← Back</button>
+    <div class="progress-label">Step 2 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:12%"></div></div>
+    <h2 class="screen-title">What area do you want to improve most?</h2>
+    <p class="screen-sub">Helps us prioritize your workouts</p>
+    <div class="options-grid two-col">
+      <div class="opt-card" onclick="select(this,'focus','glutes');autoNext('s-commitment')"><span class="opt-icon">🍑</span><div class="opt-label">Glutes</div></div>
+      <div class="opt-card" onclick="select(this,'focus','core');autoNext('s-commitment')"><span class="opt-icon">⚡</span><div class="opt-label">Stomach / waist</div></div>
+      <div class="opt-card" onclick="select(this,'focus','legs');autoNext('s-commitment')"><span class="opt-icon">🦵</span><div class="opt-label">Legs</div></div>
+      <div class="opt-card" onclick="select(this,'focus','full_body');autoNext('s-commitment')"><span class="opt-icon">🌟</span><div class="opt-label">Full body</div></div>
+    </div>
+  </div>
+
+  <div id="s-commitment" class="screen">
+    <button class="back-btn" onclick="goTo('s-focus')">← Back</button>
+    <div class="progress-label">Step 3 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:18%"></div></div>
+    <h2 class="screen-title">How serious are you about your transformation?</h2>
+    <p class="screen-sub">Be honest — this helps us match you to the right plan</p>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'commitment','starter');autoNext('s-experience')"><span class="opt-icon">🌱</span><div><div class="opt-label">Just getting started</div><div class="opt-sub">Exploring my options</div></div></div>
+      <div class="opt-card" onclick="select(this,'commitment','committed');autoNext('s-experience')"><span class="opt-icon">🎯</span><div><div class="opt-label">Ready to commit</div><div class="opt-sub">I want a real plan I'll stick to</div></div></div>
+      <div class="opt-card" onclick="select(this,'commitment','allin');autoNext('s-experience')"><span class="opt-icon">🔥</span><div><div class="opt-label">All-in — fastest results possible</div><div class="opt-sub">I want coaching + accountability</div></div></div>
+    </div>
+  </div>
+
+  <div id="s-experience" class="screen">
+    <button class="back-btn" onclick="goTo('s-commitment')">← Back</button>
+    <div class="progress-label">Step 4 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:25%"></div></div>
+    <h2 class="screen-title">What's your fitness experience?</h2>
+    <p class="screen-sub">We'll calibrate your program difficulty</p>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'level','beginner');autoNext('s-days')"><span class="opt-icon">🌱</span><div><div class="opt-label">Beginner</div><div class="opt-sub">0–3 months of training</div></div></div>
+      <div class="opt-card" onclick="select(this,'level','intermediate');autoNext('s-days')"><span class="opt-icon">💪</span><div><div class="opt-label">Intermediate</div><div class="opt-sub">3–12 months of training</div></div></div>
+      <div class="opt-card" onclick="select(this,'level','advanced');autoNext('s-days')"><span class="opt-icon">🏆</span><div><div class="opt-label">Advanced</div><div class="opt-sub">1+ year of consistent training</div></div></div>
+    </div>
+  </div>
+
+  <div id="s-days" class="screen">
+    <button class="back-btn" onclick="goTo('s-experience')">← Back</button>
+    <div class="progress-label">Step 5 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:31%"></div></div>
+    <h2 class="screen-title">How many days can you realistically train?</h2>
+    <p class="screen-sub">We'll design your weekly split around your schedule</p>
+    <div class="options-grid two-col">
+      <div class="opt-card" onclick="select(this,'days','2_3');autoNext('s-location')"><div class="opt-label">2–3 days</div><div class="opt-sub">Full body focus</div></div>
+      <div class="opt-card" onclick="select(this,'days','3_4');autoNext('s-location')"><div class="opt-label">3–4 days</div><div class="opt-sub">Upper/lower split</div></div>
+      <div class="opt-card" onclick="select(this,'days','4_5');autoNext('s-location')"><div class="opt-label">4–5 days</div><div class="opt-sub">Glute-focused split</div></div>
+      <div class="opt-card" onclick="select(this,'days','5_6');autoNext('s-location')"><div class="opt-label">5–6 days</div><div class="opt-sub">High volume program</div></div>
+    </div>
+  </div>
+
+  <div id="s-location" class="screen">
+    <button class="back-btn" onclick="goTo('s-days')">← Back</button>
+    <div class="progress-label">Step 6 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:37%"></div></div>
+    <h2 class="screen-title">Where will you be working out?</h2>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'location','gym');autoNext('s-diet')"><span class="opt-icon">🏋️</span><div><div class="opt-label">Gym</div><div class="opt-sub">Full equipment access</div></div></div>
+      <div class="opt-card" onclick="select(this,'location','home');autoNext('s-diet')"><span class="opt-icon">🏠</span><div><div class="opt-label">Home</div><div class="opt-sub">Bodyweight or minimal equipment</div></div></div>
+      <div class="opt-card" onclick="select(this,'location','both');autoNext('s-diet')"><span class="opt-icon">🔄</span><div><div class="opt-label">Both</div><div class="opt-sub">Mix of gym and home</div></div></div>
+    </div>
+  </div>
+
+  <div id="s-diet" class="screen">
+    <button class="back-btn" onclick="goTo('s-location')">← Back</button>
+    <div class="progress-label">Step 7 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:43%"></div></div>
+    <h2 class="screen-title">How would you describe your current diet?</h2>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'diet','none');autoNext('s-meals')"><span class="opt-icon">🍕</span><div><div class="opt-label">No structure</div><div class="opt-sub">I eat whatever, whenever</div></div></div>
+      <div class="opt-card" onclick="select(this,'diet','somewhat');autoNext('s-meals')"><span class="opt-icon">🥗</span><div><div class="opt-label">Somewhat healthy</div><div class="opt-sub">Inconsistent but trying</div></div></div>
+      <div class="opt-card" onclick="select(this,'diet','consistent');autoNext('s-meals')"><span class="opt-icon">✅</span><div><div class="opt-label">Very consistent</div><div class="opt-sub">I track and plan meals</div></div></div>
+    </div>
+  </div>
+
+  <div id="s-meals" class="screen">
+    <button class="back-btn" onclick="goTo('s-diet')">← Back</button>
+    <div class="progress-label">Step 8 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:50%"></div></div>
+    <h2 class="screen-title">How many meals do you prefer per day?</h2>
+    <p class="screen-sub">Helps us structure your meal plan</p>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'meals','2_3');autoNext('s-diet-pref')"><span class="opt-icon">🍽️</span><div class="opt-label">2–3 meals</div></div>
+      <div class="opt-card" onclick="select(this,'meals','3_4');autoNext('s-diet-pref')"><span class="opt-icon">🍽️</span><div class="opt-label">3–4 meals</div></div>
+      <div class="opt-card" onclick="select(this,'meals','4_5');autoNext('s-diet-pref')"><span class="opt-icon">🍽️</span><div class="opt-label">4–5 meals</div></div>
+    </div>
+  </div>
+
+  <div id="s-diet-pref" class="screen">
+    <button class="back-btn" onclick="goTo('s-meals')">← Back</button>
+    <div class="progress-label">Step 9 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:56%"></div></div>
+    <h2 class="screen-title">Any dietary preferences?</h2>
+    <div class="options-grid two-col">
+      <div class="opt-card" onclick="select(this,'diet_pref','none');autoNext('s-struggle')"><div class="opt-label">None</div></div>
+      <div class="opt-card" onclick="select(this,'diet_pref','vegetarian');autoNext('s-struggle')"><div class="opt-label">Vegetarian</div></div>
+      <div class="opt-card" onclick="select(this,'diet_pref','vegan');autoNext('s-struggle')"><div class="opt-label">Vegan</div></div>
+      <div class="opt-card" onclick="select(this,'diet_pref','dairy_free');autoNext('s-struggle')"><div class="opt-label">Dairy-free</div></div>
+      <div class="opt-card" onclick="select(this,'diet_pref','gluten_free');autoNext('s-struggle')"><div class="opt-label">Gluten-free</div></div>
+      <div class="opt-card" onclick="select(this,'diet_pref','other');autoNext('s-struggle')"><div class="opt-label">Other</div></div>
+    </div>
+  </div>
+
+  <div id="s-struggle" class="screen">
+    <button class="back-btn" onclick="goTo('s-diet-pref')">← Back</button>
+    <div class="progress-label">Step 10 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:62%"></div></div>
+    <h2 class="screen-title">What's holding you back right now?</h2>
+    <p class="screen-sub">We'll address this directly in your plan</p>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'struggle','consistency');autoNext('s-activity')"><span class="opt-icon">📅</span><div class="opt-label">Staying consistent</div></div>
+      <div class="opt-card" onclick="select(this,'struggle','nutrition');autoNext('s-activity')"><span class="opt-icon">🍽️</span><div class="opt-label">Not knowing what to eat</div></div>
+      <div class="opt-card" onclick="select(this,'struggle','results');autoNext('s-activity')"><span class="opt-icon">📉</span><div class="opt-label">Not seeing results</div></div>
+      <div class="opt-card" onclick="select(this,'struggle','motivation');autoNext('s-activity')"><span class="opt-icon">😔</span><div class="opt-label">Lack of motivation</div></div>
+      <div class="opt-card" onclick="select(this,'struggle','time');autoNext('s-activity')"><span class="opt-icon">⏱️</span><div class="opt-label">No time</div></div>
+    </div>
+  </div>
+
+  <div id="s-activity" class="screen">
+    <button class="back-btn" onclick="goTo('s-struggle')">← Back</button>
+    <div class="progress-label">Step 11 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:68%"></div></div>
+    <h2 class="screen-title">How active are you daily outside the gym?</h2>
+    <p class="screen-sub">Used to calculate your calorie needs</p>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'activity','sedentary');autoNext('s-cycle')"><span class="opt-icon">💻</span><div><div class="opt-label">Mostly sitting</div><div class="opt-sub">Desk job, low daily movement</div></div></div>
+      <div class="opt-card" onclick="select(this,'activity','light');autoNext('s-cycle')"><span class="opt-icon">🚶</span><div><div class="opt-label">Lightly active</div><div class="opt-sub">Some walking, on feet part of day</div></div></div>
+      <div class="opt-card" onclick="select(this,'activity','active');autoNext('s-cycle')"><span class="opt-icon">🏃</span><div><div class="opt-label">Very active</div><div class="opt-sub">Physical job or lots of movement</div></div></div>
+    </div>
+  </div>
+
+  <div id="s-cycle" class="screen">
+    <button class="back-btn" onclick="goTo('s-activity')">← Back</button>
+    <div class="progress-label">Step 12 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:75%"></div></div>
+    <h2 class="screen-title">Want workouts + nutrition based on your cycle?</h2>
+    <p class="screen-sub">Optimize energy, fat loss, and results in every phase</p>
+    <div class="options-grid">
+      <div class="opt-card" onclick="select(this,'cycle','yes');autoNext('s-height')"><span class="opt-icon">✨</span><div><div class="opt-label">Yes, optimize everything</div><div class="opt-sub">Flags you for Elite coaching tier</div></div></div>
+      <div class="opt-card" onclick="select(this,'cycle','no');autoNext('s-height')"><span class="opt-icon">➡️</span><div class="opt-label">Not right now</div></div>
+      <div class="opt-card" onclick="select(this,'cycle','more');autoNext('s-height')"><span class="opt-icon">💬</span><div class="opt-label">Tell me more first</div></div>
+      <div class="opt-card" onclick="select(this,'cycle','na');autoNext('s-height')"><span class="opt-icon">🚫</span><div class="opt-label">Not applicable</div></div>
+    </div>
+  </div>
+
+  <div id="s-height" class="screen">
+    <button class="back-btn" onclick="goTo('s-cycle')">← Back</button>
+    <div class="progress-label">Step 13 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:81%"></div></div>
+    <h2 class="screen-title">Your height</h2>
+    <div class="unit-toggle">
+      <button class="unit-btn active" id="ht-imp" onclick="toggleUnit('height','imperial')">ft / in</button>
+      <button class="unit-btn" id="ht-met" onclick="toggleUnit('height','metric')">cm</button>
+    </div>
+    <div id="height-imperial">
+      <div style="display:flex;gap:10px">
+        <div class="input-wrap" style="flex:1"><label class="input-label">Feet</label><input type="number" class="text-input" id="h-ft" placeholder="5" min="3" max="7" oninput="saveVal('height_ft',this.value)"></div>
+        <div class="input-wrap" style="flex:1"><label class="input-label">Inches</label><input type="number" class="text-input" id="h-in" placeholder="5" min="0" max="11" oninput="saveVal('height_in',this.value)"></div>
+      </div>
+    </div>
+    <div id="height-metric" style="display:none">
+      <div class="input-wrap"><label class="input-label">cm</label><input type="number" class="text-input" id="h-cm" placeholder="165" min="100" max="250" oninput="saveVal('height_cm',this.value)"></div>
+    </div>
+    <button class="cta-btn" onclick="goTo('s-weight')">Continue →</button>
+  </div>
+
+  <div id="s-weight" class="screen">
+    <button class="back-btn" onclick="goTo('s-height')">← Back</button>
+    <div class="progress-label">Step 14 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:87%"></div></div>
+    <h2 class="screen-title">Your current weight</h2>
+    <div class="unit-toggle">
+      <button class="unit-btn active" id="wt-imp" onclick="toggleUnit('weight','imperial')">lbs</button>
+      <button class="unit-btn" id="wt-met" onclick="toggleUnit('weight','metric')">kg</button>
+    </div>
+    <div id="weight-lbs">
+      <label class="input-label">Current weight (lbs)</label>
+      <input type="number" class="text-input" id="w-lbs" placeholder="150" min="80" max="400" oninput="saveVal('weight_lbs',this.value)">
+      <div id="weight-slider-lbs" style="margin-top:16px">
+        <input type="range" min="80" max="400" value="150" step="1" style="width:100%" oninput="document.getElementById('w-lbs').value=this.value;saveVal('weight_lbs',this.value)">
+      </div>
+    </div>
+    <div id="weight-kg" style="display:none">
+      <label class="input-label">Current weight (kg)</label>
+      <input type="number" class="text-input" id="w-kg" placeholder="68" min="35" max="180" oninput="saveVal('weight_kg',this.value)">
+    </div>
+    <button class="cta-btn" onclick="goTo('s-goal-weight')" style="margin-top:20px">Continue →</button>
+  </div>
+
+  <div id="s-goal-weight" class="screen">
+    <button class="back-btn" onclick="goTo('s-weight')">← Back</button>
+    <div class="progress-label">Step 15 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:93%"></div></div>
+    <h2 class="screen-title">Your goal weight</h2>
+    <p class="screen-sub">Optional — helps us predict your timeline</p>
+    <div id="gw-lbs-wrap">
+      <label class="input-label">Goal weight (lbs)</label>
+      <input type="number" class="text-input" id="gw-lbs" placeholder="135" min="80" max="400" oninput="saveVal('goal_weight_lbs',this.value)">
+    </div>
+    <button class="cta-btn" onclick="goTo('s-age')" style="margin-top:20px">Continue →</button>
+    <button class="cta-btn-outline" onclick="goTo('s-age')">Skip</button>
+  </div>
+
+  <div id="s-age" class="screen">
+    <button class="back-btn" onclick="goTo('s-goal-weight')">← Back</button>
+    <div class="progress-label">Step 16 of 16</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+    <h2 class="screen-title">Almost there! Your age?</h2>
+    <p class="screen-sub">Used to fine-tune your calorie calculation</p>
+    <div class="input-wrap">
+      <label class="input-label">Age</label>
+      <input type="number" class="text-input" id="age-input" placeholder="25" min="16" max="80" oninput="saveVal('age',this.value)">
+    </div>
+    <button class="cta-btn" onclick="startProcessing()" style="margin-top:20px">Build My Plan 🔥</button>
+  </div>
+
+  <div id="s-processing" class="screen">
+    <div class="processing-screen">
+      <div class="spinner-ring"></div>
+      <p style="font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px">Building your plan...</p>
+      <p class="processing-step" id="proc-step">Analyzing your goals…</p>
+    </div>
+  </div>
+
+  <div id="s-results" class="screen">
+    <div style="flex:1;overflow-y:auto;padding-bottom:8px">
+      <div class="brand-header"><div class="brand-dot"></div><span class="brand-name">Your Results</span></div>
+      <div class="results-header">
+        <div id="res-goal-badge" class="result-goal-badge">Fat Loss</div>
+        <p style="font-size:15px;color:var(--color-text-secondary);margin-bottom:6px" id="res-sub">Personalized plan based on your answers</p>
+        <p style="font-size:28px;font-weight:500;color:#c9617a" id="res-cals">~1,850 cal/day</p>
+        <p style="font-size:13px;color:var(--color-text-secondary)">estimated daily target</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val" id="res-protein">130g</div><div class="stat-lbl">Protein / day</div></div>
+        <div class="stat-card"><div class="stat-val" id="res-training">4x/week</div><div class="stat-lbl">Training days</div></div>
+        <div class="stat-card"><div class="stat-val" id="res-focus">Glutes + Core</div><div class="stat-lbl">Primary focus</div></div>
+        <div class="stat-card"><div class="stat-val" id="res-timeline">8–10 wks</div><div class="stat-lbl">To see results</div></div>
+      </div>
+      <div style="margin-bottom:18px">
+        <div class="prediction-row"><span class="prediction-icon">📉</span><span class="prediction-text" id="pred-1">Lose 1–2 lbs per week at this pace</span></div>
+        <div class="prediction-row"><span class="prediction-icon">🍑</span><span class="prediction-text" id="pred-2">Noticeable glute changes in 6–8 weeks</span></div>
+      </div>
+      <p style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">Recommended plan</p>
+      <div id="tier-basic" class="tier-card tier-basic" style="display:none">
+        <div class="tier-badge">BASIC</div>
+        <p class="tier-title">Starter Plan</p>
+        <p class="tier-desc">Generic workout programs + standard meal guides to get you moving in the right direction.</p>
+      </div>
+      <div id="tier-pro" class="tier-card tier-pro" style="display:none">
+        <span class="recommended-tag">Recommended</span>
+        <div class="tier-badge">PRO</div>
+        <p class="tier-title">Personalized Plan</p>
+        <p class="tier-desc">Custom workouts + meal plan built specifically for YOUR goal, body, and schedule.</p>
+        <button class="cta-btn" style="margin-top:12px" onclick="openLink('https://whop.com/joined/destinyfitness/?tab=home')">Start My Plan →</button>
+      </div>
+      <div id="tier-elite" class="tier-card tier-elite" style="display:none">
+        <span class="recommended-tag" style="background:linear-gradient(135deg,#c9a84c,#e8829a)">Best Results</span>
+        <div class="tier-badge">ELITE</div>
+        <p class="tier-title">1-on-1 Coaching</p>
+        <p class="tier-desc">Weekly check-ins, cycle-based programming, direct coach access, and the fastest possible results.</p>
+        <button class="cta-btn" style="margin-top:12px" onclick="openLink('https://whop.com/joined/destinyfitness/?tab=home')">Upgrade to Elite →</button>
+      </div>
+      <button class="cta-btn-outline" style="margin-top:8px" onclick="restart()">Retake Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const data = {};
+
+function saveVal(k, v) { data[k] = v; }
+
+function select(el, key, val) {
+  data[key] = val;
+  const parent = el.closest('.options-grid');
+  parent.querySelectorAll('.opt-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('quiz-root').scrollTop = 0;
+}
+
+function autoNext(id) {
+  setTimeout(() => goTo(id), 200);
+}
+
+function toggleUnit(type, mode) {
+  if (type === 'height') {
+    document.getElementById('height-imperial').style.display = mode === 'imperial' ? 'block' : 'none';
+    document.getElementById('height-metric').style.display = mode === 'metric' ? 'block' : 'none';
+    document.getElementById('ht-imp').classList.toggle('active', mode === 'imperial');
+    document.getElementById('ht-met').classList.toggle('active', mode === 'metric');
+    data.height_unit = mode;
+  } else {
+    document.getElementById('weight-lbs').style.display = mode === 'imperial' ? 'block' : 'none';
+    document.getElementById('weight-kg').style.display = mode === 'metric' ? 'block' : 'none';
+    document.getElementById('wt-imp').classList.toggle('active', mode === 'imperial');
+    document.getElementById('wt-met').classList.toggle('active', mode === 'metric');
+    data.weight_unit = mode;
+  }
+}
+
+function calcResults() {
+  let weightLbs = parseFloat(data.weight_lbs) || 150;
+  if (data.weight_unit === 'metric' && data.weight_kg) weightLbs = parseFloat(data.weight_kg) * 2.205;
+
+  const actMult = { sedentary: 14, light: 15, active: 16 };
+  const mult = actMult[data.activity] || 15;
+  let maint = Math.round(weightLbs * mult);
+
+  let calories = maint;
+  let goalLabel = 'Fat Loss';
+  let pred1 = 'Lose 1–2 lbs per week at this pace';
+  let pred2 = 'Visible difference in 6–8 weeks';
+  let focusTxt = data.focus === 'glutes' ? 'Glutes + Core' : data.focus === 'core' ? 'Core + Cardio' : data.focus === 'legs' ? 'Legs + Glutes' : 'Full Body';
+
+  if (data.goal === 'fat_loss') { calories = maint - 400; goalLabel = 'Fat Loss'; pred1 = 'Lose 1–2 lbs per week at this pace'; pred2 = 'Noticeable changes in 4–6 weeks'; }
+  else if (data.goal === 'glute_growth') { calories = maint + 250; goalLabel = 'Glute Growth'; pred1 = 'Lean muscle gain of 0.5–1 lb/week'; pred2 = 'Visible glute changes in 6–8 weeks'; }
+  else if (data.goal === 'tone') { calories = maint - 100; goalLabel = 'Tone & Sculpt'; pred1 = 'Body recomposition over 8–12 weeks'; pred2 = 'Leaner + more defined in 6 weeks'; }
+  else { calories = maint; goalLabel = 'Maintain & Thrive'; pred1 = 'Maintain weight while building strength'; pred2 = 'Visible fitness improvement in 4 weeks'; }
+
+  const protein = Math.round(weightLbs * 0.9);
+  const trainingMap = { '2_3': '3x/week', '3_4': '4x/week', '4_5': '5x/week', '5_6': '6x/week' };
+  const timeline = data.goal === 'fat_loss' ? '6–8 wks' : data.goal === 'glute_growth' ? '8–10 wks' : '6–8 wks';
+  const tier = data.commitment === 'starter' ? 'basic' : data.commitment === 'allin' || data.cycle === 'yes' ? 'elite' : 'pro';
+
+  document.getElementById('res-goal-badge').textContent = goalLabel;
+  document.getElementById('res-cals').textContent = `~${calories.toLocaleString()} cal/day`;
+  document.getElementById('res-protein').textContent = `${protein}g`;
+  document.getElementById('res-training').textContent = trainingMap[data.days] || '4x/week';
+  document.getElementById('res-focus').textContent = focusTxt;
+  document.getElementById('res-timeline').textContent = timeline;
+  document.getElementById('pred-1').textContent = pred1;
+  document.getElementById('pred-2').textContent = pred2;
+
+  ['tier-basic', 'tier-pro', 'tier-elite'].forEach(t => document.getElementById(t).style.display = 'none');
+  document.getElementById('tier-' + tier).style.display = 'block';
+}
+
+function startProcessing() {
+  goTo('s-processing');
+  const steps = ['Analyzing your goals…', 'Calculating your calories…', 'Building your workout split…', 'Personalizing your meal plan…', 'Almost ready!'];
+  let i = 0;
+  const el = document.getElementById('proc-step');
+  const iv = setInterval(() => {
+    i++;
+    if (i < steps.length) { el.textContent = steps[i]; }
+    else { clearInterval(iv); calcResults(); goTo('s-results'); }
+  }, 700);
+}
+
+function restart() { Object.keys(data).forEach(k => delete data[k]); goTo('s-welcome'); }
+</script>
