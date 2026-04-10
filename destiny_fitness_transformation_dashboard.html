@@ -5,53 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destiny Fitness Transformation Dashboard</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: white;
-            color: #333;
+        /* New color palette */
+        body { background-color: coral; color: pink; }
+        .header { background-color: gold; }
+        .accordion { background-color: pink; }
+        .glow { animation: glow-animation 1s infinite;
+            -webkit-animation: glow-animation 1s infinite; }
+        @keyframes glow-animation { 
+            0% { box-shadow: 0 0 5px pink; }
+            50% { box-shadow: 0 0 20px gold; }
+            100% { box-shadow: 0 0 5px pink; }
         }
-        /* New Color Palette */
-        .pink { color: #FFC0CB; }
-        .gold { color: #FFD700; }
-        .coral { color: #FF7F50; }
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            /* Styles for mobile */
-            .container { padding: 20px; }
-        }
-        /* Animations */
-        .goal-achieved { animation: glow 1s infinite; }
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px gold; }
-            50% { text-shadow: 0 0 10px gold; }
-            100% { text-shadow: 0 0 5px gold; }
-        }
+        /* Responsive design styles */
+        .container { display: flex; flex-direction: column; align-items: center; }
+        @media (max-width: 600px) { .container { flex-direction: column; } }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>Destiny Fitness Transformation Dashboard</h1>
+    </div>
     <div class="container">
-        <h1 class="pink">Destiny Fitness Transformation Dashboard</h1>
+        <h2>Innovations</h2>
         <div class="accordion">
-            <h2>Form 1</h2>
-            <div class="panel">
-                <form>
-                    <!-- Collapsible form elements here -->
-                </form>
-            </div>
+            <h3 onclick="toggleAccordion(this)">Log Workout (New Tab)</h3><div class="content"><form>
+                <input type="text" placeholder="Workout Name" required>
+                <input type="number" placeholder="Duration (in minutes)" required>
+                <button type="submit">Log Workout</button>
+            </form></div>
         </div>
-        <!-- Streak Ring Visualization -->
-        <div id="streak-ring">Streak: <span>0</span></div>
-        <!-- Progress Photo Calendar Date Picker -->
-        <input type="date" id="date-picker">
-        <!-- Community Leaderboard Ticker -->
-        <div id="leaderboard">Community Leaderboard</div>
-        <!-- Achievements Tab -->
-        <div id="achievements">Achievements / Badges</div>
+        <!-- More accordion forms go here -->
     </div>
     <script>
-        // JS for LocalStorage, gamification, and other features
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            content.style.display = content.style.display === "block" ? "none" : "block";
+        }
         window.onload = function() {
-            // Load data from LocalStorage
+            // Check for LocalStorage data and populate forms
+            const savedData = JSON.parse(localStorage.getItem('fitnessData')) || {};
+            // Populate your forms with savedData here
         };
     </script>
 </body>
