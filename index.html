@@ -944,12 +944,15 @@ function renderMacroUI() {
   const rem=g.cal-Math.round(t.cal);
   const cd=document.getElementById('calDelta');
   if(rem>0){cd.textContent=rem+' remaining';cd.style.color='var(--text-3)';}
-  else if(rem===0){cd.textContent='🎯 Goal reached!';cd.style.color='var(--gold-deep)';}
+ else if (rem === 0 && g.cal > 0) {
+    cd.textContent = '🎯 Goal reached!';
+    cd.style.color = 'var(--gold-deep)';
+}
   else{cd.textContent=Math.abs(rem)+' over';cd.style.color='var(--pink-deep)';}
 
-  document.getElementById('protDelta').textContent='Goal: '+g.prot+'g';
-  document.getElementById('carbDelta').textContent='Goal: '+g.carb+'g';
-  document.getElementById('fatDelta').textContent='Goal: '+g.fat+'g';
+document.getElementById('protDelta').textContent = g.prot > 0 ? 'Goal: ' + g.prot + 'g' : 'Set your goal';
+document.getElementById('carbDelta').textContent = g.carb > 0 ? 'Goal: ' + g.carb + 'g' : 'Set your goal';
+document.getElementById('fatDelta').textContent = g.fat > 0 ? 'Goal: ' + g.fat + 'g' : 'Set your goal';
 
   // bars
   const setBar = (id,p,goldIfHit) => {
