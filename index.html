@@ -21,25 +21,30 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 
 /* ── HEADER ── */
-.app-header{background:linear-gradient(135deg,#3d0a1e 0%,#6b1535 60%,#8a2040 100%);padding:16px 16px 0;position:sticky;top:0;z-index:100}
-.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.logo-wrap{display:flex;align-items:center;gap:10px}
-.logo-icon{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pink-light),var(--pink-deep));display:flex;align-items:center;justify-content:center}
-.logo-icon svg{width:18px;height:18px;fill:#fff}
-.logo-text{font-family:'Cormorant Garamond',serif;font-size:20px;color:#fff;font-weight:400}
-.logo-sub{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase}
-.date-badge{font-size:11px;color:rgba(255,255,255,0.7);text-align:right}
-.elite-badge{font-size:10px;font-weight:700;letter-spacing:1px;color:#fde68a;animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+<header class="app-header">
+  <div class="header-top">
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L4 7v10l8 5 8-5V7z"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">Destiny Fitness</div>
+        <div class="logo-sub">Transformation Dashboard</div>
+      </div>
+    </div>
+    <div id="todayDate" class="today-date"></div>
+  </div>
 
 /* XP BAR */
-.xp-header{background:rgba(0,0,0,0.2);border-radius:0;padding:8px 16px 10px;margin:0 -16px}
-.xp-row{:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
-.xp-tier{font-size:11px;font-weight:700;color:var(--gold-light);letter-spacing:1px;text-transform:uppercase}
-.xp-tier.elite{color:#fde68a}
-.xp-pts{font-size:11px;color:rgba(255,255,255,0.6)}
-.xp-bar-track{height:5px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden}
-.xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-deep),var(--gold-classic),var(--gold-light));border-radius:3px;transition:width 0.6s ease}
+<div class="xp-bar-wrap">
+    <div class="xp-bar" id="xpBar">
+      <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
+    </div>
+    <div class="xp-labels">
+      <span id="xpTierLabel">Beginner</span>
+      <span id="xpPtsLabel">0 XP</span>
+    </div>
+  </div>
 
 /* TICKER */
 .ticker-wrap{background:rgba(0,0,0,0.15);padding:5px 16px;margin:0 -16px;overflow:hidden}
@@ -49,11 +54,17 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* NAV */
-.nav-wrap{background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.nav-wrap::-webkit-scrollbar{display:none}
-.nav-tabs{display:flex;padding:0 8px;min-width:max-content}
-.nav-tab{padding:12px 14px;font-size:12px;font-weight:500;color:var(--text-2);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;letter-spacing:0.3px;font-family:'Montserrat',sans-serif}
-.nav-tab.active{color:var(--pink-deep);border-bottom-color:var(--pink-deep);font-weight:600}
+<div class="nav-wrap">
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchPage('overview')">Overview</button>
+      <button class="nav-tab" onclick="switchPage('gym')">Gym</button>
+      <button class="nav-tab" onclick="switchPage('nutrition')">Nutrition</button>
+      <button class="nav-tab" onclick="switchPage('history')">History</button>
+      <button class="nav-tab" onclick="switchPage('streak')">Streak</button>
+      <button class="nav-tab" onclick="switchPage('achievements')">Achievements</button>
+    </div>
+  </div>
+</header>
 
 /* LEVEL BANNER */
 .level-banner{display:none;position:fixed;inset:0;background:rgba(61,10,30,0.88);z-index:999;align-items:center;justify-content:center}
@@ -268,7 +279,12 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 <div class="toast" id="toast"></div>
 
 <!-- HEADER -->
-</div> <div class="page active" id="page-overview">
+</div> <div class="page active" id="page-overview"<div class="checkin-wrap">
+  <button class="btn btn-primary" id="checkinBtn" onclick="doCheckin()">
+    ✅ Check In Today
+  </button>
+  <div id="checkinLabel" class="checkin-label"></div>
+</div>
   <div class="stat-grid">
     <div class="stat-card">
       <div class="goal-chip-label">Total Volume</div>
@@ -299,6 +315,91 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
     </div>
     <button class="btn btn-primary" onclick="logExercise()">Log Set</button>
   </div>
+  <!-- Workout Logger (type + duration) -->
+<div class="card">
+  <div class="card-header" onclick="toggleCard(this)">
+    <span class="card-title">🏋️ Log Workout Session</span>
+    <span class="card-toggle">⌄</span>
+  </div>
+  <div class="card-body">
+    <div id="workoutSuggestions" class="workout-suggestions" style="display:none"></div>
+    <div class="field">
+      <label for="workoutType">Workout type</label>
+      <input id="workoutType" type="text" placeholder="e.g. Push Day" oninput="showWorkoutSuggestions(this.value)">
+    </div>
+    <div class="field">
+      <label for="workoutDur">Duration (min)</label>
+      <input id="workoutDur" type="number" placeholder="0">
+    </div>
+    <div class="field">
+      <label for="workoutNotes">Notes</label>
+      <input id="workoutNotes" type="text" placeholder="Optional notes">
+    </div>
+    <button class="btn btn-primary" onclick="logWorkout()">Save Workout</button>
+  </div>
+</div>
+
+<!-- Workout History -->
+<div class="card">
+  <div class="card-header" onclick="toggleCard(this)">
+    <span class="card-title">📋 Workout History</span>
+    <span class="card-toggle">⌄</span>
+  </div>
+  <div class="card-body">
+    <div class="history-date-nav">
+      <button class="history-date-btn" onclick="shiftDate(-1,'workout')">‹</button>
+      <input type="date" id="workoutHistoryDate">
+      <button class="history-date-btn" onclick="shiftDate(1,'workout')">›</button>
+    </div>
+    <div id="workoutLogList" class="log-list"></div>
+  </div>
+</div>
+
+<!-- Gym Metrics -->
+<div class="card" id="gymMetrics">
+  <div class="metric-grid">
+    <div class="metric-card"><div class="metric-label">Current Weight</div><div class="metric-value" id="curWeight">—</div></div>
+    <div class="metric-card"><div class="metric-label">Body Fat</div><div class="metric-value" id="mcProt">—</div></div>
+    <div class="metric-card"><div class="metric-label">Chest</div><div class="metric-value" id="curChest">—</div></div>
+    <div class="metric-card"><div class="metric-label">Waist</div><div class="metric-value" id="curWaist">—</div></div>
+    <div class="metric-card"><div class="metric-label">Hips</div><div class="metric-value" id="curHips">—</div></div>
+  </div>
+</div>
+
+<!-- Measurements -->
+<div class="card">
+  <div class="card-header" onclick="toggleCard(this)">
+    <span class="card-title">📏 Log Measurements</span>
+    <span class="card-toggle">⌄</span>
+  </div>
+  <div class="card-body">
+    <!-- measurement inputs (inWeight, inBodyFat, inChest, inWaist, inHips, inBicep, inThigh, inCalf) -->
+    <div class="row-2">
+      <div class="field"><label for="inWeight">Weight (lbs)</label><input id="inWeight" type="number" placeholder="0"></div>
+      <div class="field"><label for="inBodyFat">Body Fat %</label><input id="inBodyFat" type="number" placeholder="0"></div>
+    </div>
+    <div class="row-2">
+      <div class="field"><label for="inChest">Chest (in)</label><input id="inChest" type="number" placeholder="0"></div>
+      <div class="field"><label for="inWaist">Waist (in)</label><input id="inWaist" type="number" placeholder="0"></div>
+    </div>
+    <div class="row-2">
+      <div class="field"><label for="inHips">Hips (in)</label><input id="inHips" type="number" placeholder="0"></div>
+      <div class="field"><label for="inBicep">Bicep (in)</label><input id="inBicep" type="number" placeholder="0"></div>
+    </div>
+    <div class="row-2">
+      <div class="field"><label for="inThigh">Thigh (in)</label><input id="inThigh" type="number" placeholder="0"></div>
+      <div class="field"><label for="inCalf">Calf (in)</label><input id="inCalf" type="number" placeholder="0"></div>
+    </div>
+    <button class="btn btn-primary" onclick="logMeasurement()">Save Measurements</button>
+    <div id="measureHistory" class="log-list" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<!-- Weight Delta -->
+<div class="card" style="display:none" id="weightChartStats">
+  <div id="weightDelta"></div>
+  <div id="weightChartEmpty"></div>
+</div>
   <div class="card">
     <h3 class="section-title">🏆 Personal Bests</h3>
     <div id="pbList" class="log-list"></div>
@@ -311,25 +412,128 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
     <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="document.getElementById('photoUpload').click()">Upload Today's Photo</button>
   </div>
   <div class="card">
+  <div class="card-header" onclick="toggleCard(this)">
+    <span class="card-title">📅 Photo Calendar</span>
+    <span class="card-toggle">⌄</span>
+  </div>
+  <div class="card-body">
+    <div class="photo-cal-nav-row">
+      <button class="photo-cal-nav" onclick="photoCalPrev()">‹</button>
+      <span id="photoCalTitle"></span>
+      <button class="photo-cal-nav" onclick="photoCalNext()">›</button>
+    </div>
+    <div id="photoCalGrid" class="photo-cal-grid"></div>
+    <div id="photoDateLabel" class="photo-date-label"></div>
+    <input type="file" id="photoInput" accept="image/*" hidden onchange="handlePhotoUpload(event)">
+  </div>
+</div>
+  <div class="card">
     <h3 class="section-title">Workout History</h3>
     <div id="workoutLog" class="log-list"></div>
   </div>
 </div> ```
 
 <div class="page" id="page-nutrition">
+
+  <!-- Macro Summary -->
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-label">Calories</div>
+      <div class="metric-value" id="calDisplay">0</div>
+      <div class="metric-delta" id="calDelta"></div>
+      <div class="pct-bar"><div class="pct-fill" id="calPct" style="width:0%"></div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Protein</div>
+      <div class="metric-value" id="protDisplay">0 <span class="metric-unit">g</span></div>
+      <div class="metric-delta" id="protDelta"></div>
+      <div class="pct-bar"><div class="pct-fill" id="protPct" style="width:0%"></div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Carbs</div>
+      <div class="metric-value" id="carbDisplay">0 <span class="metric-unit">g</span></div>
+      <div class="metric-delta" id="carbDelta"></div>
+      <div class="pct-bar"><div class="pct-fill" id="carbPct" style="width:0%"></div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Fat</div>
+      <div class="metric-value" id="fatDisplay">0 <span class="metric-unit">g</span></div>
+      <div class="metric-delta" id="fatDelta"></div>
+      <div class="pct-bar"><div class="pct-fill" id="fatPct" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- All Macros Hit Banner -->
+  <div class="all-macros-banner" id="allMacrosHitBanner" style="display:none">
+    🎯 All macro goals hit today!
+  </div>
+
+  <!-- Goals Section -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">🎯 Set your goals</span>
+      <span class="card-title">🎯 Daily Goals</span>
       <span class="card-toggle">⌄</span>
     </div>
     <div class="card-body">
-      <div class="row-2">
-        <div class="field"><label>Calorie goal</label><input id="goalCal" type="number" placeholder="0"></div>
-        <div class="field"><label>Protein (g)</label><input id="goalProt" type="number" placeholder="0"></div>
+      <div id="goalsDisplay"></div>
+      <div id="goalsForm" style="display:none">
+        <div class="row-2">
+          <div class="field"><label for="goalCal">Calorie goal</label><input id="goalCal" type="number" placeholder="2000"></div>
+          <div class="field"><label for="goalProt">Protein (g)</label><input id="goalProt" type="number" placeholder="150"></div>
+        </div>
+        <div class="row-2">
+          <div class="field"><label for="goalCarb">Carbs (g)</label><input id="goalCarb" type="number" placeholder="200"></div>
+          <div class="field"><label for="goalFat">Fat (g)</label><input id="goalFat" type="number" placeholder="65"></div>
+        </div>
+        <div class="row-2">
+          <button class="btn btn-primary" onclick="saveGoals()">Save Goals</button>
+          <button class="btn btn-ghost" onclick="cancelEditGoals()">Cancel</button>
+        </div>
       </div>
-      <button class="btn btn-primary" onclick="saveGoals()">Save Goals</button>
     </div>
   </div>
+
+  <!-- Log Meal -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-title">🍽 Log Meal</span>
+      <span class="card-toggle">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="field"><label for="mealName">Meal name</label><input id="mealName" type="text" placeholder="e.g. Chicken & Rice"></div>
+      <div class="row-2">
+        <div class="field"><label for="mealCal">Calories</label><input id="mealCal" type="number" placeholder="0"></div>
+        <div class="field"><label for="mealProt">Protein (g)</label><input id="mealProt" type="number" placeholder="0"></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label for="mealCarb">Carbs (g)</label><input id="mealCarb" type="number" placeholder="0"></div>
+        <div class="field"><label for="mealFat">Fat (g)</label><input id="mealFat" type="number" placeholder="0"></div>
+      </div>
+      <div class="preset-row">
+        <button class="btn btn-ghost btn-sm" onclick="fillMealPreset('chicken')">🍗 Chicken</button>
+        <button class="btn btn-ghost btn-sm" onclick="fillMealPreset('salad')">🥗 Salad</button>
+        <button class="btn btn-ghost btn-sm" onclick="fillMealPreset('shake')">🥤 Shake</button>
+      </div>
+      <button class="btn btn-primary" onclick="logMeal()">Log Meal</button>
+    </div>
+  </div>
+
+  <!-- Meal History -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-title">📋 Meal History</span>
+      <span class="card-toggle">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="history-date-nav">
+        <button class="history-date-btn" onclick="shiftDate(-1,'meal')">‹</button>
+        <input type="date" id="mealHistoryDate">
+        <button class="history-date-btn" onclick="shiftDate(1,'meal')">›</button>
+      </div>
+      <div id="mealLogList" class="log-list"></div>
+    </div>
+  </div>
+
 </div>
 <!-- ══════════════════════════ STREAK PAGE ══════════════════════════ -->
 <div class="page" id="page-streak">
@@ -339,6 +543,9 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
     <div class="metric-card"><div class="metric-label">Best streak</div><div class="metric-value" id="bestStreak">0<span class="metric-unit"> days</span></div></div>
     <div class="metric-card"><div class="metric-label">This month</div><div class="metric-value" id="monthCount">0<span class="metric-unit"> workouts</span></div></div>
     <div class="metric-card"><div class="metric-label">All time</div><div class="metric-value" id="totalCount">0<span class="metric-unit"> days</span></div></div>
+    <div class="ticker-wrap">
+  <div class="ticker-inner" id="tickerInner"></div>
+</div>
   </div>
 
   <!-- Ring + Heatmap -->
