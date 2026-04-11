@@ -1571,13 +1571,30 @@ function renderBadges() {
 // ── TICKER FEED ──
 const tickerEvents = [
   '🔥 <span>Sarah M.</span> hit a 10-day streak!',
-  '💪 <span>Alex T.</span> logged a new PR on squats',
+  '💪 <span>alexisfit</span> logged a new PR on squats',
   '🎯 <span>Jordan K.</span> hit all macro goals today',
-  '⭐ <span>Mia R.</span> reached Challenger tier!',
-  '📸 <span>Chris P.</span> uploaded progress photos',
-  '🏋️ <span>Taylor S.</span> completed HIIT · 45 min',
+  '⭐ <span>miarosee</span> reached Challenger tier!',
+  '📸 <span>Chrislyn P.</span> uploaded progress photos',
+  '🏋️ <span>taylorgains</span> completed HIIT · 45 min',
   '🥇 <span>Riley B.</span> earned Macro Master badge',
-  '🔗 <span>Jamie L.</span> completed 7-Day Chain',
+  '🔗 <span>jamiefitxo</span> completed 7-Day Chain',
+  '🔥 <span>destinyxfit</span> extended her streak to 14 days',
+  '💪 <span>Ashley V.</span> hit a new bench PR',
+  '🎯 <span>natalie.fit</span> crushed all macro targets',
+  '⭐ <span>Isabella G.</span> leveled up to Expert',
+  '📸 <span>lunalifts</span> added new progress photos',
+  '🏋️ <span>Kayla R.</span> finished a full body workout',
+  '🥇 <span>fitwithsam</span> unlocked Protein Queen badge',
+  '🔗 <span>Hailey D.</span> hit a 7-day streak',
+  '🔥 <span>zoeystrong</span> is on a 21-day streak',
+  '💪 <span>Emily S.</span> hit a deadlift PR',
+  '🎯 <span>camifitxo</span> completed daily nutrition goals',
+  '⭐ <span>Ariana L.</span> reached Champion tier',
+  '📸 <span>glowwithnia</span> updated her progress check-in',
+  '🏋️ <span>Vanessa M.</span> completed leg day',
+  '🥇 <span>fitbyjess</span> earned consistency badge',
+  '🔗 <span>Olivia T.</span> kept the streak alive today',
+  '🔥 <span>barbiegains</span> just hit a new streak record'
 ];
 
 function setupTicker() {
@@ -1606,7 +1623,7 @@ let userStats = JSON.parse(localStorage.getItem('fitnessStats')) || {
     xp: 0,
     calories: 0,
     protein: 0,
-    goalProtein: 150
+    goalProtein: 0
 };
 
 // 2. Function to update the visuals (The UI)
