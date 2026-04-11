@@ -944,7 +944,7 @@ function renderMacroUI() {
   const rem=g.cal-Math.round(t.cal);
   const cd=document.getElementById('calDelta');
   if(rem>0){cd.textContent=rem+' remaining';cd.style.color='var(--text-3)';}
- else if (rem === 0 && g.cal > 0) {
+ else if (rem === 0 && g.cal 'Set your goal' {
     cd.textContent = '🎯 Goal reached!';
     cd.style.color = 'var(--gold-deep)';
 }
