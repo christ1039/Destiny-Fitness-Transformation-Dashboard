@@ -31,7 +31,6 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
 /* ── HEADER ── */
 .app-header {
   background: linear-gradient(135deg, #3d0a1e 0%, #6b1535 60%, #8a2040 100%);
@@ -46,7 +45,6 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .logo-sub { font-size:10px; color:rgba(255,255,255,0.6); letter-spacing:1px; text-transform:uppercase; }
 .header-right { display:flex;align-items:center;gap:10px; }
 .date-badge { font-size:11px; color:rgba(255,255,255,0.7); text-align:right; }
-
 /* XP BAR in header */
 .xp-header { background:rgba(0,0,0,0.2); border-radius:0 0 12px 12px; padding:8px 16px 10px; margin:0 -16px; }
 .xp-row { display:flex;align-items:center;justify-content:space-between; margin-bottom:5px; }
@@ -54,21 +52,18 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .xp-pts { font-size:11px; color:rgba(255,255,255,0.6); }
 .xp-bar-track { height:5px; background:rgba(255,255,255,0.15); border-radius:3px; overflow:hidden; }
 .xp-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold-deep),var(--gold-classic),var(--gold-light)); border-radius:3px; transition:width 0.6s ease; }
-
 /* TICKER */
 .ticker-wrap { background:rgba(0,0,0,0.15); padding:5px 16px; margin:0 -16px; overflow:hidden; }
 .ticker-inner { display:flex; gap:32px; animation:ticker 18s linear infinite; white-space:nowrap; }
 .ticker-item { font-size:10px; color:rgba(255,255,255,0.65); letter-spacing:0.3px; }
 .ticker-item span { color:var(--gold-light); font-weight:600; }
 @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-
 /* NAV TABS */
 .nav-wrap { background:#fff; border-bottom:1px solid var(--border); overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
 .nav-wrap::-webkit-scrollbar { display:none; }
 .nav-tabs { display:flex; padding:0 8px; min-width:max-content; }
 .nav-tab { padding:12px 14px; font-size:12px; font-weight:500; color:var(--text-2); border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:all 0.2s; letter-spacing:0.3px; }
 .nav-tab.active { color:var(--pink-deep); border-bottom-color:var(--pink-deep); font-weight:600; }
-
 /* LEVEL BANNER */
 .level-banner { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(61,10,30,0.85); z-index:999; align-items:center; justify-content:center; }
 .level-banner.show { display:flex; }
@@ -77,11 +72,9 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .level-banner-title { font-family:'Cormorant Garamond',serif; font-size:28px; color:var(--pink-deep); margin-bottom:4px; }
 .level-banner-sub { font-size:13px; color:var(--text-2); margin-bottom:20px; }
 .level-banner-btn { background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); color:#fff; border:none; border-radius:10px; padding:10px 28px; font-size:13px; font-weight:600; cursor:pointer; }
-
 /* MAIN CONTENT */
 .page { display:none; padding:16px; }
 .page.active { display:block; }
-
 /* CARDS */
 .card { background:var(--card-bg); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); margin-bottom:12px; overflow:hidden; }
 .card-header { padding:14px 16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
@@ -91,7 +84,6 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .card-body { padding:0 16px 16px; display:none; }
 .card-body.open { display:block; }
 .card-static { padding:16px; }
-
 /* METRIC GRID */
 .metric-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
 .metric-card { background:var(--card-bg); border-radius:var(--radius-sm); padding:14px; border:1px solid var(--border); position:relative; overflow:hidden; transition:box-shadow 0.3s; }
@@ -103,7 +95,6 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .metric-delta { font-size:10px; margin-top:4px; }
 .metric-bar { margin-top:6px; height:3px; background:#f0e8ea; border-radius:2px; overflow:hidden; }
 .metric-bar-fill { height:100%; border-radius:2px; transition:width 0.5s ease; }
-
 /* STREAK SECTION */
 .streak-section { display:flex; gap:12px; align-items:flex-start; margin-bottom:12px; }
 .streak-ring-wrap { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:4px; }
@@ -117,7 +108,6 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .hd.done { background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); }
 .hd.today { background:linear-gradient(135deg,var(--gold-classic),var(--gold-deep)); box-shadow:0 0 6px rgba(212,163,95,0.5); }
 .hd.done.today { background:linear-gradient(135deg,var(--gold-classic),var(--gold-deep)); box-shadow:0 0 8px rgba(212,163,95,0.7); }
-
 /* FORMS */
 .field { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
 .field label { font-size:11px; color:var(--text-2); font-weight:500; letter-spacing:0.3px; }
@@ -137,7 +127,6 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .btn-ghost { background:transparent; border:1px solid var(--border); color:var(--text-2); }
 .btn-gold { background:linear-gradient(135deg,var(--gold-classic),var(--gold-deep)); color:#fff; }
 .btn-danger { background:#fee2e2; color:#c0392b; border:1px solid #fca5a5; }
-
 /* LOG ENTRIES */
 .log-list { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
 .log-item { background:#fdf5f6; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
@@ -147,11 +136,9 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .log-item-actions { display:flex; gap:4px; flex-shrink:0; }
 .icon-btn { background:none; border:none; cursor:pointer; font-size:14px; padding:4px; border-radius:4px; transition:background 0.15s; }
 .icon-btn:hover { background:rgba(0,0,0,0.06); }
-
 /* EDIT INLINE */
 .edit-inline { background:#fff8f9; border:1px solid var(--pink-light); border-radius:var(--radius-sm); padding:10px; margin-top:6px; display:none; }
 .edit-inline.open { display:block; }
-
 /* PROGRESS PHOTO CALENDAR */
 .photo-cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
 .photo-cal-nav { background:none; border:1px solid var(--border); border-radius:6px; padding:4px 10px; cursor:pointer; font-size:12px; color:var(--text-2); }
@@ -169,7 +156,6 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 .photo-slot .remove-photo { position:absolute; top:4px; right:4px; background:rgba(201,88,106,0.85); color:#fff; border:none; border-radius:50%; width:18px; height:18px; font-size:10px; cursor:pointer; display:none; align-items:center; justify-content:center; z-index:2; }
 .photo-slot:hover .remove-photo { display:flex; }
 input[type="file"] { display:none; }
-
 /* ACHIEVEMENTS */
 .badge-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
 .badge { background:var(--card-bg); border-radius:var(--radius-sm); padding:14px 10px; text-align:center; border:1px solid var(--border); position:relative; }
@@ -179,58 +165,46 @@ input[type="file"] { display:none; }
 .badge-name { font-size:10px; font-weight:600; color:var(--text); letter-spacing:0.2px; }
 .badge-desc { font-size:9px; color:var(--text-3); margin-top:2px; }
 .badge-new { position:absolute; top:4px; right:4px; background:var(--pink-deep); color:#fff; font-size:8px; font-weight:700; padding:2px 5px; border-radius:4px; }
-
 /* HISTORY VIEWER */
 .history-date-nav { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
 .history-date-btn { background:none; border:1px solid var(--border); border-radius:6px; padding:5px 10px; font-size:11px; color:var(--text-2); cursor:pointer; }
 .history-date-select { flex:1; }
-
 /* SECTION LABEL */
 .section-label { font-size:10px; font-weight:700; color:var(--text-3); letter-spacing:1px; text-transform:uppercase; margin:14px 0 8px; }
-
 /* GOALS STATE */
 .goals-display { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .goal-chip { background:#fdf5f6; border:1px solid var(--border); border-radius:6px; padding:8px 10px; }
 .goal-chip-label { font-size:9px; color:var(--text-3); text-transform:uppercase; letter-spacing:0.5px; }
 .goal-chip-val { font-size:16px; font-weight:600; color:var(--pink-deep); }
 .goal-chip-unit { font-size:10px; color:var(--text-3); }
-
 /* MACRO BAR INLINE */
 .macro-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
 .macro-label { font-size:11px; color:var(--text-2); width:52px; flex-shrink:0; }
 .macro-bar-track { flex:1; height:7px; background:#f0e8ea; border-radius:4px; overflow:hidden; }
 .macro-bar-fill { height:100%; border-radius:4px; transition:width 0.5s ease; }
 .macro-pct { font-size:10px; color:var(--text-3); width:34px; text-align:right; }
-
 /* EMPTY STATE */
 .empty-state { text-align:center; padding:24px 16px; color:var(--text-3); font-size:12px; }
 .empty-state .es-icon { font-size:32px; margin-bottom:8px; opacity:0.5; }
-
 /* DIVIDER */
 hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
-
 /* NOTIFICATION TOAST */
 .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); color:#fff; padding:10px 20px; border-radius:20px; font-size:12px; font-weight:600; opacity:0; pointer-events:none; z-index:998; transition:all 0.3s; white-space:nowrap; }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
 /* SCROLLABLE CONTENT */
 .scroll-content { padding-bottom:80px; }
-
 /* STREAK CHAIN VISUAL */
 .chain-days { display:flex; gap:4px; flex-wrap:wrap; }
 .chain-link { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; border:2px solid; flex-shrink:0; }
 .chain-link.empty { background:#f0e8ea; border-color:#e0d0d2; color:var(--text-3); }
 .chain-link.filled { background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); border-color:var(--pink-deep); color:#fff; }
 .chain-link.gold { background:linear-gradient(135deg,var(--gold-classic),var(--gold-deep)); border-color:var(--gold-deep); color:#fff; box-shadow:0 2px 8px rgba(181,122,42,0.4); }
-
 /* CHAMPION GLOW */
 .champion-border { animation:championGlow 3s ease-in-out infinite; }
 @keyframes championGlow { 0%,100%{box-shadow:0 0 8px rgba(212,163,95,0.3)} 50%{box-shadow:0 0 20px rgba(212,163,95,0.7),0 0 40px rgba(212,163,95,0.2)} }
-
 /* EDIT DAILY GOALS BUTTON */
 .edit-goals-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; }
 .edit-goals-label { font-size:12px; color:var(--text-2); }
-
 /* Responsive tweaks */
 @media (max-width: 360px) {
   .metric-grid { grid-template-columns:1fr 1fr; }
@@ -239,7 +213,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
 </style>
 </head>
 <body>
-
 <!-- LEVEL UP BANNER -->
 <div class="level-banner" id="levelBanner">
   <div class="level-banner-card">
@@ -249,10 +222,8 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
     <button class="level-banner-btn" onclick="closeLevelBanner()">Let's Go! 🔥</button>
   </div>
 </div>
-
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
-
 <!-- HEADER -->
 <div class="app-header">
   <div class="header-top">
@@ -280,7 +251,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
     <div class="ticker-inner" id="tickerInner"></div>
   </div>
 </div>
-
 <!-- NAV -->
 <div class="nav-wrap">
   <div class="nav-tabs">
@@ -290,10 +260,8 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
     <button class="nav-tab" onclick="switchPage('achievements',this)">Achievements</button>
   </div>
 </div>
-
 <!-- ════════════════════════════════════════ NUTRITION PAGE -->
 <div class="page active scroll-content" id="page-nutrition">
-
   <!-- XP/Level mini display -->
   <div style="padding:12px 0 0;">
     <div id="checkinRow" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:10px;padding:10px 14px;border:1px solid var(--border);margin-bottom:10px;">
@@ -301,35 +269,33 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <button class="btn btn-sm btn-gold" id="checkinBtn" onclick="doCheckin()">Check in +10 XP</button>
     </div>
   </div>
-
   <!-- METRIC CARDS -->
   <div class="metric-grid" id="macroCards">
     <div class="metric-card" id="mcCal">
       <div class="metric-label">Calories</div>
       <div class="metric-value" id="calDisplay">0<span class="metric-unit"> kcal</span></div>
-      <div class="metric-delta" id="calDelta" style="color:var(--text-3)">Goal: 2000</div>
+      <div class="metric-delta" id="calDelta" style="color:var(--text-3)">Goal: 0</div>
       <div class="metric-bar"><div class="metric-bar-fill" id="calBarMini" style="width:0%;background:linear-gradient(90deg,var(--coral),var(--pink-deep))"></div></div>
     </div>
     <div class="metric-card" id="mcProt">
       <div class="metric-label">Protein</div>
       <div class="metric-value" id="protDisplay">0<span class="metric-unit"> g</span></div>
-      <div class="metric-delta" id="protDelta" style="color:var(--text-3)">Goal: 150g</div>
+      <div class="metric-delta" id="protDelta" style="color:var(--text-3)">Goal: 0g</div>
       <div class="metric-bar"><div class="metric-bar-fill" id="protBarMini" style="width:0%;background:linear-gradient(90deg,var(--pink-light),var(--pink-mid))"></div></div>
     </div>
     <div class="metric-card" id="mcCarb">
       <div class="metric-label">Carbs</div>
       <div class="metric-value" id="carbDisplay">0<span class="metric-unit"> g</span></div>
-      <div class="metric-delta" id="carbDelta" style="color:var(--text-3)">Goal: 200g</div>
+      <div class="metric-delta" id="carbDelta" style="color:var(--text-3)">Goal: 0g</div>
       <div class="metric-bar"><div class="metric-bar-fill" id="carbBarMini" style="width:0%;background:linear-gradient(90deg,var(--peach),var(--gold-classic))"></div></div>
     </div>
     <div class="metric-card" id="mcFat">
       <div class="metric-label">Fats</div>
       <div class="metric-value" id="fatDisplay">0<span class="metric-unit"> g</span></div>
-      <div class="metric-delta" id="fatDelta" style="color:var(--text-3)">Goal: 65g</div>
+      <div class="metric-delta" id="fatDelta" style="color:var(--text-3)">Goal: 0g</div>
       <div class="metric-bar"><div class="metric-bar-fill" id="fatBarMini" style="width:0%;background:linear-gradient(90deg,var(--gold-light),var(--gold-deep))"></div></div>
     </div>
   </div>
-
   <!-- MACRO PROGRESS BARS -->
   <div class="card">
     <div class="card-static">
@@ -339,8 +305,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <div class="macro-row"><span class="macro-label">Fats</span><div class="macro-bar-track"><div class="macro-bar-fill" id="fatBar" style="width:0%;background:linear-gradient(90deg,var(--gold-light),var(--gold-deep))"></div></div><span class="macro-pct" id="fatPct">0%</span></div>
       <div class="macro-row"><span class="macro-label">Calories</span><div class="macro-bar-track"><div class="macro-bar-fill" id="calBar" style="width:0%;background:linear-gradient(90deg,var(--coral),var(--pink-deep))"></div></div><span class="macro-pct" id="calPct">0%</span></div>
     </div>
-  </div>
-
   <!-- LOG MEAL — ACCORDION -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -350,17 +314,15 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
     <div class="card-body">
       <div class="row-2">
         <div class="field"><label>Meal name</label><input id="mealName" placeholder="e.g. Grilled chicken" type="text"></div>
-        <div class="field"><label>Calories (kcal)</label><input id="mealCal" placeholder="400" type="number" min="0"></div>
+        <div class="field"><label>Calories (kcal)</label><input id="mealCal" placeholder="0" type="number" min="0"></div>
       </div>
       <div class="row-3">
         <div class="field"><label>Protein (g)</label><input id="mealProt" placeholder="30" type="number" min="0"></div>
-        <div class="field"><label>Carbs (g)</label><input id="mealCarb" placeholder="50" type="number" min="0"></div>
-        <div class="field"><label>Fats (g)</label><input id="mealFat" placeholder="10" type="number" min="0"></div>
+        <div class="field"><label>Carbs (g)</label><input id="mealCarb" placeholder="0" type="number" min="0"></div>
+        <div class="field"><label>Fats (g)</label><input id="mealFat" placeholder="0" type="number" min="0"></div>
       </div>
       <button class="btn btn-primary" onclick="logMeal()">Save Meal</button>
     </div>
-  </div>
-
   <!-- DAILY GOALS -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -372,12 +334,12 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <div id="goalsDisplay"></div>
       <div id="goalsForm" style="display:none;">
         <div class="row-2">
-          <div class="field"><label>Calorie goal</label><input id="goalCal" type="number" placeholder="2000" min="0"></div>
-          <div class="field"><label>Protein (g)</label><input id="goalProt" type="number" placeholder="150" min="0"></div>
+          <div class="field"><label>Calorie goal</label><input id="goalCal" type="number" placeholder="0" min="0"></div>
+          <div class="field"><label>Protein (g)</label><input id="goalProt" type="number" placeholder="0" min="0"></div>
         </div>
         <div class="row-2">
-          <div class="field"><label>Carbs (g)</label><input id="goalCarb" type="number" placeholder="200" min="0"></div>
-          <div class="field"><label>Fats (g)</label><input id="goalFat" type="number" placeholder="65" min="0"></div>
+          <div class="field"><label>Carbs (g)</label><input id="goalCarb" type="number" placeholder="0" min="0"></div>
+          <div class="field"><label>Fats (g)</label><input id="goalFat" type="number" placeholder="0" min="0"></div>
         </div>
         <div style="display:flex;gap:8px;">
           <button class="btn btn-primary" style="flex:1" onclick="saveGoals()">Save Goals</button>
@@ -386,7 +348,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       </div>
     </div>
   </div>
-
   <!-- MEAL HISTORY -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -403,10 +364,8 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
     </div>
   </div>
 </div>
-
 <!-- ════════════════════════════════════════ GYM PROGRESS PAGE -->
 <div class="page scroll-content" id="page-gym">
-
   <div class="metric-grid">
     <div class="metric-card">
       <div class="metric-label">Body weight</div>
@@ -426,7 +385,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <div class="metric-value" id="curHips">—<span class="metric-unit"> in</span></div>
     </div>
   </div>
-
   <!-- LOG MEASUREMENTS -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -435,23 +393,22 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
     </div>
     <div class="card-body">
       <div class="row-2">
-        <div class="field"><label>Body weight (lbs)</label><input id="inWeight" placeholder="165" type="number" step="0.1"></div>
-        <div class="field"><label>Body fat %</label><input id="inBodyFat" placeholder="18" type="number" step="0.1"></div>
+        <div class="field"><label>Body weight (lbs)</label><input id="inWeight" placeholder="0" type="number" step="0.1"></div>
+        <div class="field"><label>Body fat %</label><input id="inBodyFat" placeholder="0" type="number" step="0.1"></div>
       </div>
       <div class="row-3">
-        <div class="field"><label>Chest (in)</label><input id="inChest" placeholder="40" type="number" step="0.25"></div>
-        <div class="field"><label>Waist (in)</label><input id="inWaist" placeholder="33" type="number" step="0.25"></div>
-        <div class="field"><label>Hips (in)</label><input id="inHips" placeholder="38" type="number" step="0.25"></div>
+        <div class="field"><label>Chest (in)</label><input id="inChest" placeholder="0" type="number" step="0.25"></div>
+        <div class="field"><label>Waist (in)</label><input id="inWaist" placeholder="0" type="number" step="0.25"></div>
+        <div class="field"><label>Hips (in)</label><input id="inHips" placeholder="0" type="number" step="0.25"></div>
       </div>
       <div class="row-3">
-        <div class="field"><label>Bicep (in)</label><input id="inBicep" placeholder="14" type="number" step="0.25"></div>
-        <div class="field"><label>Thigh (in)</label><input id="inThigh" placeholder="22" type="number" step="0.25"></div>
-        <div class="field"><label>Calf (in)</label><input id="inCalf" placeholder="14" type="number" step="0.25"></div>
+        <div class="field"><label>Bicep (in)</label><input id="inBicep" placeholder="0" type="number" step="0.25"></div>
+        <div class="field"><label>Thigh (in)</label><input id="inThigh" placeholder="0" type="number" step="0.25"></div>
+        <div class="field"><label>Calf (in)</label><input id="inCalf" placeholder="0" type="number" step="0.25"></div>
       </div>
       <button class="btn btn-primary" onclick="logMeasurement()">Save Measurements</button>
     </div>
   </div>
-
   <!-- LOG WORKOUT (moved here from streak) -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -466,13 +423,12 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
             <option value="Upper body"><option value="Lower body"><option value="Push"><option value="Pull"><option value="Legs"><option value="Full body"><option value="Cardio"><option value="HIIT"><option value="Yoga"><option value="Rest day">
           </datalist>
         </div>
-        <div class="field"><label>Duration (min)</label><input type="number" id="workoutDur" placeholder="45" min="1"></div>
+        <div class="field"><label>Duration (min)</label><input type="number" id="workoutDur" placeholder="0" min="1"></div>
       </div>
-      <div class="field"><label>Notes</label><input type="text" id="workoutNotes" placeholder="PR on bench, felt great..."></div>
+      <div class="field"><label>Notes</label><input type="text" id="workoutNotes" placeholder="Upper Body Workout"></div>
       <button class="btn btn-primary" onclick="logWorkout()">Save Workout +50 XP</button>
     </div>
   </div>
-
   <!-- WEIGHT CHART -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -483,7 +439,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <div style="position:relative;height:180px;"><canvas id="weightChart" role="img" aria-label="Body weight over time"></canvas></div>
     </div>
   </div>
-
   <!-- MEASUREMENT HISTORY -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -494,7 +449,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <div class="empty-state"><div class="es-icon">📏</div>No measurements yet</div>
     </div>
   </div>
-
   <!-- WORKOUT HISTORY -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -510,7 +464,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <div id="workoutLogList"></div>
     </div>
   </div>
-
   <!-- PROGRESS PHOTOS -->
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
@@ -546,10 +499,8 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
     </div>
   </div>
 </div>
-
 <!-- ════════════════════════════════════════ STREAK PAGE -->
 <div class="page scroll-content" id="page-streak">
-
   <div class="metric-grid">
     <div class="metric-card">
       <div class="metric-label">Current streak</div>
@@ -568,7 +519,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <div class="metric-value" id="totalCount">0<span class="metric-unit"> workouts</span></div>
     </div>
   </div>
-
   <!-- STREAK RING + HEATMAP -->
   <div class="card">
     <div class="card-static">
@@ -610,7 +560,6 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <button class="btn btn-primary" onclick="markTodayDone()" id="markDoneBtn">✓ Mark today done +50 XP</button>
     </div>
   </div>
-
   <!-- 7-DAY CHAIN -->
   <div class="card">
     <div class="card-static">
@@ -619,10 +568,8 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
     </div>
   </div>
 </div>
-
 <!-- ════════════════════════════════════════ ACHIEVEMENTS PAGE -->
 <div class="page scroll-content" id="page-achievements">
-
   <div class="card">
     <div class="card-static">
       <div class="section-label">Your level</div>
@@ -643,17 +590,14 @@ hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
       <div style="font-size:10px;color:var(--text-3);" id="achXpNext"></div>
     </div>
   </div>
-
   <div class="section-label" style="padding:0 0 8px;">Badges & trophies</div>
   <div class="badge-grid" id="badgeGrid"></div>
 </div>
-
 <script>
 // ══════════════════════════════════════════════════════
 // STATE & PERSISTENCE
 // ══════════════════════════════════════════════════════
 const STORE_KEY = 'df_state_v3';
-
 function loadState() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
@@ -661,16 +605,13 @@ function loadState() {
   } catch(e){}
   return null;
 }
-
 function saveState() {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch(e){}
 }
-
 const todayKey = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 };
-
 const defaultState = {
   goals: { cal:2000, prot:150, carb:200, fat:65 },
   goalsSet: false,
@@ -684,7 +625,6 @@ const defaultState = {
   checkinDate: '',
   achievements: []
 };
-
 let S = loadState() || JSON.parse(JSON.stringify(defaultState));
 if (!S.meals) S.meals = {};
 if (!S.workouts) S.workouts = {};
@@ -695,7 +635,6 @@ if (!S.achievements) S.achievements = [];
 if (!S.checkinDate) S.checkinDate = '';
 if (S.xp === undefined) S.xp = 0;
 if (S.level === undefined) S.level = 1;
-
 // ── XP SYSTEM ──
 const TIERS = [
   { name:'Rookie', icon:'🌱', min:1, max:5, xpPerLevel:200 },
@@ -704,22 +643,18 @@ const TIERS = [
   { name:'Champion', icon:'🏆', min:31, max:50, xpPerLevel:2500 },
   { name:'Legend', icon:'⭐', min:51, max:999, xpPerLevel:5000 },
 ];
-
 function getTierForLevel(level) {
   return TIERS.find(t => level >= t.min && level <= t.max) || TIERS[TIERS.length-1];
 }
-
 function xpForLevel(level) {
   const tier = getTierForLevel(level);
   return tier.xpPerLevel;
 }
-
 function totalXpForLevel(level) {
   let total = 0;
   for (let l = 1; l < level; l++) total += xpForLevel(l);
   return total;
 }
-
 function getLevelFromXp(xp) {
   let level = 1, remaining = xp;
   while (remaining >= xpForLevel(level)) {
@@ -728,7 +663,6 @@ function getLevelFromXp(xp) {
   }
   return { level, remainder: remaining, needed: xpForLevel(level) };
 }
-
 function addXP(amount, reason) {
   const before = getLevelFromXp(S.xp);
   S.xp += amount;
@@ -743,7 +677,6 @@ function addXP(amount, reason) {
     setTimeout(() => showLevelBanner(after.level, oldTier, newTier), 600);
   }
 }
-
 function updateXPUI() {
   const info = getLevelFromXp(S.xp);
   const tier = getTierForLevel(info.level);
@@ -766,7 +699,6 @@ function updateXPUI() {
     cards.forEach(c => c.classList.remove('champion-border'));
   }
 }
-
 function showLevelBanner(level, oldTier, newTier) {
   const isTierUp = newTier.name !== oldTier.name;
   document.getElementById('levelBannerIcon').textContent = newTier.icon;
@@ -777,11 +709,9 @@ function showLevelBanner(level, oldTier, newTier) {
   document.getElementById('levelBanner').classList.add('show');
   unlockAchievement(`level_${level}`);
 }
-
 function closeLevelBanner() {
   document.getElementById('levelBanner').classList.remove('show');
 }
-
 // ── TOAST ──
 let toastTimer;
 function showToast(msg) {
@@ -791,7 +721,6 @@ function showToast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
 }
-
 // ── NAV ──
 function switchPage(page, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -802,7 +731,6 @@ function switchPage(page, btn) {
   if (page === 'gym') renderWeightChart();
   if (page === 'achievements') renderBadges();
 }
-
 function toggleCard(header) {
   const toggle = header.querySelector('.card-toggle');
   const body = header.nextElementSibling;
@@ -810,7 +738,6 @@ function toggleCard(header) {
   body.classList.toggle('open', !isOpen);
   toggle.classList.toggle('open', !isOpen);
 }
-
 // ── DATE HELPERS ──
 function fmtDate(d) {
   const dt = typeof d === 'string' ? new Date(d+'T12:00:00') : d;
@@ -821,7 +748,6 @@ function fmtShort(d) {
   return dt.toLocaleDateString('en-US', { month:'short', day:'numeric' });
 }
 function uid() { return Math.random().toString(36).slice(2,9); }
-
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
   const now = new Date();
@@ -844,7 +770,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // checkin button state
   updateCheckinBtn();
 });
-
 // ── CHECK-IN ──
 function updateCheckinBtn() {
   const btn = document.getElementById('checkinBtn');
@@ -855,7 +780,6 @@ function updateCheckinBtn() {
     btn.style.opacity = '0.5';
   }
 }
-
 function doCheckin() {
   if (S.checkinDate === todayKey()) return;
   S.checkinDate = todayKey();
@@ -863,7 +787,6 @@ function doCheckin() {
   updateCheckinBtn();
   checkBadge_checkin();
 }
-
 // ── GOALS ──
 function renderGoalsUI() {
   const disp = document.getElementById('goalsDisplay');
@@ -890,7 +813,6 @@ function renderGoalsUI() {
     document.getElementById('goalFat').value = S.goals.fat;
   }
 }
-
 function showGoalsForm() {
   document.getElementById('goalsDisplay').style.display = 'none';
   const form = document.getElementById('goalsForm');
@@ -904,7 +826,6 @@ function showGoalsForm() {
 function cancelEditGoals() {
   renderGoalsUI();
 }
-
 function saveGoals() {
   S.goals.cal = +document.getElementById('goalCal').value || 2000;
   S.goals.prot = +document.getElementById('goalProt').value || 150;
@@ -927,9 +848,7 @@ function getTodayTotals() {
     return acc;
   }, {cal:0,prot:0,carb:0,fat:0});
 }
-
 function pct(val, goal) { return goal ? Math.min(100, Math.round((val/goal)*100)) : 0; }
-
 function renderMacroUI() {
   const t = getTodayTotals();
   const g = S.goals;
@@ -973,7 +892,6 @@ function renderMacroUI() {
     checkAllMacrosHit();
   }
 }
-
 let macroXpGivenToday = false;
 function checkAllMacrosHit() {
   const td = todayKey();
@@ -984,7 +902,6 @@ function checkAllMacrosHit() {
     unlockAchievement('all_macros');
   }
 }
-
 function logMeal() {
   const name = document.getElementById('mealName').value.trim() || 'Meal';
   const cal = +document.getElementById('mealCal').value || 0;
@@ -1002,7 +919,6 @@ function logMeal() {
   showToast('Meal logged!');
   checkBadge_meals();
 }
-
 function renderMealHistory() {
   const date = document.getElementById('mealHistoryDate').value;
   const meals = S.meals[date] || [];
@@ -1028,12 +944,10 @@ function renderMealHistory() {
       </div>
     </div>`).join('') + '</div>';
 }
-
 function toggleMealEdit(id) {
   const el = document.getElementById('mealEdit_' + id);
   el.classList.toggle('open');
 }
-
 function saveMealEdit(date, id) {
   const meals = S.meals[date] || [];
   const idx = meals.findIndex(m => m.id === id);
@@ -1045,12 +959,10 @@ function saveMealEdit(date, id) {
   meals[idx].fat = +document.getElementById('medit_fat_'+id).value || 0;
   saveState(); renderMealHistory(); renderMacroUI(); showToast('Meal updated!');
 }
-
 function deleteMeal(date, id) {
   S.meals[date] = (S.meals[date]||[]).filter(m => m.id !== id);
   saveState(); renderMealHistory(); renderMacroUI(); showToast('Meal deleted');
 }
-
 function prevDay(type) {
   const inp = document.getElementById(type === 'meal' ? 'mealHistoryDate' : 'workoutHistoryDate');
   const d = new Date(inp.value + 'T12:00:00');
@@ -1058,7 +970,6 @@ function prevDay(type) {
   inp.value = d.toISOString().slice(0,10);
   if (type === 'meal') renderMealHistory(); else renderWorkoutHistory();
 }
-
 function nextDay(type) {
   const inp = document.getElementById(type === 'meal' ? 'mealHistoryDate' : 'workoutHistoryDate');
   const d = new Date(inp.value + 'T12:00:00');
@@ -1066,7 +977,6 @@ function nextDay(type) {
   inp.value = d.toISOString().slice(0,10);
   if (type === 'meal') renderMealHistory(); else renderWorkoutHistory();
 }
-
 // ── WORKOUTS ──
 function logWorkout() {
   const type = document.getElementById('workoutType').value.trim() || 'Workout';
@@ -1094,7 +1004,6 @@ function logWorkout() {
   checkBadge_workouts();
   updateTickerFeed();
 }
-
 function renderWorkoutHistory() {
   const date = document.getElementById('workoutHistoryDate').value;
   const workouts = S.workouts[date] || [];
@@ -1120,7 +1029,6 @@ function renderWorkoutHistory() {
       </div>
     </div>`).join('') + '</div>';
 }
-
 function toggleWorkoutEdit(id) { document.getElementById('woEdit_'+id).classList.toggle('open'); }
 function saveWorkoutEdit(date, id) {
   const ws = S.workouts[date] || [];
@@ -1138,7 +1046,6 @@ function deleteWorkout(date, id) {
   }
   saveState(); renderWorkoutHistory(); renderStreakUI(); renderChainDays(); showToast('Workout deleted');
 }
-
 // ── MEASUREMENTS ──
 function logMeasurement() {
   const entry = {
@@ -1162,7 +1069,6 @@ function logMeasurement() {
   showToast('Measurements saved!');
   checkBadge_measurements();
 }
-
 function renderGymMetrics() {
   const sorted = S.measurements.slice().sort((a,b) => a.date.localeCompare(b.date));
   if (!sorted.length) return;
@@ -1183,7 +1089,6 @@ function renderGymMetrics() {
   if (last.waist) document.getElementById('curWaist').innerHTML = last.waist + '<span class="metric-unit"> in</span>';
   if (last.hips) document.getElementById('curHips').innerHTML = last.hips + '<span class="metric-unit"> in</span>';
 }
-
 function renderMeasureHistory() {
   const el = document.getElementById('measureHistory');
   if (!S.measurements.length) {
@@ -1224,7 +1129,6 @@ function renderMeasureHistory() {
     </div>`;
   }).join('') + '</div>';
 }
-
 function toggleMeasEdit(id) { document.getElementById('measEdit_'+id).classList.toggle('open'); }
 function saveMeasEdit(id) {
   const idx = S.measurements.findIndex(m => m.id === id);
@@ -1241,7 +1145,6 @@ function deleteMeas(id) {
   S.measurements = S.measurements.filter(m => m.id !== id);
   saveState(); renderMeasureHistory(); renderGymMetrics(); renderWeightChart(); showToast('Deleted');
 }
-
 // ── WEIGHT CHART ──
 let weightChartInst = null;
 function renderWeightChart() {
@@ -1266,7 +1169,6 @@ function renderWeightChart() {
     }
   });
 }
-
 // ── STREAK ──
 function markTodayDone() {
   const td = todayKey();
@@ -1283,7 +1185,6 @@ function markTodayDone() {
     showToast('Already marked today!');
   }
 }
-
 function checkWeekStreakXP() {
   const today = new Date(); today.setHours(0,0,0,0);
   let consecutive = 0;
@@ -1302,7 +1203,6 @@ function checkWeekStreakXP() {
     }
   }
 }
-
 function getStreakCount() {
   const today = new Date(); today.setHours(0,0,0,0);
   let streak = 0;
@@ -1314,7 +1214,6 @@ function getStreakCount() {
   }
   return streak;
 }
-
 function getBestStreak() {
   if (!S.streakDays.length) return 0;
   const days = S.streakDays.slice().sort();
@@ -1327,7 +1226,6 @@ function getBestStreak() {
   }
   return best;
 }
-
 function renderStreakUI() {
   const now = new Date();
   const year = now.getFullYear(), month = now.getMonth();
@@ -1336,7 +1234,6 @@ function renderStreakUI() {
   const today = now.getDate();
   const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   document.getElementById('heatmapMonthTitle').textContent = monthNames[month] + ' ' + year;
-
   let html = '';
   for (let i=0;i<firstDay;i++) html += '<div class="hd"></div>';
   for (let d=1;d<=daysInMonth;d++) {
@@ -1350,12 +1247,10 @@ function renderStreakUI() {
     html += `<div class="${cls}" title="${monthNames[month]} ${d}"></div>`;
   }
   document.getElementById('heatmapGrid').innerHTML = html;
-
   const streak = getStreakCount();
   const best = getBestStreak();
   document.getElementById('curStreak').innerHTML = streak + '<span class="metric-unit"> days</span>';
   document.getElementById('bestStreak').innerHTML = best + '<span class="metric-unit"> days</span>';
-
   // ring fill — 7-day cycle, turns gold after 7
   const ringFill = document.getElementById('streakRingFill');
   const ringNum = document.getElementById('ringNum');
@@ -1374,7 +1269,6 @@ function renderStreakUI() {
     ringNum.style.fill = '#C9586A';
     ringLabel.textContent = 'Streak';
   }
-
   // this month
   let monthCount = 0;
   S.streakDays.forEach(k => {
@@ -1384,7 +1278,6 @@ function renderStreakUI() {
   document.getElementById('monthCount').innerHTML = monthCount + '<span class="metric-unit"> workouts</span>';
   document.getElementById('totalCount').innerHTML = S.streakDays.length + '<span class="metric-unit"> workouts</span>';
 }
-
 function renderChainDays() {
   const today = new Date(); today.setHours(0,0,0,0);
   const el = document.getElementById('chainDays');
@@ -1404,10 +1297,8 @@ function renderChainDays() {
   }
   el.innerHTML = html;
 }
-
 // ── PROGRESS PHOTOS ──
 let photoCalYear, photoCalMonth, selectedPhotoDate, currentPhotoSlot;
-
 function initPhotoCalendar() {
   const now = new Date();
   photoCalYear = now.getFullYear();
@@ -1416,7 +1307,6 @@ function initPhotoCalendar() {
   renderPhotoCal();
   renderPhotoSlots();
 }
-
 function photoCalPrev() {
   photoCalMonth--;
   if (photoCalMonth < 0) { photoCalMonth = 11; photoCalYear--; }
@@ -1427,7 +1317,6 @@ function photoCalNext() {
   if (photoCalMonth > 11) { photoCalMonth = 0; photoCalYear++; }
   renderPhotoCal();
 }
-
 function renderPhotoCal() {
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   document.getElementById('photoCalTitle').textContent = months[photoCalMonth] + ' ' + photoCalYear;
@@ -1448,7 +1337,6 @@ function renderPhotoCal() {
   }
   document.getElementById('photoCalGrid').innerHTML = html;
 }
-
 function selectPhotoDate(dateKey) {
   selectedPhotoDate = dateKey;
   renderPhotoCal();
@@ -1456,7 +1344,6 @@ function selectPhotoDate(dateKey) {
   const d = new Date(dateKey+'T12:00:00');
   document.getElementById('photoDateLabel').textContent = dateKey === todayKey() ? "Today's photos" : fmtDate(dateKey);
 }
-
 function renderPhotoSlots() {
   const photos = S.photos[selectedPhotoDate] || {};
   ['front','side','back'].forEach(type => {
@@ -1475,12 +1362,10 @@ function renderPhotoSlots() {
     }
   });
 }
-
 function triggerPhotoUpload(slot) {
   currentPhotoSlot = slot;
   document.getElementById('photoInput').click();
 }
-
 function handlePhotoUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -1497,7 +1382,6 @@ function handlePhotoUpload(e) {
   reader.readAsDataURL(file);
   e.target.value = '';
 }
-
 function removePhoto(event, slot) {
   event.stopPropagation();
   if (S.photos[selectedPhotoDate]) {
@@ -1508,7 +1392,6 @@ function removePhoto(event, slot) {
     showToast('Photo removed');
   }
 }
-
 // ── ACHIEVEMENTS / BADGES ──
 const ALL_BADGES = [
   { id:'first_meal', icon:'🍽️', name:'First Meal', desc:'Log your first meal', condition: () => Object.values(S.meals).some(d=>d.length>0) },
@@ -1524,7 +1407,6 @@ const ALL_BADGES = [
   { id:'checkin7', icon:'✅', name:'Consistent', desc:'Check in 7 different days', condition: () => false }, // manual track
   { id:'measurements5', icon:'📐', name:'Body Tracker', desc:'Log 5 measurements', condition: () => S.measurements.length>=5 },
 ];
-
 function unlockAchievement(id) {
   if (!S.achievements.includes(id)) {
     S.achievements.push(id);
@@ -1534,7 +1416,6 @@ function unlockAchievement(id) {
     renderBadges();
   }
 }
-
 function checkBadge_meals() {
   const total = Object.values(S.meals).reduce((a,d)=>a+d.length,0);
   if (total>=1) unlockAchievement('first_meal');
@@ -1551,7 +1432,6 @@ function checkBadge_checkin() {
   // count unique checkin days (use checkinDate as proxy — simplified)
   unlockAchievement('checkin7'); // simplified: first checkin
 }
-
 function renderBadges() {
   const el = document.getElementById('badgeGrid');
   el.innerHTML = ALL_BADGES.map(b => {
@@ -1567,7 +1447,6 @@ function renderBadges() {
     </div>`;
   }).join('');
 }
-
 // ── TICKER FEED ──
 const tickerEvents = [
   '🔥 <span>Sarah M.</span> hit a 10-day streak!',
@@ -1596,11 +1475,9 @@ const tickerEvents = [
   '🔗 <span>Olivia T.</span> kept the streak alive today',
   '🔥 <span>barbiegains</span> just hit a new streak record'
 ];
-
 function setupTicker() {
   updateTickerFeed();
 }
-
 function updateTickerFeed() {
   const items = tickerEvents.slice();
   // add user activity
@@ -1609,7 +1486,6 @@ function updateTickerFeed() {
   const doubled = [...items,...items];
   document.getElementById('tickerInner').innerHTML = doubled.map(e => `<span class="ticker-item">${e}</span>`).join('');
 }
-
 // ── INIT DATE ──
 document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
 <script>
@@ -1625,21 +1501,17 @@ let userStats = JSON.parse(localStorage.getItem('fitnessStats')) || {
     protein: 0,
     goalProtein: 0
 };
-
 // 2. Function to update the visuals (The UI)
 function updateDashboard() {
     // Update Text
     document.getElementById('xp-display').innerText = `${userStats.xp} / 200 XP`;
     document.getElementById('protein-count').innerText = userStats.protein;
-    
     // Update Progress Bar Math
     const proteinPercent = (userStats.protein / userStats.goalProtein) * 100;
     document.getElementById('protein-bar').style.width = Math.min(proteinPercent, 100) + '%';
-    
     // Save data
     localStorage.setItem('fitnessStats', JSON.stringify(userStats));
 }
-
 // 3. Button Action: Check-in
 function handleCheckIn() {
     userStats.xp += 10;
@@ -1655,7 +1527,6 @@ function logMeal() {
         updateDashboard();
     }
 }
-
 // Initialize on page load
 updateDashboard();
 </script>
