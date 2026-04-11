@@ -710,7 +710,7 @@ const fmtShort = d => new Date((typeof d==='string'?d+'T12:00:00':d)).toLocaleDa
 const pct = (v,g) => g ? Math.min(100,Math.round((v/g)*100)) : 0;
 
 const DEFAULT = {
-  goals:{cal:2000,prot:150,carb:200,fat:65}, goalsSet:false,
+  goals: { cal: 0, prot: 0, carb: 0, fat: 0 },
   meals:{}, workouts:{}, measurements:[], photos:{},
   streakDays:[], xp:0, level:1, checkinDate:'', achievements:[], macroXpDates:[]
 };
