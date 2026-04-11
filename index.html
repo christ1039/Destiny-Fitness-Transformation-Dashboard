@@ -54,16 +54,15 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* NAV */
-<div class="nav-wrap">
-    <div class="nav-tabs">
-      <button class="nav-tab active" onclick="switchPage('overview')">Overview</button>
-      <button class="nav-tab" onclick="switchPage('gym')">Gym</button>
-      <button class="nav-tab" onclick="switchPage('nutrition')">Nutrition</button>
-      <button class="nav-tab" onclick="switchPage('history')">History</button>
-      <button class="nav-tab" onclick="switchPage('streak')">Streak</button>
-      <button class="nav-tab" onclick="switchPage('achievements')">Achievements</button>
-    </div>
-  </div>
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="switchPage('overview', this)">Overview</button>
+  <button class="nav-tab" onclick="switchPage('gym', this)">Gym</button>
+  <button class="nav-tab" onclick="switchPage('history', this)">History</button>
+  <button class="nav-tab" onclick="switchPage('nutrition', this)">Nutrition</button>
+  <button class="nav-tab" onclick="switchPage('streak', this)">Streak</button>
+  <button class="nav-tab" onclick="switchPage('achievements', this)">Badges</button>
+</div>
+  
 </header>
 
 /* LEVEL BANNER */
@@ -271,7 +270,7 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
     <div class="level-banner-title" id="levelBannerTitle">Level Up!</div>
     <div class="level-banner-sub" id="levelBannerSub">You've reached a new tier!</div>
     <div class="level-banner-tier" id="levelBannerTier" style="display:none"></div>
-    < class="level-banner-btn" id="levelBannerBtn">Let's Go! 🔥</>
+<button class="level-banner-btn" id="levelBannerBtn" onclick="document.getElementById('levelBanner').classList.remove('show')">Let's Go! 🔥</button>
   </div>
 </div>
 
@@ -303,8 +302,6 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
     <h3 class="section-title">Muscle Focus</h3>
     <div class="chart-container"><canvas id="muscleChart"></canvas></div>
   </div> </div> <div class="page" id="page-gym">
-
-<div class="page" id="page-gym">
   <div class="card">
     <h3 class="section-title">Log Workout</h3>
     <div class="field"><label>Exercise Name</label><input type="text" id="exName" placeholder="e.g. Squats"></div>
@@ -359,7 +356,7 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 <div class="card" id="gymMetrics">
   <div class="metric-grid">
     <div class="metric-card"><div class="metric-label">Current Weight</div><div class="metric-value" id="curWeight">—</div></div>
-    <div class="metric-card"><div class="metric-label">Body Fat</div><div class="metric-value" id="mcProt">—</div></div>
+    <div class="metric-card"><div class="metric-label">Body Fat</div><div class="metric-value" id="curBodyFat">—</div></div>
     <div class="metric-card"><div class="metric-label">Chest</div><div class="metric-value" id="curChest">—</div></div>
     <div class="metric-card"><div class="metric-label">Waist</div><div class="metric-value" id="curWaist">—</div></div>
     <div class="metric-card"><div class="metric-label">Hips</div><div class="metric-value" id="curHips">—</div></div>
@@ -745,6 +742,8 @@ function updateXPUI() {
   tierEl.className = 'xp-tier' + (isElite?' elite':'');
   document.getElementById('xpPtsLabel').textContent = `${info.remainder.toLocaleString()} / ${info.needed.toLocaleString()} XP`;
   document.getElementById('xpBarFill').style.width = p+'%';
+
+  .xp-tier.elite { color: var(--gold-deep); text-shadow: 0 0 8px rgba(212,163,95,0.3); }
 
   const eb = document.getElementById('eliteBadge');
   if(isElite){eb.textContent=tier.icon+' '+tier.name;eb.style.display='block';}
