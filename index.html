@@ -95,41 +95,47 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .metric-bar{margin-top:6px;height:3px;background:#f0e8ea;border-radius:2px;overflow:hidden}
 .metric-bar-fill{height:100%;border-radius:2px;transition:width 0.5s ease}
 
-/* STREAK */
-.streak-section{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
-.streak-ring-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px}
-.streak-ring-label{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;text-align:center}
-.heatmap-wrap{flex:1}
-.heatmap-title{font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:6px}
-.heatmap-days-row{display:flex;gap:2px;margin-bottom:3px}
-.heatmap-day-label{font-size:9px;color:var(--text-3);width:14px;text-align:center}
-.heatmap-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.hd{aspect-ratio:1;border-radius:3px;background:#f0e8ea;transition:background 0.2s}
-.hd.done{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep))}
-.hd.today{background:#f0e8ea;box-shadow:0 0 0 1.5px var(--gold-classic)}
-.hd.done.today{background:linear-gradient(135deg,var(--gold-classic),var(--gold-deep));box-shadow:0 0 8px rgba(212,163,95,0.7)}
+/* COMPACT CALENDARS & LAYOUT FIXES */
+.streak-section { display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
+.heatmap-grid, .photo-grid { 
+    display: grid; 
+    grid-template-columns: repeat(7, minmax(0, 1fr)); 
+    gap: 4px; 
+    max-width: 300px; 
+}
+.hd, .photo-day { 
+    aspect-ratio: 1; 
+    border-radius: 4px; 
+    background: #f0e8ea; 
+    position: relative; 
+    font-size: 9px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer;
+}
+.date-num { position: absolute; top: 2px; right: 2px; font-size: 7px; opacity: 0.6; }
+.hd.done { background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep)); color: white; }
 
-/* CHAIN */
-.chain-days{display:flex;gap:4px;flex-wrap:wrap}
-.chain-link{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;border:2px solid;flex-shrink:0;transition:all 0.3s}
-.chain-link.empty{background:#f0e8ea;border-color:#e0d0d2;color:var(--text-3)}
-.chain-link.filled{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));border-color:var(--pink-deep);color:#fff}
-.chain-link.gold{background:linear-gradient(135deg,var(--gold-classic),var(--gold-deep));border-color:var(--gold-deep);color:#fff;box-shadow:0 2px 8px rgba(181,122,42,0.4)}
+/* CONSTRAINED CONTAINERS */
+.chain-days { display: flex; gap: 4px; flex-wrap: wrap; width: fit-content; border: 1px solid var(--border); padding: 8px; border-radius: 12px; }
 
-/* FORMS */
-.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
-.field label{font-size:11px;color:var(--text-2);font-weight:500;letter-spacing:0.3px}
-.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;font-size:14px;font-family:'Montserrat',sans-serif;background:#fff;color:var(--text);outline:none;width:100%;transition:border-color 0.2s,box-shadow 0.2s}
-.field input:focus,.field select:focus{border-color:var(--pink-mid);box-shadow:0 0 0 3px rgba(224,122,134,0.12)}
-.row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.btn{border:none;border-radius:var(--radius-sm);padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s}
-.btn-primary{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;width:100%;margin-top:4px}
-.btn-primary:active{transform:scale(0.98)}
-.btn-sm{padding:5px 12px;font-size:11px;border-radius:6px}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-2)}
-.btn-gold{background:linear-gradient(135deg,var(--gold-classic),var(--gold-deep));color:#fff}
-.btn-danger{background:#fee2e2;color:#c0392b;border:1px solid #fca5a5}
+/* FORMS & S */
+.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+.field label { font-size: 11px; color: var(--text-2); font-weight: 500; }
+.field input { border: 1px solid var(--border); border-radius: 8px; padding: 10px; width: 100%; }
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.btn { border: none; border-radius: 8px; padding: 10px 18px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.btn-primary { background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep)); color: #fff; width: 100%; }
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-2); }
+
+/* QUICK STAT CARDS */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+.stat-card { background: #fff; padding: 12px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
+.stat-val { font-size: 18px; font-weight: 700; color: var(--pink-deep); }
+
+/* CHART PLACEHOLDERS */
+.chart-container { background: #fff; padding: 10px; border-radius: 12px; margin-bottom: 10px; height: 200px; border: 1px solid var(--border); }
 
 /* PRESETS */
 .preset-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
@@ -254,7 +260,7 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
     <div class="level-banner-title" id="levelBannerTitle">Level Up!</div>
     <div class="level-banner-sub" id="levelBannerSub">You've reached a new tier!</div>
     <div class="level-banner-tier" id="levelBannerTier" style="display:none"></div>
-    <button class="level-banner-btn" id="levelBannerBtn">Let's Go! 🔥</button>
+    < class="level-banner-btn" id="levelBannerBtn">Let's Go! 🔥</>
   </div>
 </div>
 
@@ -262,307 +268,69 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 <div class="toast" id="toast"></div>
 
 <!-- HEADER -->
-<div class="app-header">
-  <div class="header-top">
-    <div class="logo-wrap">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      </div>
-      <div>
-        <div class="logo-text">Destiny Fitness</div>
-        <div class="logo-sub">Transformation Dashboard</div>
-      </div>
+</div> <div class="page active" id="page-overview">
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="goal-chip-label">Total Volume</div>
+      <div class="stat-val" id="statVol">0 lbs</div>
     </div>
-    <div style="text-align:right">
-      <div class="date-badge" id="todayDate"></div>
-      <div class="elite-badge" id="eliteBadge" style="display:none"></div>
+    <div class="stat-card">
+      <div class="goal-chip-label">Consistency</div>
+      <div class="stat-val" id="statCons">0%</div>
     </div>
   </div>
-  <div class="xp-header">
-    <div class="xp-row">
-      <span class="xp-tier" id="xpTierLabel">🌱 Rookie · Lv 1</span>
-      <span class="xp-pts" id="xpPtsLabel">0 / 200 XP</span>
-    </div>
-    <div class="xp-bar-track"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
-  </div>
-  <div class="ticker-wrap">
-    <div class="ticker-inner" id="tickerInner"></div>
-  </div>
-</div>
-
-<!-- NAV TABS -->
-<div class="nav-wrap">
-  <div class="nav-tabs">
-    <button class="nav-tab active" id="tab-nutrition" onclick="switchPage('nutrition',this)">🥗 Nutrition</button>
-    <button class="nav-tab" id="tab-gym" onclick="switchPage('gym',this)">🏋️ Gym Progress</button>
-    <button class="nav-tab" id="tab-streak" onclick="switchPage('streak',this)">🔥 Streak</button>
-    <button class="nav-tab" id="tab-achievements" onclick="switchPage('achievements',this)">🏅 Achievements</button>
-  </div>
-</div>
-
-<!-- ══════════════════════════ NUTRITION PAGE ══════════════════════════ -->
-<div class="page active" id="page-nutrition">
-
-  <!-- Check-in row -->
-  <div style="background:#fff;border-radius:10px;padding:10px 14px;border:1px solid var(--border);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
-    <span style="font-size:12px;color:var(--text-2)" id="checkinLabel">Daily check-in</span>
-    <button class="btn btn-sm btn-gold" id="checkinBtn" onclick="doCheckin()">Check in +10 XP</button>
-  </div>
-
-  <!-- Macro cards -->
-  <div class="metric-grid" id="macroCards">
-    <div class="metric-card" id="mcCal">
-      <div class="metric-label">Calories</div>
-      <div class="metric-value" id="calDisplay">0<span class="metric-unit"> kcal</span></div>
-      <div class="metric-delta" id="calDelta" style="color:var(--text-3)">Goal: 0</div>
-      <div class="metric-bar"><div class="metric-bar-fill" id="calBarMini" style="width:0%;background:linear-gradient(90deg,var(--coral),var(--pink-deep))"></div></div>
-    </div>
-    <div class="metric-card" id="mcProt">
-      <div class="metric-label">Protein</div>
-      <div class="metric-value" id="protDisplay">0<span class="metric-unit"> g</span></div>
-      <div class="metric-delta" id="protDelta" style="color:var(--text-3)">Goal: 0g</div>
-      <div class="metric-bar"><div class="metric-bar-fill" id="protBarMini" style="width:0%;background:linear-gradient(90deg,var(--pink-light),var(--pink-mid))"></div></div>
-    </div>
-    <div class="metric-card" id="mcCarb">
-      <div class="metric-label">Carbs</div>
-      <div class="metric-value" id="carbDisplay">0<span class="metric-unit"> g</span></div>
-      <div class="metric-delta" id="carbDelta" style="color:var(--text-3)">Goal: 0g</div>
-      <div class="metric-bar"><div class="metric-bar-fill" id="carbBarMini" style="width:0%;background:linear-gradient(90deg,var(--peach),var(--gold-classic))"></div></div>
-    </div>
-    <div class="metric-card" id="mcFat">
-      <div class="metric-label">Fats</div>
-      <div class="metric-value" id="fatDisplay">0<span class="metric-unit"> g</span></div>
-      <div class="metric-delta" id="fatDelta" style="color:var(--text-3)">Goal: 0g</div>
-      <div class="metric-bar"><div class="metric-bar-fill" id="fatBarMini" style="width:0%;background:linear-gradient(90deg,var(--gold-light),var(--gold-deep))"></div></div>
-    </div>
-  </div>
-
-  <!-- Macro progress bars -->
   <div class="card">
-    <div class="card-static">
-      <div class="section-label">Macro progress</div>
-      <div class="macro-row"><span class="macro-label">Protein</span><div class="macro-bar-track"><div class="macro-bar-fill" id="protBar" style="width:0%;background:linear-gradient(90deg,var(--pink-light),var(--pink-mid))"></div></div><span class="macro-pct" id="protPct">0%</span></div>
-      <div class="macro-row"><span class="macro-label">Carbs</span><div class="macro-bar-track"><div class="macro-bar-fill" id="carbBar" style="width:0%;background:linear-gradient(90deg,var(--peach),var(--gold-classic))"></div></div><span class="macro-pct" id="carbPct">0%</span></div>
-      <div class="macro-row"><span class="macro-label">Fats</span><div class="macro-bar-track"><div class="macro-bar-fill" id="fatBar" style="width:0%;background:linear-gradient(90deg,var(--gold-light),var(--gold-deep))"></div></div><span class="macro-pct" id="fatPct">0%</span></div>
-      <div class="macro-row"><span class="macro-label">Calories</span><div class="macro-bar-track"><div class="macro-bar-fill" id="calBar" style="width:0%;background:linear-gradient(90deg,var(--coral),var(--pink-deep))"></div></div><span class="macro-pct" id="calPct">0%</span></div>
-      <div id="allMacrosHitBanner" style="display:none;margin-top:10px;padding:8px 12px;border-radius:8px;text-align:center;font-size:12px;font-weight:700;background:linear-gradient(135deg,var(--gold-light),var(--gold-classic));color:#7a4a10">🏆 All macro goals hit today!</div>
-    </div>
+    <h3 class="section-title">Weight Trend</h3>
+    <div class="chart-container"><canvas id="weightChart"></canvas></div>
   </div>
+<div class="card">
+    <h3 class="section-title">Muscle Focus</h3>
+    <div class="chart-container"><canvas id="muscleChart"></canvas></div>
+  </div> </div> <div class="page" id="page-gym">
 
-  <!-- Log a meal -->
-  <div class="card">
-    <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">➕ Log a meal</span>
-      <span class="card-toggle">⌄</span>
-    </div>
-    <div class="card-body">
-      <div class="preset-label">Quick add</div>
-      <div class="preset-row">
-        <button class="preset-chip" onclick="fillMealPreset('Chicken & Rice',450,42,38,8)">Chicken & Rice</button>
-        <button class="preset-chip" onclick="fillMealPreset('Protein Shake',160,30,8,2)">Protein Shake</button>
-        <button class="preset-chip" onclick="fillMealPreset('Greek Yogurt',130,18,9,3)">Greek Yogurt</button>
-        <button class="preset-chip" onclick="fillMealPreset('Eggs & Toast',320,22,28,12)">Eggs & Toast</button>
-        <button class="preset-chip" onclick="fillMealPreset('Salmon & Veg',390,38,15,18)">Salmon & Veg</button>
-        <button class="preset-chip" onclick="fillMealPreset('Oatmeal',300,10,52,6)">Oatmeal</button>
-      </div>
-      <div class="row-2">
-        <div class="field"><label>Meal name</label><input id="mealName" placeholder="e.g. Grilled chicken" type="text"></div>
-        <div class="field"><label>Calories (kcal)</label><input id="mealCal" placeholder="0" type="number" min="0"></div>
-      </div>
-      <div class="row-3">
-        <div class="field"><label>Protein (g)</label><input id="mealProt" placeholder="0" type="number" min="0"></div>
-        <div class="field"><label>Carbs (g)</label><input id="mealCarb" placeholder="0" type="number" min="0"></div>
-        <div class="field"><label>Fats (g)</label><input id="mealFat" placeholder="0" type="number" min="0"></div>
-      </div>
-      <button class="btn btn-primary" onclick="logMeal()">Save Meal 🍽️</button>
-    </div>
-  </div>
-
-  <!-- Daily Goals -->
-  <div class="card">
-    <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">🎯 Daily goals</span>
-      <span class="card-toggle">⌄</span>
-    </div>
-    <div class="card-body" id="goalsCardBody">
-      <div id="goalsDisplay"></div>
-      <div id="goalsForm" style="display:none">
-        <div class="row-2">
-          <div class="field"><label>Calorie goal</label><input id="goalCal" type="number" placeholder="0"></div>
-          <div class="field"><label>Protein (g)</label><input id="goalProt" type="number" placeholder="0"></div>
-        </div>
-        <div class="row-2">
-          <div class="field"><label>Carbs (g)</label><input id="goalCarb" type="number" placeholder="0"></div>
-          <div class="field"><label>Fats (g)</label><input id="goalFat" type="number" placeholder="0"></div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-primary" style="flex:1;margin-top:0" onclick="saveGoals()">Save Goals</button>
-          <button class="btn btn-ghost btn-sm" onclick="cancelEditGoals()" style="padding:10px 14px">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Meal history -->
-  <div class="card">
-    <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">📋 Meal history</span>
-      <span class="card-toggle">⌄</span>
-    </div>
-    <div class="card-body">
-      <div class="history-date-nav">
-        <button class="history-date-btn" onclick="shiftDate('meal',-1)">‹</button>
-        <input type="date" id="mealHistoryDate" class="field history-date-select" onchange="renderMealHistory()" style="margin:0;flex:1;padding:6px 10px;font-size:12px;border:1px solid var(--border);border-radius:6px;color:var(--text)">
-        <button class="history-date-btn" onclick="shiftDate('meal',1)">›</button>
-      </div>
-      <div id="mealLogList"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════ GYM PROGRESS PAGE ══════════════════════════ -->
 <div class="page" id="page-gym">
-
-  <div class="metric-grid">
-    <div class="metric-card"><div class="metric-label">Body weight</div><div class="metric-value" id="curWeight">—<span class="metric-unit"> lbs</span></div><div class="metric-delta" id="weightDelta" style="color:var(--text-3)">No entries yet</div></div>
-    <div class="metric-card"><div class="metric-label">Waist</div><div class="metric-value" id="curWaist">—<span class="metric-unit"> in</span></div></div>
-    <div class="metric-card"><div class="metric-label">Chest</div><div class="metric-value" id="curChest">—<span class="metric-unit"> in</span></div></div>
-    <div class="metric-card"><div class="metric-label">Hips</div><div class="metric-value" id="curHips">—<span class="metric-unit"> in</span></div></div>
+  <div class="card">
+    <h3 class="section-title">Log Workout</h3>
+    <div class="field"><label>Exercise Name</label><input type="text" id="exName" placeholder="e.g. Squats"></div>
+    <div class="row-3">
+      <div class="field"><label>Sets</label><input type="number" id="exSets" placeholder="0"></div>
+      <div class="field"><label>Reps</label><input type="number" id="exReps" placeholder="0"></div>
+      <div class="field"><label>Weight</label><input type="number" id="exWeight" placeholder="lbs"></div>
+    </div>
+    <button class="btn btn-primary" onclick="logExercise()">Log Set</button>
   </div>
+  <div class="card">
+    <h3 class="section-title">🏆 Personal Bests</h3>
+    <div id="pbList" class="log-list"></div>
+  </div> 
+</div> <div class="page" id="page-history">
+  <div class="card">
+    <h3 class="section-title">Progress Photos</h3>
+    <div class="photo-grid" id="photoGrid"></div>
+    <input type="file" id="photoUpload" hidden onchange="handlePhoto(event)">
+    <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="document.getElementById('photoUpload').click()">Upload Today's Photo</button>
+  </div>
+  <div class="card">
+    <h3 class="section-title">Workout History</h3>
+    <div id="workoutLog" class="log-list"></div>
+  </div>
+</div> ```
 
-  <!-- Log Workout -->
+<div class="page" id="page-nutrition">
   <div class="card">
     <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">💪 Log workout</span>
+      <span class="card-title">🎯 Set your goals</span>
       <span class="card-toggle">⌄</span>
     </div>
     <div class="card-body">
       <div class="row-2">
-        <div class="field">
-          <label>Workout type</label>
-          <div class="autocomplete-wrap">
-            <input type="text" id="workoutType" placeholder="e.g. Upper body" autocomplete="off"
-              oninput="showWorkoutSuggestions()" onblur="hideWorkoutSuggestions()" onfocus="showWorkoutSuggestions()">
-            <div class="autocomplete-list" id="workoutSuggestions"></div>
-          </div>
-        </div>
-        <div class="field"><label>Duration (min)</label><input type="number" id="workoutDur" placeholder="0" min="1"></div>
+        <div class="field"><label>Calorie goal</label><input id="goalCal" type="number" placeholder="0"></div>
+        <div class="field"><label>Protein (g)</label><input id="goalProt" type="number" placeholder="0"></div>
       </div>
-      <div class="field"><label>Notes</label><input type="text" id="workoutNotes" placeholder="New Squat PR"></div>
-      <button class="btn btn-primary" onclick="logWorkout()">Save Workout +50 XP 💪</button>
-    </div>
-  </div>
-
-  <!-- Workout History -->
-  <div class="card">
-    <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">🏋️ Workout history</span>
-      <span class="card-toggle">⌄</span>
-    </div>
-    <div class="card-body">
-      <div class="history-date-nav">
-        <button class="history-date-btn" onclick="shiftDate('workout',-1)">‹</button>
-        <input type="date" id="workoutHistoryDate" class="history-date-select" onchange="renderWorkoutHistory()" style="flex:1;padding:6px 10px;font-size:12px;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Montserrat',sans-serif;outline:none">
-        <button class="history-date-btn" onclick="shiftDate('workout',1)">›</button>
-      </div>
-      <div id="workoutLogList"></div>
-    </div>
-  </div>
-
-  <!-- Log Measurements -->
-  <div class="card">
-    <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">📏 Log measurements</span>
-      <span class="card-toggle">⌄</span>
-    </div>
-    <div class="card-body">
-      <div class="row-2">
-        <div class="field"><label>Body weight (lbs)</label><input id="inWeight" placeholder="0" type="number" step="0.1"></div>
-        <div class="field"><label>Body fat %</label><input id="inBodyFat" placeholder="0" type="number" step="0.1"></div>
-      </div>
-      <div class="row-3">
-        <div class="field"><label>Chest (in)</label><input id="inChest" placeholder="0" type="number" step="0.25"></div>
-        <div class="field"><label>Waist (in)</label><input id="inWaist" placeholder="0" type="number" step="0.25"></div>
-        <div class="field"><label>Hips (in)</label><input id="inHips" placeholder="0" type="number" step="0.25"></div>
-      </div>
-      <div class="row-3">
-        <div class="field"><label>Bicep (in)</label><input id="inBicep" placeholder="0" type="number" step="0.25"></div>
-        <div class="field"><label>Thigh (in)</label><input id="inThigh" placeholder="0" type="number" step="0.25"></div>
-        <div class="field"><label>Calf (in)</label><input id="inCalf" placeholder="0" type="number" step="0.25"></div>
-      </div>
-      <button class="btn btn-primary" onclick="logMeasurement()">Save Measurements 📏</button>
-    </div>
-  </div>
-
-  <!-- Weight Chart -->
-  <div class="card">
-    <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">📈 Weight chart</span>
-      <span class="card-toggle">⌄</span>
-    </div>
-    <div class="card-body">
-      <div id="weightChartStats" style="display:none;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px"></div>
-      <div style="position:relative;height:180px"><canvas id="weightChart" role="img" aria-label="Body weight over time"></canvas></div>
-      <div id="weightChartEmpty" class="empty-state"><div class="es-icon">⚖️</div>Log 2+ weight entries to see your chart</div>
-    </div>
-  </div>
-
-  <!-- Measurement History -->
-  <div class="card">
-    <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">📋 Measurement history</span>
-      <span class="card-toggle">⌄</span>
-    </div>
-    <div class="card-body" id="measureHistory">
-      <div class="empty-state"><div class="es-icon">📏</div>No measurements yet</div>
-    </div>
-  </div>
-
-  <!-- Progress Photos -->
-  <div class="card">
-    <div class="card-header" onclick="toggleCard(this)">
-      <span class="card-title">📸 Progress photos</span>
-      <span class="card-toggle">⌄</span>
-    </div>
-    <div class="card-body">
-      <div class="photo-cal-header">
-        <button class="photo-cal-nav" onclick="photoCalPrev()">‹</button>
-        <span class="photo-cal-title" id="photoCalTitle"></span>
-        <button class="photo-cal-nav" onclick="photoCalNext()">›</button>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px">
-        <div style="font-size:9px;color:var(--text-3);text-align:center">S</div>
-        <div style="font-size:9px;color:var(--text-3);text-align:center">M</div>
-        <div style="font-size:9px;color:var(--text-3);text-align:center">T</div>
-        <div style="font-size:9px;color:var(--text-3);text-align:center">W</div>
-        <div style="font-size:9px;color:var(--text-3);text-align:center">T</div>
-        <div style="font-size:9px;color:var(--text-3);text-align:center">F</div>
-        <div style="font-size:9px;color:var(--text-3);text-align:center">S</div>
-      </div>
-      <div class="photo-grid" id="photoCalGrid"></div>
-      <div class="section-label" id="photoDateLabel">Today's photos</div>
-      <div class="photo-slots">
-        <div class="photo-slot" id="slotFront" onclick="triggerPhotoUpload('front')">
-          <img id="photoFront" src="" style="display:none" alt="Front">
-          <span class="photo-slot-label">+ Front</span>
-          <button class="remove-photo" onclick="removePhoto(event,'front')">×</button>
-        </div>
-        <div class="photo-slot" id="slotSide" onclick="triggerPhotoUpload('side')">
-          <img id="photoSide" src="" style="display:none" alt="Side">
-          <span class="photo-slot-label">+ Side</span>
-          <button class="remove-photo" onclick="removePhoto(event,'side')">×</button>
-        </div>
-        <div class="photo-slot" id="slotBack" onclick="triggerPhotoUpload('back')">
-          <img id="photoBack" src="" style="display:none" alt="Back">
-          <span class="photo-slot-label">+ Back</span>
-          <button class="remove-photo" onclick="removePhoto(event,'back')">×</button>
-        </div>
-      </div>
-      <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+      <button class="btn btn-primary" onclick="saveGoals()">Save Goals</button>
     </div>
   </div>
 </div>
-
 <!-- ══════════════════════════ STREAK PAGE ══════════════════════════ -->
 <div class="page" id="page-streak">
 
@@ -843,15 +611,100 @@ function showToast(msg) {
 // NAV & CARDS
 // ══════════════════════════════════════
 function switchPage(page, btn) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  btn.classList.add('active');
-  if(page==='streak'){renderStreakUI();renderChainDays();}
-  if(page==='gym'){renderWeightChart();}
-  if(page==='achievements'){renderBadges();}
+  // Hide all pages and deactivate all tabs
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  
+  // Show the selected page and activate the button
+  const targetPage = document.getElementById('page-' + page);
+  if (targetPage) targetPage.classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  // Trigger specific logic for each tab
+  if (page === 'overview') {
+    initCharts(); // This draws your new Pink and Gold charts
+  }
+  if (page === 'streak') {
+    renderStreakUI();
+    renderChainDays();
+  }
+  if (page === 'gym') {
+    // We can add gym-specific refresh logic here if needed
+  }
+  if (page === 'achievements') {
+    renderBadges();
+  }
+}
+// ══════════════════════════════════════
+// OVERVIEW & CHARTS
+// ══════════════════════════════════════
+let weightChart, muscleChart;
+
+function initCharts() {
+  const ctxW = document.getElementById('weightChart')?.getContext('2d');
+  const ctxM = document.getElementById('muscleChart')?.getContext('2d');
+  if (!ctxW || !ctxM) return;
+
+  if (weightChart) weightChart.destroy();
+  if (muscleChart) muscleChart.destroy();
+
+  weightChart = new Chart(ctxW, {
+    type: 'line',
+    data: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{
+        label: 'Weight Trend',
+        data: [185, 184, 184.5, 183, 182.5, 182, 181],
+        borderColor: '#F6B3B8',
+        backgroundColor: 'rgba(246, 179, 184, 0.1)',
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  muscleChart = new Chart(ctxM, {
+    type: 'radar',
+    data: {
+      labels: ['Glutes', 'Quads', 'Back', 'Arms', 'Chest', 'Abs'],
+      datasets: [{
+        label: 'Activation',
+        data: [90, 70, 40, 50, 60, 85],
+        backgroundColor: 'rgba(242, 211, 162, 0.5)',
+        borderColor: '#F2D3A2'
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
 }
 
+// ══════════════════════════════════════
+// GYM LOGGING
+// ══════════════════════════════════════
+function logExercise() {
+  const name = document.getElementById('exName').value;
+  const sets = document.getElementById('exSets').value;
+  const reps = document.getElementById('exReps').value;
+  const weight = document.getElementById('exWeight').value;
+
+  if (!name || !sets || !reps || !weight) {
+    showToast("Please fill all fields!");
+    return;
+  }
+
+  // Add to state and save
+  const entry = { name, sets, reps, weight, date: new Date().toLocaleDateString() };
+  S.workoutHistory = S.workoutHistory || [];
+  S.workoutHistory.unshift(entry);
+  
+  saveState();
+  showToast("Set Logged! +10 XP 💪");
+  addXP(10);
+
+  // Clear inputs
+  ['exName', 'exSets', 'exReps', 'exWeight'].forEach(id => document.getElementById(id).value = '');
+}
 function toggleCard(header) {
   const toggle = header.querySelector('.card-toggle');
   const body = header.nextElementSibling;
