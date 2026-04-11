@@ -1600,6 +1600,47 @@ document.getElementById('todayDate').textContent = new Date().toLocaleDateString
     function handleCheckIn() {
         // ... logic ...
     }
+  <script>
+// 1. Initialize data from storage or set to 0
+let userStats = JSON.parse(localStorage.getItem('fitnessStats')) || {
+    xp: 0,
+    calories: 0,
+    protein: 0,
+    goalProtein: 150
+};
+
+// 2. Function to update the visuals (The UI)
+function updateDashboard() {
+    // Update Text
+    document.getElementById('xp-display').innerText = `${userStats.xp} / 200 XP`;
+    document.getElementById('protein-count').innerText = userStats.protein;
+    
+    // Update Progress Bar Math
+    const proteinPercent = (userStats.protein / userStats.goalProtein) * 100;
+    document.getElementById('protein-bar').style.width = Math.min(proteinPercent, 100) + '%';
+    
+    // Save data
+    localStorage.setItem('fitnessStats', JSON.stringify(userStats));
+}
+
+// 3. Button Action: Check-in
+function handleCheckIn() {
+    userStats.xp += 10;
+    alert("Check-in successful! +10 XP");
+    updateDashboard();
+}
+
+// 4. Button Action: Log Meal
+function logMeal() {
+    const amount = prompt("How many grams of protein did you eat?");
+    if (amount) {
+        userStats.protein += parseInt(amount);
+        updateDashboard();
+    }
+}
+
+// Initialize on page load
+updateDashboard();
 </script>
 </body>
 </html>
