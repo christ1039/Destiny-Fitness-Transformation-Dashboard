@@ -1,0 +1,2 @@
+/*
+  Content-Security-Policy: frame-ancestors 'self' https://whop.com https://*.whop.com;
