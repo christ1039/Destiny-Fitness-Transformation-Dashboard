@@ -21,49 +21,108 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 
 /* ── HEADER ── */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destiny Fitness — Transformation Dashboard</title>
+
+    <style>
+        .ticker-wrap {
+            background: rgba(0,0,0,0.15);
+            padding: 5px 16px;
+            margin: 0 -16px;
+            overflow: hidden;
+        }
+        .ticker-inner {
+            display: flex
+            gap: 32px;
+            animation: ticker 22s linear infinite;
+            white-space: nowrap;
+        }
+        .ticker-item {
+            font-size: 10px;
+            color: rgba(255,255,255,0.65);
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
+        }
+        .ticker-item span {
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+    </style>
+</head>
+<body>
+
 <header class="app-header">
-  <div class="header-top">
-    <div class="logo-wrap">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2L4 7v10l8 5 8-5V7z"/></svg>
-      </div>
-      <div>
-        <div class="logo-text">Destiny Fitness</div>
-        <div class="logo-sub">Transformation Dashboard</div>
-      </div>
+    <div class="header-top">
+        <div class="logo-wrap">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2L4 7v10l8 5 8-5V7z"/></svg>
+            </div>
+            <div>
+                <div class="logo-text">Destiny Fitness</div>
+                <div class="logo-sub">Transformation Dashboard</div>
+            </div>
+        </div>
+        <div id="todayDate" class="today-date"></div>
     </div>
-    <div id="todayDate" class="today-date"></div>
+/* Styling for the badge that appears for Champion/Legend */
+.elite-badge {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
+  color: #000;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(212,163,95,0.4);
+}
+.xp-tier.elite { 
+  color: var(--gold-deep); 
+  text-shadow: 0 0 8px rgba(212,163,95,0.3); 
+}
+    <div class="xp-bar-wrap">
+      <div class="xp-bar-wrap">
+  <div id="eliteBadge" class="elite-badge" style="display:none;"></div>
+
+  <div class="xp-bar" id="xpBar">
+    <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
   </div>
-
-/* XP BAR */
-<div class="xp-bar-wrap">
-    <div class="xp-bar" id="xpBar">
-      <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
-    </div>
-    <div class="xp-labels">
-      <span id="xpTierLabel">Beginner</span>
-      <span id="xpPtsLabel">0 XP</span>
-    </div>
+  <div class="xp-labels">
+    <span id="xpTierLabel" class="xp-tier">Beginner</span>
+    <span id="xpPtsLabel">0 XP</span>
   </div>
-
-/* TICKER */
-.ticker-wrap{background:rgba(0,0,0,0.15);padding:5px 16px;margin:0 -16px;overflow:hidden}
-.ticker-inner{:flex;gap:32px;animation:ticker 22s linear infinite;white-space:nowrap}
-.ticker-item{font-size:10px;color:rgba(255,255,255,0.65);letter-spacing:0.3px;flex-shrink:0}
-.ticker-item span{color:var(--gold-light);font-weight:600}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* NAV */
-<div class="nav-tabs">
-  <button class="nav-tab active" onclick="switchPage('overview', this)">Overview</button>
-  <button class="nav-tab" onclick="switchPage('gym', this)">Gym</button>
-  <button class="nav-tab" onclick="switchPage('history', this)">History</button>
-  <button class="nav-tab" onclick="switchPage('nutrition', this)">Nutrition</button>
-  <button class="nav-tab" onclick="switchPage('streak', this)">Streak</button>
-  <button class="nav-tab" onclick="switchPage('achievements', this)">Badges</button>
 </div>
-  
+        <div class="xp-bar" id="xpBar">
+            <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
+        </div>
+        <div class="xp-labels">
+            <span id="xpTierLabel">Beginner</span>
+            <span id="xpPtsLabel">0 XP</span>
+        </div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchPage('overview', this)">Overview</button>
+        <button class="nav-tab" onclick="switchPage('gym', this)">Gym</button>
+        <button class="nav-tab" onclick="switchPage('history', this)">History</button>
+        <button class="nav-tab" onclick="switchPage('nutrition', this)">Nutrition</button>
+        <button class="nav-tab" onclick="switchPage('streak', this)">Streak</button>
+        <button class="nav-tab" onclick="switchPage('achievements', this)">Badges</button>
+    </div>
 </header>
+
+</body>
+</html>
 
 /* LEVEL BANNER */
 .level-banner{display:none;position:fixed;inset:0;background:rgba(61,10,30,0.88);z-index:999;align-items:center;justify-content:center}
@@ -278,7 +337,9 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 <div class="toast" id="toast"></div>
 
 <!-- HEADER -->
-</div> <div class="page active" id="page-overview"<div class="checkin-wrap">
+</div>
+<div class="page active" id="page-overview">
+  <div class="checkin-wrap">
   <button class="btn btn-primary" id="checkinBtn" onclick="doCheckin()">
     ✅ Check In Today
   </button>
@@ -428,7 +489,7 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
     <h3 class="section-title">Workout History</h3>
     <div id="workoutLog" class="log-list"></div>
   </div>
-</div> ```
+</div>
 
 <div class="page" id="page-nutrition">
 
@@ -742,8 +803,6 @@ function updateXPUI() {
   tierEl.className = 'xp-tier' + (isElite?' elite':'');
   document.getElementById('xpPtsLabel').textContent = `${info.remainder.toLocaleString()} / ${info.needed.toLocaleString()} XP`;
   document.getElementById('xpBarFill').style.width = p+'%';
-
-  .xp-tier.elite { color: var(--gold-deep); text-shadow: 0 0 8px rgba(212,163,95,0.3); }
 
   const eb = document.getElementById('eliteBadge');
   if(isElite){eb.textContent=tier.icon+' '+tier.name;eb.style.display='block';}
