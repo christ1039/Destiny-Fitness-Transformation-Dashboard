@@ -854,6 +854,32 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 
 </div><!-- closes page-streak -->
 
+  <!-- ACHIEVEMENTS PAGE -->
+<div class="page" id="page-achievements">
+
+    <div class="card">
+        <div class="card-static">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <span id="badgeProgress" style="font-size:12px;color:var(--text-3);font-weight:600">0/12</span>
+            </div>
+            <div style="height:5px;background:var(--bar-track);border-radius:3px;overflow:hidden;margin-bottom:16px">
+                <div id="badgeProgressBar" style="height:100%;border-radius:3px;background:linear-gradient(90deg,var(--pink-mid),var(--pink-deep));transform:scaleX(0);transform-origin:left;transition:transform 0.5s ease"></div>
+            </div>
+            <div id="badgeGrid" class="badge-grid"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <button type="button" class="card-header" aria-expanded="false">
+            <span class="card-title">🏆 Tier Guide</span>
+            <span class="card-toggle" aria-hidden="true">⌄</span>
+        </button>
+        <div class="card-body">
+            <div class="tier-list" id="tierList"></div>
+        </div>
+    </div>
+
+</div><!-- closes page-achievements -->
   <script>
       // ══════════════════════════════════════
 // ACHIEVEMENTS
