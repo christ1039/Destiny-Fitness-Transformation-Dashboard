@@ -470,9 +470,10 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
         <h3 class="section-title">Weight Trend</h3>
         <div class="chart-container"><canvas id="weightChart"></canvas></div>
     </div>
-    <div class="card">
-        <h3 class="section-title">Muscle Focus</h3>
-        <div class="chart-container"><canvas id="muscleChart"></canvas></div> renderMuscleChart();
+<div class="card">
+    <h3 class="section-title">Muscle Focus</h3>
+    <div class="chart-container">
+        <canvas id="muscleChart"></canvas>
     </div>
 </div>
 
@@ -1644,6 +1645,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initPhotoCalendar();
     updateTicker();
 });
+    // Ensure this runs after the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof renderMuscleChart === 'function') {
+            renderMuscleChart();
+        }
+    });
     </script>
 </body>
 </html>
