@@ -1622,6 +1622,7 @@ function renderBadges() {
     // ══════════════════════════════════════
 // INIT
 // ══════════════════════════════════════
+    
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', {
         weekday: 'short', month: 'short', day: 'numeric'
@@ -1638,6 +1639,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderGymMetrics();
     renderMeasureHistory();
     renderWeightChart();
+    renderMuscleChart();
     renderStreakUI();
     renderChainDays();
     checkBadges();
@@ -1645,12 +1647,72 @@ document.addEventListener('DOMContentLoaded', () => {
     initPhotoCalendar();
     updateTicker();
 });
-    // Ensure this runs after the DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', () => {
-        if (typeof renderMuscleChart === 'function') {
-            renderMuscleChart();
+function renderMuscleChart() {
+    const ctx = document.getElementById('muscleChart');
+    if (!ctx) return;
+
+    // 1. Initialize counts for each muscle group
+    const counts = { 'Chest': 0, 'Back': 0, 'Legs': 0, 'Shoulders': 0, 'Arms': 0, 'Core': 0 };
+
+    // 2. Count occurrences from S.workouts
+    Object.values(S.workouts).forEach(day => {
+        day.forEach(ex => {
+            const muscle = MUSCLE_MAP[ex.name] || 'Other';
+            if (counts[muscle] !== undefined) {
+                counts[muscle]++;
+            }
+        });
+    });
+
+    // 3. Prepare data for Chart.js
+    const labels = Object.keys(counts);
+    const dataValues = Object.values(counts);
+
+    if (window.myMuscleChart) window.myMuscleChart.destroy();
+
+    window.myMuscleChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Workout Volume',
+                data: dataValues,
+                backgroundColor: 'rgba(255, 107, 107, 0.2)',
+                borderColor: '#ff6b6b',
+                pointBackgroundColor: '#ff6b6b',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    ticks: { display: false },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    angleLines: { color: 'rgba(255, 255, 255, 0.1)' }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
         }
     });
+}
+   const MUSCLE_MAP = {
+    'Bench Press': 'Chest',
+    'Incline Dumbbell Press': 'Chest',
+    'Pushups': 'Chest',
+    'Squats': 'Legs',
+    'Leg Press': 'Legs',
+    'Lunges': 'Legs',
+    'Pull Ups': 'Back',
+    'Rows': 'Back',
+    'Deadlifts': 'Back',
+    'Shoulder Press': 'Shoulders',
+    'Lateral Raises': 'Shoulders',
+    'Bicep Curls': 'Arms',
+    'Tricep Extensions': 'Arms'
+};
     </script>
 </body>
 </html>
