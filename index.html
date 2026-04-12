@@ -18,382 +18,354 @@
   --bar-track:#f0e8ea; --chip-bg:#fdf5f6; --chip-bg-hover:#fff5f6;
   --bg:#F4F4F4; --white:#fff; --text:#2a1a1c; --text-2:#7a5a60; --text-3:#b09090;
   --border:rgba(201,88,106,0.15); --border-gold:rgba(212,163,95,0.3);
-  --z-dropdown: 50; --z-modal: 999;
+  --z-dropdown:50; --z-modal:999;
+  --hover-overlay:rgba(0,0,0,0.06);
   --card-bg:#fff; --radius:14px; --radius-sm:8px;
+  --edit-bg:#fff8f9;
   --shadow:0 2px 16px rgba(201,88,106,0.08); --shadow-gold:0 2px 20px rgba(212,163,95,0.18);
+  --z-toast: 998;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overscroll-behavior:none}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.ticker-wrap{background:rgba(0,0,0,0.15);padding:5px 16px;margin:0 -16px;overflow:hidden}
+.ticker-inner{display:flex;gap:32px;animation:ticker 22s linear infinite;white-space:nowrap;will-change:transform}
+.ticker-item{font-size:12px;color:rgba(255,255,255,0.65);letter-spacing:0.3px;flex-shrink:0}
+.ticker-item span{color:var(--gold-light);font-weight:600}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.ticker-inner{animation:none}}
+.elite-badge{background:linear-gradient(135deg,var(--gold-light),var(--gold-deep));color:#000;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:800;text-transform:uppercase;margin-bottom:4px;display:inline-block;box-shadow:0 0 10px rgba(212,163,95,0.4)}
+.xp-tier.elite{color:var(--gold-deep);text-shadow:0 0 8px rgba(212,163,95,0.3)}
 
-        .ticker-wrap {
-            background: rgba(0,0,0,0.15);
-            padding: 5px 16px;
-            margin: 0 -16px;
-            overflow: hidden;
-        }
-        .ticker-inner {
-            display: flex;
-            gap: 32px;
-            animation: ticker 22s linear infinite;
-            white-space: nowrap;
-            will-change: transform;
-        }
-        .ticker-item {
-            font-size: 12px;
-            color: rgba(255,255,255,0.65);
-            letter-spacing: 0.3px;
-            flex-shrink: 0;
-        }
-        .ticker-item span {
-            color: var(--gold-light);
-            font-weight: 600;
-        }
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-@media (prefers-reduced-motion: reduce) {
-    .ticker-inner {
-        animation: none;
-    }
-}
-
-.elite-badge {
-  background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
-  color: #000;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  display: inline-block;
-  box-shadow: 0 0 10px rgba(212,163,95,0.4);
-}
-.xp-tier.elite { 
-  color: var(--gold-deep); 
-  text-shadow: 0 0 8px rgba(212,163,95,0.3); 
-}
 /* LEVEL BANNER */
-.level-banner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    inset: 0;
-    background: rgba(61,10,30,0.88);
-    z-index: 999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-.level-banner.show {
-    opacity: 1;
-    pointer-events: auto;
-}
-.level-banner.show .level-banner-card {
-    animation: levelUpIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
-}
-.level-banner-card {
-    background: linear-gradient(135deg, #fff5f7, #fff);
-    border-radius: 20px;
-    padding: 32px 28px;
-    text-align: center;
-    max-width: 300px;
-    width: 90%;
-    box-shadow: 0 20px 60px rgba(201,88,106,0.3);
-}
-@keyframes levelUpIn {
-    0%   { transform: scale(0.7) translateY(20px); opacity: 0; }
-    60%  { transform: scale(1.05); }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-    .level-banner-card {
-        animation: none;
-    }
-}
-.level-banner-icon { font-size: 52px; margin-bottom: 12px; display: block; }
-.level-banner-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; color: var(--pink-deep); margin-bottom: 4px; }
-.level-banner-sub { font-size: 13px; color: var(--text-2); margin-bottom: 8px; }
-.level-banner-tier { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; background: linear-gradient(135deg, var(--gold-light), var(--gold-classic)); color: #7a4a10; margin-bottom: 16px; }
-.level-banner-btn { background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep)); color: #fff; border: none; border-radius: 10px; padding: 12px 28px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Montserrat', sans-serif; width: 100%; }
-  /* PAGES */
-  .page {
-    display: none;
-    opacity: 0;
-    padding: 16px;
-    padding-bottom: 80px;
-}
-.page.active {
-    display: block;
-    opacity: 1;
-    transition: opacity 0.2s ease;
-}
+.level-banner{display:flex;align-items:center;justify-content:center;position:fixed;inset:0;background:rgba(61,10,30,0.88);z-index:999;opacity:0;pointer-events:none;transition:opacity 0.3s ease}
+.level-banner.show{opacity:1;pointer-events:auto}
+.level-banner.show .level-banner-card{animation:levelUpIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards}
+.level-banner-card{background:linear-gradient(135deg,#fff5f7,#fff);border-radius:20px;padding:32px 28px;text-align:center;max-width:300px;width:90%;box-shadow:0 20px 60px rgba(201,88,106,0.3)}
+@keyframes levelUpIn{0%{transform:scale(0.7) translateY(20px);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1) translateY(0);opacity:1}}
+@media(prefers-reduced-motion:reduce){.level-banner-card{animation:none}}
+.level-banner-icon{font-size:52px;margin-bottom:12px;display:block}
+.level-banner-title{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--pink-deep);margin-bottom:4px}
+.level-banner-sub{font-size:13px;color:var(--text-2);margin-bottom:8px}
+.level-banner-tier{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,var(--gold-light),var(--gold-classic));color:#7a4a10;margin-bottom:16px}
+.level-banner-btn{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;width:100%}
+  
+/* TOUCH */
+.touch-target{touch-action:none}
+
+/* PAGES */
+.page{display:none;opacity:0;padding:16px;padding-bottom:80px}
+.page.active{display:block;opacity:1;transition:opacity 0.2s ease}
+
 /* CARDS */
-.card {
+.card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:12px;overflow:hidden}
+.card.champion-glow{animation:championGlow 3s ease-in-out infinite;will-change:box-shadow}
+@keyframes championGlow{0%,100%{box-shadow:0 0 8px rgba(212,163,95,0.3)}50%{box-shadow:0 0 22px rgba(212,163,95,0.7),0 0 40px rgba(212,163,95,0.2)}}
+.card-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;background:none;border:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif}
+.card-header:focus-visible{outline:2px solid var(--pink-deep);outline-offset:2px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);letter-spacing:0.2px}
+.card-toggle{font-size:18px;color:var(--text-3);transition:transform 0.25s}
+.card-toggle.open{transform:rotate(180deg)}
+.card-body{display:block;visibility:hidden;max-height:0;overflow:hidden;transition:max-height 0.25s ease,visibility 0.25s;padding:0 16px}
+.card-body.open{visibility:visible;max-height:600px;padding:0 16px 16px}
+@media(prefers-reduced-motion:reduce){.card.champion-glow{animation:none}.card-body.open{animation:none}}
+.card-static{padding:16px}
+
+/* CALENDARS */
+.metric-bar{background:var(--bar-track)}
+.streak-section{display:flex;flex-direction:column;gap:12px;max-width:320px}
+.heatmap-grid,.photo-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;max-width:300px;width:100%}
+.hd,.photo-day{aspect-ratio:1;border-radius:4px;border:1px solid var(--border);background:var(--bar-track);position:relative;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hd:focus-visible,.photo-day:focus-visible{outline:2px solid var(--pink-deep);outline-offset:2px}
+.date-num{position:absolute;top:2px;right:2px;font-size:9px;opacity:0.6}
+.hd.done{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:white}
+
+/* CONSTRAINED CONTAINERS */
+.chain-days{display:flex;gap:4px;flex-wrap:wrap;width:-webkit-fit-content;width:fit-content;border:1px solid var(--border);padding:8px;border-radius:12px}
+
+/* FORMS & BUTTONS */
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:11px;color:var(--text-2);font-weight:500}
+.field input{border:1px solid var(--border);border-radius:8px;padding:10px;width:100%;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--text);background:var(--white)}
+.field input:focus{outline:none;border-color:var(--pink-mid);box-shadow:0 0 0 3px rgba(224,122,134,0.15)}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:360px){.row-3{grid-template-columns:1fr}}
+.btn{border:none;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;transition:opacity 0.2s ease,transform 0.2s ease;font-family:'Montserrat',sans-serif;font-size:13px}
+.btn:focus-visible{outline:2px solid var(--pink-deep);outline-offset:2px}
+.btn-primary{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;width:100%}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-2)}
+
+/* QUICK STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-card{background:var(--card-bg);padding:12px;border-radius:var(--radius-sm);border:1px solid var(--border);text-align:center;box-shadow:var(--shadow)}
+.stat-val{font-size:18px;font-weight:700;color:var(--pink-deep)}
+
+/* CHART */
+.chart-container{background:var(--card-bg);padding:10px;border-radius:var(--radius);margin-bottom:10px;position:relative;min-height:200px;height:200px;border:1px solid var(--border);box-shadow:var(--shadow)}
+
+/* PRESETS */
+.preset-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.preset-chip{padding:5px 10px;border-radius:20px;border:1px solid var(--border);background:var(--chip-bg);font-size:11px;font-weight:500;color:var(--text-2);cursor:pointer;transition:border-color 0.15s ease,color 0.15s ease,background 0.15s ease;font-family:'Montserrat',sans-serif}
+.preset-chip:hover{border-color:var(--pink-mid);color:var(--pink-deep);background:var(--chip-bg-hover)}
+.preset-chip:focus-visible{outline:2px solid var(--pink-deep);outline-offset:2px}
+.preset-label{font-size:11px;color:var(--text-3);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px}
+
+/* AUTOCOMPLETE */
+.autocomplete-wrap{position:relative}
+.autocomplete-list{position:absolute;top:100%;left:0;right:0;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);box-shadow:0 6px 20px rgba(201,88,106,0.12);z-index:var(--z-dropdown);overflow:hidden;margin-top:2px;opacity:0;pointer-events:none;visibility:hidden;transition:opacity 0.15s ease,visibility 0.15s}
+.autocomplete-list.show{opacity:1;pointer-events:auto;visibility:visible}
+.autocomplete-item{padding:10px 12px;font-size:13px;color:var(--text);cursor:pointer;transition:background 0.1s ease}
+.autocomplete-item:hover{background:var(--chip-bg)}
+.autocomplete-item:focus-visible{outline:2px solid var(--pink-deep);outline-offset:-2px;background:var(--chip-bg)}
+
+/* LOG ENTRIES */
+.log-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.log-item{background:var(--chip-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.log-item-info{flex:1;min-width:0}
+.log-item-title{font-size:13px;font-weight:500;color:var(--text)}
+.log-item-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+.log-item-actions{display:flex;gap:4px;flex-shrink:0}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:14px;padding:4px;border-radius:4px;transition:background 0.15s ease}
+.icon-btn:hover{background:var(--hover-overlay)}
+.icon-btn:focus-visible{outline:2px solid var(--pink-deep);outline-offset:2px}
+
+/* EDIT INLINE */
+.edit-inline{background:var(--edit-bg);border:1px solid var(--pink-light);border-radius:var(--radius-sm);padding:10px;margin-top:6px;visibility:hidden;max-height:0;overflow:hidden;transition:max-height 0.2s ease,visibility 0.2s}
+.edit-inline.open{visibility:visible;max-height:300px}
+
+/* MACRO BARS */
+.macro-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.macro-label{font-size:11px;color:var(--text-2);width:52px;flex-shrink:0}
+.macro-bar-track{flex:1;height:7px;background:var(--bar-track);border-radius:4px;overflow:hidden}
+.macro-bar-fill{height:100%;border-radius:4px;transform:scaleX(0);transform-origin:left;transition:transform 0.5s ease;background:linear-gradient(90deg,var(--pink-mid),var(--pink-deep))}
+.macro-pct{font-size:11px;color:var(--text-3);width:34px;text-align:right}
+
+/* GOALS */
+.goals-display{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.goal-chip{background:var(--chip-bg);border:1px solid var(--border);border-radius:6px;padding:8px 10px}
+.goal-chip-label{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px}
+.goal-chip-val{font-size:16px;font-weight:600;color:var(--pink-deep)}
+.goal-chip-unit{font-size:11px;color:var(--text-3)}
+
+/* PROGRESS PHOTOS */
+.photo-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.photo-cal-nav{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;color:var(--text-2);font-family:'Montserrat',sans-serif}
+.photo-cal-nav:focus-visible{outline:2px solid var(--pink-deep);outline-offset:2px}
+.photo-cal-title{font-size:13px;font-weight:600;color:var(--text)}
+.photo-day.has-photo{background:linear-gradient(135deg,var(--pink-light),var(--pink-mid));color:#fff;font-weight:600;border-color:transparent}
+.photo-day.selected{border-color:var(--pink-deep);box-shadow:0 0 0 2px rgba(201,88,106,0.25)}
+.photo-day.today-marker{border-color:var(--gold-classic)}
+.photo-slots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+.photo-slot{border:1.5px dashed var(--border);border-radius:var(--radius-sm);aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;background:var(--chip-bg);transition:border-color 0.2s ease}
+.photo-slot:hover{border-color:var(--pink-mid)}
+.photo-slot:focus-visible{outline:2px solid var(--pink-deep);outline-offset:2px}
+.photo-slot img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
+.photo-slot-label{font-size:11px;color:var(--text-3);font-weight:500;position:relative;z-index:1}
+.photo-slot .remove-photo{position:absolute;top:4px;right:4px;background:rgba(201,88,106,0.9);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;font-family:'Montserrat',sans-serif;opacity:0;pointer-events:none;transition:opacity 0.15s ease}
+.photo-slot:hover .remove-photo,
+.photo-slot:focus-within .remove-photo{opacity:1;pointer-events:auto}
+input[type="file"]{display:none}
+
+/* ACHIEVEMENTS */
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+.badge {
     background: var(--card-bg);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+    text-align: center;
     border: 1px solid var(--border);
-    margin-bottom: 12px;
-    overflow: hidden;
+    position: relative;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
 }
-.card.champion-glow {
-    animation: championGlow 3s ease-in-out infinite;
-    will-change: box-shadow;
-}
-@keyframes championGlow {
-    0%, 100% { box-shadow: 0 0 8px rgba(212,163,95,0.3); }
-    50%       { box-shadow: 0 0 22px rgba(212,163,95,0.7), 0 0 40px rgba(212,163,95,0.2); }
-}
-.card-header {
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    user-select: none;
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
-    font-family: 'Montserrat', sans-serif;
-}
-.card-header:focus-visible {
+.badge:focus-visible {
     outline: 2px solid var(--pink-deep);
     outline-offset: 2px;
 }
-.card-title {
+.badge.locked { opacity: 0.42; filter: grayscale(0.6); }
+.badge.unlocked { border-color: rgba(212,163,95,0.5); box-shadow: 0 2px 12px rgba(212,163,95,0.12); }
+.badge.unlocked::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold-classic), var(--gold-deep)); border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+.badge-icon { font-size: 28px; margin-bottom: 6px; }
+.badge-name { font-size: 11px; font-weight: 600; color: var(--text); letter-spacing: 0.2px; }
+.badge-desc { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+.badge-new { position: absolute; top: 5px; right: 5px; background: var(--pink-deep); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 4px; letter-spacing: 0.3px; }
+
+/* TIER GUIDE */
+.tier-list { display: flex; flex-direction: column; gap: 6px; }
+.tier-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; transition: background 0.2s ease; }
+.tier-row.current { background: var(--chip-bg); border: 1px solid var(--border); }
+.tier-icon { font-size: 18px; width: 28px; text-align: center; }
+.tier-info { flex: 1; }
+.tier-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.tier-range { font-size: 11px; color: var(--text-3); }
+.tier-xp { font-size: 11px; color: var(--text-2); font-weight: 500; }
+.you-badge { font-size: 10px; font-weight: 700; background: var(--pink-deep); color: #fff; padding: 1px 6px; border-radius: 4px; margin-left: 4px; letter-spacing: 0.3px; }
+
+@media (prefers-reduced-motion: reduce) {
+    .badge { transition: none; }
+    .tier-row { transition: none; }
+}
+/* HISTORY NAV */
+.history-date-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.history-date-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11px;
+    color: var(--text-2);
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+.history-date-btn:focus-visible {
+    outline: 2px solid var(--pink-deep);
+    outline-offset: 2px;
+}
+.history-date-select {
+    flex: 1;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    background: var(--white);
+}
+
+/* SECTION LABEL */
+.section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 14px 0 8px;
+}
+
+/* EMPTY STATE */
+.empty-state {
+    text-align: center;
+    padding: 24px 16px;
+    color: var(--text-3);
+    font-size: 12px;
+}
+.empty-state .es-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    opacity: 0.5;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep));
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    z-index: var(--z-toast);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(201,88,106,0.35);
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* STREAK BONUS BAR */
+.streak-bonus-row { margin-top: 10px; }
+.streak-bonus-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-3);
+    margin-bottom: 4px;
+}
+.streak-bonus-bar {
+    height: 5px;
+    background: var(--bar-track);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.streak-bonus-fill {
+    height: 100%;
+    border-radius: 3px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+}
+
+/* MOTIVATION CARD */
+.motivation-card {
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+}
+.motivation-card.gold {
+    background: linear-gradient(135deg, #fffbf0, #fff8e8);
+    border-color: rgba(212,163,95,0.35);
+}
+.motivation-card.pink {
+    background: linear-gradient(135deg, #fff5f7, #fff);
+    border-color: var(--border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast { transition: none; }
+    .streak-bonus-fill { transition: none; }
+}
+
+  /* DIVIDER */
+hr{border:none;border-top:1px solid var(--border);margin:12px 0}
+
+@media(max-width:360px){.metric-grid{grid-template-columns:1fr 1fr}}
+
+  /* SECTION TITLE */
+.section-title {
     font-size: 13px;
     font-weight: 600;
     color: var(--text);
-    letter-spacing: 0.2px;
+    padding: 14px 16px 0;
+    margin-bottom: 8px;
 }
-.card-toggle {
-    font-size: 18px;
-    color: var(--text-3);
-    transition: transform 0.25s;
-}
-.card-toggle.open {
-    transform: rotate(180deg);
-}
-.card-body {
-    display: block;
-    visibility: hidden;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.25s ease, visibility 0.25s;
-    padding: 0 16px;
-}
-.card-body.open {
-    visibility: visible;
-    max-height: 600px;
-    padding: 0 16px 16px;
-}
-@media (prefers-reduced-motion: reduce) {
-    .card.champion-glow {
-        animation: none;
-    }
-    .card-body.open {
-        animation: none;
-    }
-}
-.card-static {
-    padding: 16px;
-}
-/* COMPACT CALENDARS & LAYOUT FIXES */
-.metric-bar { background: var(--bar-track); }
-.streak-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 320px;
-}
-.heatmap-grid, .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 4px;
-    max-width: 300px;
-    width: 100%;
-}
-.hd, .photo-day {
-    aspect-ratio: 1;
-    border-radius: 4px;
-    background: var(--bar-track);
-    position: relative;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-.hd:focus-visible,
-.photo-day:focus-visible {
-    outline: 2px solid var(--pink-deep);
-    outline-offset: 2px;
-}
-.date-num {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-size: 9px;
-    opacity: 0.6;
-}
-.hd.done {
-    background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep));
-    color: white;
-}
-/* CONSTRAINED CONTAINERS */
-/* chain-days: compact day-dot strip — 4px gap, 8px padding */
-.chain-days {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    width: -webkit-fit-content; /* Safari/older WebKit fallback */
-    width: fit-content;
-    border: 1px solid var(--border);
-    padding: 8px;
-    border-radius: 12px;
-} 
-/* FORMS & BUTTONS */
-.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-.field label { font-size: 11px; color: var(--text-2); font-weight: 500; }
-.field input {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px;
-    width: 100%;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    color: var(--text);
-    background: var(--white);
-}
-.field input:focus {
-    outline: none;
-    border-color: var(--pink-mid);
-    box-shadow: 0 0 0 3px rgba(224,122,134,0.15);
-}
-.row-3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-}
-@media (max-width: 360px) {
-    .row-3 {
-        grid-template-columns: 1fr;
-    }
-}
-.btn { border: none; border-radius: 8px; padding: 10px 18px; font-weight: 600; cursor: pointer; transition: opacity 0.2s ease, transform 0.2s ease; font-family: 'Montserrat', sans-serif; font-size: 13px; }
-.btn:focus-visible {
-    outline: 2px solid var(--pink-deep);
-    outline-offset: 2px;
-}
-.btn-primary { background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep)); color: #fff; width: 100%; }
-.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-2); }
-  
-/* QUICK STAT CARDS */
-.stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-.stat-card {
-    background: var(--card-bg);
-    padding: 12px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    text-align: center;
-    box-shadow: var(--shadow);
-}
-.stat-val {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--pink-deep);
-}
+/* METRIC GRID */
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
+.metric-card{background:var(--card-bg);border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);position:relative;overflow:hidden}
+.metric-label{font-size:11px;color:var(--text-3);font-weight:500;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px}
+.metric-value{font-size:22px;font-weight:600;color:var(--text);line-height:1.1}
 
-  /* CHART PLACEHOLDERS */
-.chart-container {
-    background: var(--card-bg);
-    padding: 10px;
-    border-radius: var(--radius);
-    margin-bottom: 10px;
-    position: relative;
-    min-height: 200px;
-    height: 200px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-}
-  /* PRESETS */
-.preset-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.preset-chip {
-    padding: 5px 10px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: var(--chip-bg);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-2);
-    cursor: pointer;
-    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
-    font-family: 'Montserrat', sans-serif;
-}
-.preset-chip:hover {
-    border-color: var(--pink-mid);
-    color: var(--pink-deep);
-    background: var(--chip-bg-hover);
-}
-.preset-chip:focus-visible {
-    outline: 2px solid var(--pink-deep);
-    outline-offset: 2px;
-}
-.preset-label{font-size:11px;color:var(--text-3);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px}
-/* AUTOCOMPLETE */
-.autocomplete-wrap {
-    position: relative;
-}
-.autocomplete-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 6px 20px rgba(201,88,106,0.12);
-    z-index: var(--z-dropdown);
-    overflow: hidden;
-    margin-top: 2px;
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-    transition: opacity 0.15s ease, visibility 0.15s;
-}
-.autocomplete-list.show {
-    opacity: 1;
-    pointer-events: auto;
-    visibility: visible;
-}
-.autocomplete-item {
-    padding: 10px 12px;
-    font-size: 13px;
-    color: var(--text);
-    cursor: pointer;
-    transition: background 0.1s ease;
-}
-.autocomplete-item:hover {
-    background: var(--chip-bg);
-}
-.autocomplete-item:focus-visible {
-    outline: 2px solid var(--pink-deep);
-    outline-offset: -2px;
-    background: var(--chip-bg);
-}
-</style> 
+  /* ROW 2 */
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:360px){.row-2{grid-template-columns:1fr}}
 
+.btn-sm{padding:6px 12px;font-size:11px}
+.photo-cal-nav-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+
+  /* NUTRITION METRICS */
+.metric-delta{font-size:11px;color:var(--text-3);margin:2px 0 4px}
+.metric-unit{font-size:13px;font-weight:400;color:var(--text-3)}
+.pct-bar{height:4px;background:var(--bar-track);border-radius:2px;overflow:hidden;margin-top:4px}
+.pct-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--pink-mid),var(--pink-deep));transition:transform 0.5s ease;transform:scaleX(0);transform-origin:left}
+.all-macros-banner{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;text-align:center;padding:10px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;margin-bottom:12px}
+</style>
+ 
 </head>
 <body>
 <header class="app-header">
@@ -439,6 +411,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <button type="button" class="nav-tab" role="tab" aria-selected="false" 
             aria-controls="page-achievements" onclick="switchPage('achievements', this)">Badges</button>
 </div>
+  
 </header>
 
 <div class="level-banner" 
@@ -448,12 +421,326 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
      aria-labelledby="levelBannerTitle"
      aria-hidden="true">
     <div class="level-banner-card">
-        <span class="level-banner-icon" id="levelBannerIcon">🏆</span>
-        <div class="level-banner-title" id="levelBannerTitle">Level Up!</div>
-        <div class="level-banner-sub" id="levelBannerSub">You've reached a new tier!</div>
+        <span class="level-banner-icon" id="levelBannerIcon" aria-hidden="true">🏆</span>
+        <h2 class="level-banner-title" id="levelBannerTitle">Level Up!</h2>
+        <p class="level-banner-sub" id="levelBannerSub">You've reached a new tier!</p>
         <div class="level-banner-tier" id="levelBannerTier" style="display:none"></div>
         <button type="button" class="level-banner-btn" id="levelBannerBtn">
             Let's Go! 🔥
         </button>
     </div>
 </div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<div class="page active" id="page-overview">
+    <div class="checkin-wrap">
+        <button type="button" class="btn btn-primary" id="checkinBtn">
+            ✅ Check In Today
+        </button>
+        <div id="checkinLabel" class="checkin-label" aria-live="polite"></div>
+    </div>
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="goal-chip-label">Total Volume</div>
+            <div class="stat-val" id="statVol">0 lbs</div>
+        </div>
+        <div class="stat-card">
+            <div class="goal-chip-label">Consistency</div>
+            <div class="stat-val" id="statCons">0%</div>
+        </div>
+    </div>
+    <div class="card">
+        <h3 class="section-title">Weight Trend</h3>
+        <div class="chart-container"><canvas id="weightChart"></canvas></div>
+    </div>
+    <div class="card">
+        <h3 class="section-title">Muscle Focus</h3>
+        <div class="chart-container"><canvas id="muscleChart"></canvas></div>
+    </div>
+</div>
+
+<div class="page" id="page-gym">
+    <div class="card">
+        <h3 class="section-title">Log Workout</h3>
+        <div class="field">
+            <label for="exName">Exercise Name</label>
+            <input type="text" id="exName" placeholder="e.g. Squats">
+        </div>
+        <div class="row-3">
+            <div class="field">
+                <label for="exSets">Sets</label>
+                <input type="number" id="exSets" placeholder="0">
+            </div>
+            <div class="field">
+                <label for="exReps">Reps</label>
+                <input type="number" id="exReps" placeholder="0">
+            </div>
+            <div class="field">
+                <label for="exWeight">Weight</label>
+                <input type="number" id="exWeight" placeholder="lbs">
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="logSetBtn">Log Set</button>
+    </div>
+
+<!-- Workout Logger (type + duration) -->
+<div class="card">
+    <button type="button" class="card-header" aria-expanded="false" id="workoutCardHeader">
+        <span class="card-title">🏋️ Log Workout Session</span>
+        <span class="card-toggle" aria-hidden="true">⌄</span>
+    </button>
+    <div class="card-body">
+        <div id="workoutSuggestions" 
+             class="workout-suggestions" 
+             role="listbox"
+             aria-label="Workout suggestions"
+             style="display:none"></div>
+        <div class="field">
+            <label for="workoutType">Workout type</label>
+            <input id="workoutType" type="text" placeholder="e.g. Push Day">
+        </div>
+        <div class="field">
+            <label for="workoutDur">Duration (min)</label>
+            <input id="workoutDur" type="number" placeholder="0">
+        </div>
+        <div class="field">
+            <label for="workoutNotes">Notes</label>
+            <input id="workoutNotes" type="text" placeholder="Optional notes">
+        </div>
+        <button type="button" class="btn btn-primary" id="saveWorkoutBtn">Save Workout</button>
+    </div>
+</div>
+
+  <!-- Workout History -->
+<div class="card">
+    <button type="button" class="card-header" aria-expanded="false">
+        <span class="card-title">📋 Workout History</span>
+        <span class="card-toggle" aria-hidden="true">⌄</span>
+    </button>
+    <div class="card-body">
+        <div class="history-date-nav">
+            <button type="button" class="history-date-btn" id="workoutDatePrev" aria-label="Previous date">‹</button>
+            <input type="date" id="workoutHistoryDate">
+            <button type="button" class="history-date-btn" id="workoutDateNext" aria-label="Next date">›</button>
+        </div>
+        <div id="workoutLogList" class="log-list"></div>
+    </div>
+</div>
+
+<!-- Gym Metrics -->
+<div class="card" id="gymMetrics">
+    <div class="metric-grid">
+        <div class="metric-card"><div class="metric-label">Current Weight</div><div class="metric-value" id="curWeight">—</div></div>
+        <div class="metric-card"><div class="metric-label">Body Fat</div><div class="metric-value" id="curBodyFat">—</div></div>
+        <div class="metric-card"><div class="metric-label">Chest</div><div class="metric-value" id="curChest">—</div></div>
+        <div class="metric-card"><div class="metric-label">Waist</div><div class="metric-value" id="curWaist">—</div></div>
+        <div class="metric-card"><div class="metric-label">Hips</div><div class="metric-value" id="curHips">—</div></div>
+    </div>
+</div>
+
+<!-- Measurements -->
+<div class="card">
+    <button type="button" class="card-header" aria-expanded="false">
+        <span class="card-title">📏 Log Measurements</span>
+        <span class="card-toggle" aria-hidden="true">⌄</span>
+    </button>
+    <div class="card-body">
+        <div class="row-2">
+            <div class="field"><label for="inWeight">Weight (lbs)</label><input id="inWeight" type="number" placeholder="0"></div>
+            <div class="field"><label for="inBodyFat">Body Fat %</label><input id="inBodyFat" type="number" placeholder="0"></div>
+        </div>
+        <div class="row-2">
+            <div class="field"><label for="inChest">Chest (in)</label><input id="inChest" type="number" placeholder="0"></div>
+            <div class="field"><label for="inWaist">Waist (in)</label><input id="inWaist" type="number" placeholder="0"></div>
+        </div>
+        <div class="row-2">
+            <div class="field"><label for="inHips">Hips (in)</label><input id="inHips" type="number" placeholder="0"></div>
+            <div class="field"><label for="inBicep">Bicep (in)</label><input id="inBicep" type="number" placeholder="0"></div>
+        </div>
+        <div class="row-2">
+            <div class="field"><label for="inThigh">Thigh (in)</label><input id="inThigh" type="number" placeholder="0"></div>
+            <div class="field"><label for="inCalf">Calf (in)</label><input id="inCalf" type="number" placeholder="0"></div>
+        </div>
+        <button type="button" class="btn btn-primary" id="saveMeasurementBtn">Save Measurements</button>
+        <div id="measureHistory" class="log-list" style="margin-top:12px"></div>
+    </div>
+</div>
+
+<!-- Weight Delta -->
+<div class="card" style="display:none" id="weightChartStats">
+    <div id="weightDelta"></div>
+    <div id="weightChartEmpty"></div>
+</div>
+
+<div class="card">
+    <h3 class="section-title">🏆 Personal Bests</h3>
+    <div id="pbList" class="log-list"></div>
+</div>
+
+</div><!-- closes page-gym -->
+
+<div class="page" id="page-history">
+
+<div class="card">
+    <h3 class="section-title">Progress Photos</h3>
+    <div class="photo-grid" id="photoGrid"></div>
+    <input type="file" id="photoUpload" hidden>
+    <button type="button" class="btn btn-ghost btn-sm" id="uploadPhotoBtn" style="margin-top:10px">
+        Upload Today's Photo
+    </button>
+</div>
+
+<div class="card">
+    <button type="button" class="card-header" aria-expanded="false">
+        <span class="card-title">📅 Photo Calendar</span>
+        <span class="card-toggle" aria-hidden="true">⌄</span>
+    </button>
+    <div class="card-body">
+        <div class="photo-cal-nav-row">
+            <button type="button" class="photo-cal-nav" id="photoCalPrev" aria-label="Previous month">‹</button>
+            <span id="photoCalTitle"></span>
+            <button type="button" class="photo-cal-nav" id="photoCalNext" aria-label="Next month">›</button>
+        </div>
+        <div id="photoCalGrid" class="photo-cal-grid"></div>
+        <div id="photoDateLabel" class="photo-date-label"></div>
+        <input type="file" id="photoInput" accept="image/*" hidden>
+    </div>
+</div>
+
+<div class="card">
+    <h3 class="section-title">Workout History</h3>
+    <div id="workoutLog" class="log-list"></div>
+</div>
+
+</div><!-- closes page-history -->
+
+<div class="page" id="page-nutrition">
+
+    <div class="card">
+        <div class="metric-grid">
+            <div class="metric-card">
+                <div class="metric-label">Calories</div>
+                <div class="metric-value" id="calDisplay">0</div>
+                <div class="metric-delta" id="calDelta"></div>
+                <div class="pct-bar"><div class="pct-fill" id="calPct"></div></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Protein</div>
+                <div class="metric-value" id="protDisplay">0 <span class="metric-unit">g</span></div>
+                <div class="metric-delta" id="protDelta"></div>
+                <div class="pct-bar"><div class="pct-fill" id="protPct"></div></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Carbs</div>
+                <div class="metric-value" id="carbDisplay">0 <span class="metric-unit">g</span></div>
+                <div class="metric-delta" id="carbDelta"></div>
+                <div class="pct-bar"><div class="pct-fill" id="carbPct"></div></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Fat</div>
+                <div class="metric-value" id="fatDisplay">0 <span class="metric-unit">g</span></div>
+                <div class="metric-delta" id="fatDelta"></div>
+                <div class="pct-bar"><div class="pct-fill" id="fatPct"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="all-macros-banner" id="allMacrosHitBanner" style="display:none">
+        🎯 All macro goals hit today!
+    </div>
+  <!-- Goals Section -->
+<div class="card">
+    <button type="button" class="card-header" aria-expanded="false">
+        <span class="card-title">🎯 Daily Goals</span>
+        <span class="card-toggle" aria-hidden="true">⌄</span>
+    </button>
+    <div class="card-body">
+        <div id="goalsDisplay"></div>
+        <div id="goalsForm" style="display:none">
+            <div class="row-2">
+                <div class="field">
+                    <label for="goalCal">Calorie goal</label>
+                    <input id="goalCal" type="number" placeholder="2000">
+                </div>
+                <div class="field">
+                    <label for="goalProt">Protein (g)</label>
+                    <input id="goalProt" type="number" placeholder="150">
+                </div>
+            </div>
+            <div class="row-2">
+                <div class="field">
+                    <label for="goalCarb">Carbs (g)</label>
+                    <input id="goalCarb" type="number" placeholder="200">
+                </div>
+                <div class="field">
+                    <label for="goalFat">Fat (g)</label>
+                    <input id="goalFat" type="number" placeholder="65">
+                </div>
+            </div>
+            <div class="row-2">
+                <button type="button" class="btn btn-primary" id="saveGoalsBtn">Save Goals</button>
+                <button type="button" class="btn btn-ghost" id="cancelGoalsBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Log Meal -->
+<div class="card">
+    <button type="button" class="card-header" aria-expanded="false">
+        <span class="card-title">🍽 Log Meal</span>
+        <span class="card-toggle" aria-hidden="true">⌄</span>
+    </button>
+    <div class="card-body">
+        <div class="field">
+            <label for="mealName">Meal name</label>
+            <input id="mealName" type="text" placeholder="e.g. Chicken & Rice">
+        </div>
+        <div class="row-2">
+            <div class="field">
+                <label for="mealCal">Calories</label>
+                <input id="mealCal" type="number" placeholder="0">
+            </div>
+            <div class="field">
+                <label for="mealProt">Protein (g)</label>
+                <input id="mealProt" type="number" placeholder="0">
+            </div>
+        </div>
+        <div class="row-2">
+            <div class="field">
+                <label for="mealCarb">Carbs (g)</label>
+                <input id="mealCarb" type="number" placeholder="0">
+            </div>
+            <div class="field">
+                <label for="mealFat">Fat (g)</label>
+                <input id="mealFat" type="number" placeholder="0">
+            </div>
+        </div>
+        <div class="preset-row">
+            <button type="button" class="btn btn-ghost btn-sm" id="presetChicken">🍗 Chicken</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="presetSalad">🥗 Salad</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="presetShake">🥤 Shake</button>
+        </div>
+        <button type="button" class="btn btn-primary" id="logMealBtn">Log Meal</button>
+    </div>
+</div>
+
+<!-- Meal History -->
+<div class="card">
+    <button type="button" class="card-header" aria-expanded="false">
+        <span class="card-title">📋 Meal History</span>
+        <span class="card-toggle" aria-hidden="true">⌄</span>
+    </button>
+    <div class="card-body">
+        <div class="history-date-nav">
+            <button type="button" class="history-date-btn" id="mealDatePrev" aria-label="Previous date">‹</button>
+            <input type="date" id="mealHistoryDate">
+            <button type="button" class="history-date-btn" id="mealDateNext" aria-label="Next date">›</button>
+        </div>
+        <div id="mealLogList" class="log-list"></div>
+    </div>
+</div>
+
+</div><!-- closes page-nutrition -->
+  
