@@ -14,7 +14,7 @@
 :root {
   --pink-light:#F6B3B8; --pink-mid:#E07A86; --pink-deep:#C9586A;
   --gold-light:#F2D3A2; --gold-classic:#D4A35F; --gold-deep:#B57A2A;
-  --coral:#F4A6A1; --peach:#E8B07C;
+  --coral:#F4A6A1; --peach:#E8B07C; --bar-track: #f0e8ea;
   --bg:#F4F4F4; --white:#fff; --text:#2a1a1c; --text-2:#7a5a60; --text-3:#b09090;
   --border:rgba(201,88,106,0.15); --border-gold:rgba(212,163,95,0.3);
   --card-bg:#fff; --radius:14px; --radius-sm:8px;
@@ -74,7 +74,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   color: var(--gold-deep); 
   text-shadow: 0 0 8px rgba(212,163,95,0.3); 
 }
-    /* LEVEL BANNER */
+/* LEVEL BANNER */
 .level-banner {
     display: flex;
     align-items: center;
@@ -91,6 +91,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     opacity: 1;
     pointer-events: auto;
 }
+.level-banner.show .level-banner-card {
+    animation: levelUpIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
 .level-banner-card {
     background: linear-gradient(135deg, #fff5f7, #fff);
     border-radius: 20px;
@@ -99,26 +102,22 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     max-width: 300px;
     width: 90%;
     box-shadow: 0 20px 60px rgba(201,88,106,0.3);
-    animation: levelUpIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
 }
-
 @keyframes levelUpIn {
     0%   { transform: scale(0.7) translateY(20px); opacity: 0; }
     60%  { transform: scale(1.05); }
     100% { transform: scale(1) translateY(0); opacity: 1; }
 }
-
 @media (prefers-reduced-motion: reduce) {
     .level-banner-card {
         animation: none;
     }
 }
-.level-banner-icon{font-size:52px;margin-bottom:12px;display:block}
-.level-banner-title{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--pink-deep);margin-bottom:4px}
-.level-banner-sub{font-size:13px;color:var(--text-2);margin-bottom:8px}
-.level-banner-tier{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,var(--gold-light),var(--gold-classic));color:#7a4a10;margin-bottom:16px}
-.level-banner-btn{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;width:100%}
-
+.level-banner-icon { font-size: 52px; margin-bottom: 12px; display: block; }
+.level-banner-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; color: var(--pink-deep); margin-bottom: 4px; }
+.level-banner-sub { font-size: 13px; color: var(--text-2); margin-bottom: 8px; }
+.level-banner-tier { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; background: linear-gradient(135deg, var(--gold-light), var(--gold-classic)); color: #7a4a10; margin-bottom: 16px; }
+.level-banner-btn { background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep)); color: #fff; border: none; border-radius: 10px; padding: 12px 28px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Montserrat', sans-serif; width: 100%; }
   /* PAGES */
   .page {
     display: none;
@@ -203,6 +202,50 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .card-static {
     padding: 16px;
 }
+/* COMPACT CALENDARS & LAYOUT FIXES */
+.metric-bar { background: var(--bar-track); }
+.streak-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+}
+.heatmap-grid, .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+    max-width: 300px;
+    width: 100%;
+}
+.hd, .photo-day {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    background: var(--bar-track);
+    position: relative;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.hd:focus-visible,
+.photo-day:focus-visible {
+    outline: 2px solid var(--pink-deep);
+    outline-offset: 2px;
+}
+.date-num {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 9px;
+    opacity: 0.6;
+}
+.hd.done {
+    background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep));
+    color: white;
+}
+  /* CONSTRAINED CONTAINERS */
+.chain-days { display: flex; /* chain-days: compact day-dot strip — 4px gap, 8px padding */ gap: 4px; flex-wrap: wrap; width: -webkit-fit-content; /* Safari/older WebKit */ width: fit-content; border: 1px solid var(--border); padding: 8px; border-radius: 12px; }
 
 </style> 
 
