@@ -378,6 +378,8 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 .chain-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .chain-gold-badge{display:none;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:linear-gradient(135deg,var(--gold-light),var(--gold-classic));color:#7a4a10}
 
+.xp-bar-fill { transform-origin: left; transform: scaleX(0); transition: transform 0.5s ease; }
+  
 </style>
  
 </head>
@@ -402,7 +404,7 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
   <div id="eliteBadge" class="elite-badge" style="display:none;"></div>
 
   <div class="xp-bar">
-    <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
+    <div class="xp-bar-fill" id="xpBarFill" ></div>
   </div>
 
   <div class="xp-labels">
@@ -413,17 +415,17 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 
 <div class="nav-tabs" role="tablist" aria-label="Dashboard sections">
     <button type="button" class="nav-tab active" role="tab" aria-selected="true" 
-            aria-controls="page-overview" onclick="switchPage('overview', this)">Overview</button>
+            aria-controls="page-overview" ('overview', this)">Overview</button>
     <button type="button" class="nav-tab" role="tab" aria-selected="false" 
-            aria-controls="page-gym" onclick="switchPage('gym', this)">Gym</button>
+            aria-controls="page-gym" ('gym', this)">Gym</button>
     <button type="button" class="nav-tab" role="tab" aria-selected="false" 
-            aria-controls="page-history" onclick="switchPage('history', this)">History</button>
+            aria-controls="page-history" ('history', this)">History</button>
     <button type="button" class="nav-tab" role="tab" aria-selected="false" 
-            aria-controls="page-nutrition" onclick="switchPage('nutrition', this)">Nutrition</button>
+            aria-controls="page-nutrition" ('nutrition', this)">Nutrition</button>
     <button type="button" class="nav-tab" role="tab" aria-selected="false" 
-            aria-controls="page-streak" onclick="switchPage('streak', this)">Streak</button>
+            aria-controls="page-streak" ('streak', this)">Streak</button>
     <button type="button" class="nav-tab" role="tab" aria-selected="false" 
-            aria-controls="page-achievements" onclick="switchPage('achievements', this)">Badges</button>
+            aria-controls="page-achievements" ('achievements', this)">Badges</button>
 </div>
   
 </header>
@@ -471,6 +473,7 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
     <div class="card">
         <h3 class="section-title">Muscle Focus</h3>
         <div class="chart-container"><canvas id="muscleChart"></canvas></div>
+      renderMuscleChart();
     </div>
 </div>
 
@@ -881,6 +884,695 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 
 </div><!-- closes page-achievements -->
   <script>
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+const STATE_KEY = 'destinyFitnessState';
+
+const DEFAULT_STATE = {
+    xp: 0,
+    streakDays: [],
+    meals: {},
+    workouts: {},
+    measurements: [],
+    photos: {},
+    goals: {},
+    achievements: []
+};
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STATE_KEY);
+        return saved ? { ...DEFAULT_STATE, ...JSON.parse(saved) } : { ...DEFAULT_STATE };
+    } catch(e) {
+        return { ...DEFAULT_STATE };
+    }
+}
+
+function saveState() {
+    try {
+        localStorage.setItem(STATE_KEY, JSON.stringify(S));
+    } catch(e) {
+        console.error('Save failed', e);
+    }
+}
+
+let S = loadState(); // ← now after loadState is defined
+
+// ══════════════════════════════════════
+// UTILITIES
+// ══════════════════════════════════════
+function todayKey() {
+    return new Date().toISOString().slice(0, 10);
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ══════════════════════════════════════
+// NAV
+// ══════════════════════════════════════
+document.querySelectorAll('.nav-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const target = btn.getAttribute('aria-controls');
+        document.querySelectorAll('.nav-tab').forEach(b => b.setAttribute('aria-selected', 'false'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById(target).classList.add('active');
+    });
+});
+
+// ══════════════════════════════════════
+// CARD TOGGLES
+// ══════════════════════════════════════
+document.querySelectorAll('.card-header').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const body = btn.nextElementSibling;
+        const isOpen = body.classList.contains('open');
+        body.classList.toggle('open');
+        btn.setAttribute('aria-expanded', !isOpen);
+        const toggle = btn.querySelector('.card-toggle');
+        if (toggle) toggle.classList.toggle('open');
+    });
+});
+
+// ══════════════════════════════════════
+// LEVEL BANNER
+// ══════════════════════════════════════
+document.getElementById('levelBannerBtn').addEventListener('click', () => {
+    const banner = document.getElementById('levelBanner');
+    banner.classList.remove('show');
+    banner.setAttribute('aria-hidden', 'true');
+});
+
+function showLevelBanner(title, sub, tier) {
+    const banner = document.getElementById('levelBanner');
+    document.getElementById('levelBannerTitle').textContent = title;
+    document.getElementById('levelBannerSub').textContent = sub;
+    if (tier) {
+        const tierEl = document.getElementById('levelBannerTier');
+        tierEl.textContent = tier;
+        tierEl.style.display = 'inline-block';
+    }
+    banner.classList.add('show');
+    banner.setAttribute('aria-hidden', 'false');
+}
+// ══════════════════════════════════════
+// XP / LEVEL
+// ══════════════════════════════════════
+const TIERS = [
+    { level:1,  xp:0,    name:'Beginner',    icon:'🌱' },
+    { level:5,  xp:500,  name:'Active',      icon:'⚡' },
+    { level:10, xp:1500, name:'Dedicated',   icon:'🔥' },
+    { level:15, xp:3000, name:'Athlete',     icon:'💪' },
+    { level:20, xp:5000, name:'Champion',    icon:'🏆' },
+    { level:25, xp:8000, name:'Elite',       icon:'👑' },
+];
+
+function getLevelInfo(xp) {
+    const level = Math.floor(xp / 100) + 1;
+    const currentXP = xp % 100;
+    const tier = TIERS.slice().reverse().find(t => level >= t.level) || TIERS[0];
+    return { level, currentXP, nextXP: 100, tier };
+}
+
+function addXP(amount) {
+    const before = getLevelInfo(S.xp);
+    S.xp += amount;
+    saveState();
+    const after = getLevelInfo(S.xp);
+    if (after.level > before.level) {
+        showLevelBanner(
+            'Level ' + after.level + '!',
+            'You reached ' + after.tier.name,
+            after.tier.icon + ' ' + after.tier.name
+        );
+    }
+    updateXPUI();
+}
+
+function updateXPUI() {
+    const { level, currentXP, nextXP, tier } = getLevelInfo(S.xp);
+    document.getElementById('xpBarFill').style.transform = 'scaleX(' + (currentXP / nextXP) + ')';
+    document.getElementById('xpTierLabel').textContent = tier.icon + ' ' + tier.name;
+    document.getElementById('xpPtsLabel').textContent = S.xp + ' XP';
+    const isElite = tier.name === 'Elite';
+    document.getElementById('eliteBadge').style.display = isElite ? 'inline-block' : 'none';
+    if (isElite) document.getElementById('eliteBadge').textContent = '👑 Elite';
+    document.getElementById('xpTierLabel').classList.toggle('elite', isElite);
+}
+    // ══════════════════════════════════════
+// CHECK-IN
+// ══════════════════════════════════════
+function doCheckin() {
+    const td = todayKey();
+    if (S.streakDays.includes(td)) {
+        showToast('Already checked in today!');
+        return;
+    }
+    S.streakDays.push(td);
+    saveState();
+    addXP(50);
+    showToast('✅ Checked in! +50 XP');
+    updateCheckinBtn();
+    renderStreakUI();
+    renderChainDays();
+    checkBadges();
+    renderBadges();
+}
+
+function updateCheckinBtn() {
+    const td = todayKey();
+    const done = S.streakDays.includes(td);
+    const btn = document.getElementById('checkinBtn');
+    btn.textContent = done ? '✅ Checked In' : '✅ Check In Today';
+    btn.disabled = done;
+    if (done) {
+        document.getElementById('checkinLabel').textContent = 'Great work today!';
+    }
+}
+    // ══════════════════════════════════════
+// GOALS
+// ══════════════════════════════════════
+function saveGoals() {
+    S.goals = {
+        cal:  Number(document.getElementById('goalCal').value)  || 2000,
+        prot: Number(document.getElementById('goalProt').value) || 150,
+        carb: Number(document.getElementById('goalCarb').value) || 200,
+        fat:  Number(document.getElementById('goalFat').value)  || 65,
+    };
+    saveState();
+    document.getElementById('goalsForm').style.display = 'none';
+    renderGoalsUI();
+    renderMacroUI();
+    showToast('Goals saved!');
+}
+
+function cancelEditGoals() {
+    document.getElementById('goalsForm').style.display = 'none';
+}
+
+function renderGoalsUI() {
+    const g = S.goals;
+    const display = document.getElementById('goalsDisplay');
+    if (!g || !g.cal) {
+        display.innerHTML = `<button type="button" class="btn btn-ghost" id="editGoalsBtn">Set Goals</button>`;
+        document.getElementById('editGoalsBtn').addEventListener('click', () => {
+            document.getElementById('goalsForm').style.display = 'block';
+        });
+        return;
+    }
+    display.innerHTML = `
+        <div class="goals-display">
+            <div class="goal-chip"><div class="goal-chip-label">Calories</div><div class="goal-chip-val">${g.cal}<span class="goal-chip-unit"> kcal</span></div></div>
+            <div class="goal-chip"><div class="goal-chip-label">Protein</div><div class="goal-chip-val">${g.prot}<span class="goal-chip-unit"> g</span></div></div>
+            <div class="goal-chip"><div class="goal-chip-label">Carbs</div><div class="goal-chip-val">${g.carb}<span class="goal-chip-unit"> g</span></div></div>
+            <div class="goal-chip"><div class="goal-chip-label">Fat</div><div class="goal-chip-val">${g.fat}<span class="goal-chip-unit"> g</span></div></div>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" style="margin-top:8px" id="editGoalsBtn">Edit Goals</button>`;
+    document.getElementById('editGoalsBtn').addEventListener('click', () => {
+        document.getElementById('goalsForm').style.display = 'block';
+    });
+}
+
+function renderMacroUI() {
+    const td = todayKey();
+    const meals = S.meals[td] || [];
+    const totals = meals.reduce((acc, m) => ({
+        cal:  acc.cal  + (m.cal  || 0),
+        prot: acc.prot + (m.prot || 0),
+        carb: acc.carb + (m.carb || 0),
+        fat:  acc.fat  + (m.fat  || 0),
+    }), { cal:0, prot:0, carb:0, fat:0 });
+    const g = S.goals || {};
+    document.getElementById('calDisplay').textContent  = totals.cal;
+    document.getElementById('protDisplay').innerHTML   = totals.prot + ' <span class="metric-unit">g</span>';
+    document.getElementById('carbDisplay').innerHTML   = totals.carb + ' <span class="metric-unit">g</span>';
+    document.getElementById('fatDisplay').innerHTML    = totals.fat  + ' <span class="metric-unit">g</span>';
+    const setPct = (id, val, goal) => {
+        const pct = goal ? Math.min(val / goal, 1) : 0;
+        document.getElementById(id).style.transform = 'scaleX(' + pct + ')';
+    };
+    setPct('calPct',  totals.cal,  g.cal);
+    setPct('protPct', totals.prot, g.prot);
+    setPct('carbPct', totals.carb, g.carb);
+    setPct('fatPct',  totals.fat,  g.fat);
+    const allHit = g.cal && totals.cal >= g.cal && totals.prot >= g.prot && totals.carb >= g.carb && totals.fat >= g.fat;
+    document.getElementById('allMacrosHitBanner').style.display = allHit ? 'block' : 'none';
+    if (allHit) unlockAchievement('all_macros');
+}
+    // ══════════════════════════════════════
+// MEALS
+// ══════════════════════════════════════
+const MEAL_PRESETS = {
+    chicken: { name:'Chicken & Rice', cal:450, prot:40, carb:45, fat:8 },
+    salad:   { name:'Garden Salad',   cal:180, prot:6,  carb:20, fat:7 },
+    shake:   { name:'Protein Shake',  cal:220, prot:30, carb:18, fat:4 },
+};
+
+function fillMealPreset(key) {
+    const p = MEAL_PRESETS[key];
+    if (!p) return;
+    document.getElementById('mealName').value = p.name;
+    document.getElementById('mealCal').value  = p.cal;
+    document.getElementById('mealProt').value = p.prot;
+    document.getElementById('mealCarb').value = p.carb;
+    document.getElementById('mealFat').value  = p.fat;
+}
+
+function logMeal() {
+    const name = document.getElementById('mealName').value.trim();
+    if (!name) { showToast('Enter a meal name'); return; }
+    const meal = {
+        name,
+        cal:  Number(document.getElementById('mealCal').value)  || 0,
+        prot: Number(document.getElementById('mealProt').value) || 0,
+        carb: Number(document.getElementById('mealCarb').value) || 0,
+        fat:  Number(document.getElementById('mealFat').value)  || 0,
+        time: new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' }),
+    };
+    const td = todayKey();
+    if (!S.meals[td]) S.meals[td] = [];
+    S.meals[td].push(meal);
+    saveState();
+    addXP(10);
+    ['mealName','mealCal','mealProt','mealCarb','mealFat'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    renderMealHistory();
+    renderMacroUI();
+    checkBadges();
+    renderBadges();
+    showToast('Meal logged! +10 XP');
+}
+
+function renderMealHistory() {
+    const td = document.getElementById('mealHistoryDate').value || todayKey();
+    const meals = S.meals[td] || [];
+    const list = document.getElementById('mealLogList');
+    if (!meals.length) {
+        list.innerHTML = '<div class="empty-state"><div class="es-icon">🍽️</div>No meals logged</div>';
+        return;
+    }
+    list.innerHTML = meals.map((m, i) => `
+        <div class="log-item">
+            <div class="log-item-info">
+                <div class="log-item-title">${m.name}</div>
+                <div class="log-item-sub">${m.cal} kcal · ${m.prot}g protein · ${m.time}</div>
+            </div>
+            <div class="log-item-actions">
+                <button type="button" class="icon-btn" data-date="${td}" data-index="${i}" data-type="meal" aria-label="Delete meal">🗑</button>
+            </div>
+        </div>`).join('');
+    list.querySelectorAll('.icon-btn[data-type="meal"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const d = btn.dataset.date;
+            const idx = Number(btn.dataset.index);
+            S.meals[d].splice(idx, 1);
+            saveState();
+            renderMealHistory();
+            renderMacroUI();
+        });
+    });
+}
+    // ══════════════════════════════════════
+// WORKOUTS
+// ══════════════════════════════════════
+const WORKOUT_SUGGESTIONS = ['Push Day','Pull Day','Leg Day','Upper Body','Lower Body','Full Body','Cardio','HIIT','Rest Day','Yoga'];
+
+function showWorkoutSuggestions(val) {
+    const wrap = document.getElementById('workoutSuggestions');
+    if (!val.trim()) { wrap.style.display = 'none'; return; }
+    const matches = WORKOUT_SUGGESTIONS.filter(s => s.toLowerCase().includes(val.toLowerCase()));
+    if (!matches.length) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+    wrap.innerHTML = matches.map(s => `<div class="autocomplete-item" role="option">${s}</div>`).join('');
+    wrap.querySelectorAll('.autocomplete-item').forEach(item => {
+        item.addEventListener('click', () => {
+            document.getElementById('workoutType').value = item.textContent;
+            wrap.style.display = 'none';
+        });
+    });
+}
+
+function logExercise() {
+    const name = document.getElementById('exName').value.trim();
+    if (!name) { showToast('Enter an exercise name'); return; }
+    const set = {
+        name,
+        sets:   document.getElementById('exSets').value   || 0,
+        reps:   document.getElementById('exReps').value   || 0,
+        weight: document.getElementById('exWeight').value || 0,
+    };
+    const td = todayKey();
+    if (!S.workouts[td]) S.workouts[td] = [];
+    S.workouts[td].push(set);
+    saveState();
+    addXP(5);
+    ['exName','exSets','exReps','exWeight'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    renderWorkoutHistory();
+    checkBadges();
+    renderBadges();
+    showToast('Set logged! +5 XP');
+}
+
+function logWorkout() {
+    const type = document.getElementById('workoutType').value.trim();
+    if (!type) { showToast('Enter a workout type'); return; }
+    const workout = {
+        type,
+        duration: document.getElementById('workoutDur').value   || 0,
+        notes:    document.getElementById('workoutNotes').value || '',
+        time: new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' }),
+    };
+    const td = todayKey();
+    if (!S.workouts[td]) S.workouts[td] = [];
+    S.workouts[td].push(workout);
+    saveState();
+    addXP(30);
+    ['workoutType','workoutDur','workoutNotes'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    document.getElementById('workoutSuggestions').style.display = 'none';
+    renderWorkoutHistory();
+    checkBadges();
+    renderBadges();
+    showToast('Workout saved! +30 XP');
+}
+
+function renderWorkoutHistory() {
+    const td = document.getElementById('workoutHistoryDate').value || todayKey();
+    const sets = S.workouts[td] || [];
+    const list = document.getElementById('workoutLogList');
+    if (!sets.length) {
+        list.innerHTML = '<div class="empty-state"><div class="es-icon">🏋️</div>No workouts logged</div>';
+        return;
+    }
+    list.innerHTML = sets.map((s, i) => `
+        <div class="log-item">
+            <div class="log-item-info">
+                <div class="log-item-title">${s.name || s.type}</div>
+                <div class="log-item-sub">${s.sets ? s.sets+'×'+s.reps+' @ '+s.weight+'lbs' : s.duration+' min'}</div>
+            </div>
+            <div class="log-item-actions">
+                <button type="button" class="icon-btn" data-date="${td}" data-index="${i}" data-type="workout" aria-label="Delete workout">🗑</button>
+            </div>
+        </div>`).join('');
+    list.querySelectorAll('.icon-btn[data-type="workout"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const d = btn.dataset.date;
+            const idx = Number(btn.dataset.index);
+            S.workouts[d].splice(idx, 1);
+            saveState();
+            renderWorkoutHistory();
+        });
+    });
+}
+    // ══════════════════════════════════════
+// MEASUREMENTS
+// ══════════════════════════════════════
+function logMeasurement() {
+    const fields = ['inWeight','inBodyFat','inChest','inWaist','inHips','inBicep','inThigh','inCalf'];
+    const entry = { date: todayKey() };
+    fields.forEach(id => { entry[id] = Number(document.getElementById(id).value) || null; });
+    if (!Object.values(entry).some(v => v && v !== entry.date)) {
+        showToast('Enter at least one measurement');
+        return;
+    }
+    S.measurements.push(entry);
+    saveState();
+    addXP(20);
+    fields.forEach(id => { document.getElementById(id).value = ''; });
+    renderMeasureHistory();
+    renderGymMetrics();
+    checkBadges();
+    renderBadges();
+    showToast('Measurements saved! +20 XP');
+}
+
+function renderGymMetrics() {
+    const latest = S.measurements[S.measurements.length - 1] || {};
+    const set = (id, key) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = latest[key] ? latest[key] : '—';
+    };
+    set('curWeight',  'inWeight');
+    set('curBodyFat', 'inBodyFat');
+    set('curChest',   'inChest');
+    set('curWaist',   'inWaist');
+    set('curHips',    'inHips');
+}
+
+function renderMeasureHistory() {
+    const list = document.getElementById('measureHistory');
+    if (!S.measurements.length) {
+        list.innerHTML = '<div class="empty-state"><div class="es-icon">📏</div>No measurements yet</div>';
+        return;
+    }
+    list.innerHTML = S.measurements.slice().reverse() .map(m => `
+        <div class="log-item">
+            <div class="log-item-info">
+                <div class="log-item-title">${m.date}</div>
+                <div class="log-item-sub">${m.inWeight ? m.inWeight+'lbs' : ''} ${m.inBodyFat ? m.inBodyFat+'% bf' : ''}</div>
+            </div>
+        </div>`).join('');
+}
+
+// ══════════════════════════════════════
+// WEIGHT CHART
+// ══════════════════════════════════════
+let weightChartInstance = null;
+
+function renderWeightChart() {
+    const ctx = document.getElementById('weightChart').getContext('2d');
+    const data = S.measurements.filter(m => m.inWeight).slice(-12);
+    if (weightChartInstance) weightChartInstance.destroy();
+    weightChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.map(m => m.date.slice(5)),
+            datasets: [{
+                data: data.map(m => m.inWeight),
+                borderColor: '#E07A86',
+                backgroundColor: 'rgba(224,122,134,0.1)',
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#C9586A',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: 'rgba(201,88,106,0.08)' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+}
+    // ══════════════════════════════════════
+// STREAK
+// ══════════════════════════════════════
+function getBestStreak() {
+  const days = [...S.streakDays].sort();
+    let best = 0, current = 0;
+    for (let i = 0; i < days.length; i++) {
+        if (i === 0) { current = 1; }
+        else {
+            const prev = new Date(days[i-1]);
+            const curr = new Date(days[i]);
+            const diff = (curr - prev) / 86400000;
+            current = diff === 1 ? current + 1 : 1;
+        }
+        best = Math.max(best, current);
+    }
+    return best;
+}
+
+function renderStreakUI() {
+    const days = [...S.streakDays].sort();
+    const td = todayKey();
+    let streak = 0;
+    let d = new Date(td);
+    while (true) {
+        const key = d.toISOString().slice(0, 10);
+        if (!S.streakDays.includes(key)) break;
+        streak++;
+        d.setDate(d.getDate() - 1);
+    }
+    const best = getBestStreak();
+    const thisMonth = S.streakDays.filter(d => d.startsWith(td.slice(0,7))).length;
+    document.getElementById('curStreak').innerHTML  = streak  + '<span class="metric-unit"> days</span>';
+    document.getElementById('bestStreak').innerHTML = best    + '<span class="metric-unit"> days</span>';
+    document.getElementById('monthCount').innerHTML = thisMonth + '<span class="metric-unit"> workouts</span>';
+    document.getElementById('totalCount').innerHTML = S.streakDays.length + '<span class="metric-unit"> days</span>';
+    document.getElementById('ringNum').textContent  = streak;
+    const pct = Math.min(streak / 30, 1);
+    document.getElementById('streakRingFill').setAttribute('stroke-dashoffset', 239 - (239 * pct));
+    const bonusPct = (streak % 7) / 7;
+    document.getElementById('streakBonusFill').style.transform = 'scaleX(' + bonusPct + ')';
+    document.getElementById('streakBonusCount').textContent = (streak % 7) + '/7';
+}
+
+function renderChainDays() {
+    const chain = document.getElementById('chainDays');
+    const td = todayKey();
+    const days = [];
+    for (let i = 13; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        days.push(d.toISOString().slice(0, 10));
+    }
+    chain.innerHTML = days.map(d => {
+        const done = S.streakDays.includes(d);
+        const isToday = d === td;
+        return `<div class="hd ${done ? 'done' : ''}" style="${isToday ? 'outline:2px solid var(--pink-deep)' : ''}" title="${d}"></div>`;
+    }).join('');
+    const allDone = days.every(d => S.streakDays.includes(d));
+    const badge = document.getElementById('chainGoldBadge');
+    badge.style.display = allDone ? 'inline-block' : 'none';
+}
+
+function updateTicker() {
+    const streak = S.streakDays.length;
+    const level = getLevelInfo(S.xp).level;
+    const msgs = [
+        `🔥 <span>${streak} day streak</span>`,
+        `⭐ <span>Level ${level}</span>`,
+        `💪 <span>${S.xp} XP earned</span>`,
+        `🏆 <span>${S.achievements.length} badges unlocked</span>`,
+        `📅 <span>${S.streakDays.length} total check-ins</span>`,
+    ];
+    const inner = document.getElementById('tickerInner');
+    inner.innerHTML = [...msgs, ...msgs].join('  ·  ');
+}
+    // ══════════════════════════════════════
+// PHOTOS
+// ══════════════════════════════════════
+let photoCalDate = new Date();
+
+function initPhotoCalendar() {
+    document.getElementById('photoCalPrev').addEventListener('click', () => {
+        photoCalDate.setMonth(photoCalDate.getMonth() - 1);
+        renderPhotoCalendar();
+    });
+    document.getElementById('photoCalNext').addEventListener('click', () => {
+        photoCalDate.setMonth(photoCalDate.getMonth() + 1);
+        renderPhotoCalendar();
+    });
+    document.getElementById('uploadPhotoBtn').addEventListener('click', () => {
+        document.getElementById('photoUpload').click();
+    });
+    document.getElementById('photoUpload').addEventListener('change', handlePhoto);
+    document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
+    renderPhotoCalendar();
+}
+
+function renderPhotoCalendar() {
+    const year  = photoCalDate.getFullYear();
+    const month = photoCalDate.getMonth();
+    document.getElementById('photoCalTitle').textContent =
+        photoCalDate.toLocaleDateString('en-US', { month:'long', year:'numeric' });
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysIn   = new Date(year, month + 1, 0).getDate();
+    const td = todayKey();
+    let html = '';
+    for (let i = 0; i < firstDay; i++) html += '<div></div>';
+    for (let d = 1; d <= daysIn; d++) {
+        const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const hasPhoto = !!S.photos[key];
+        const isToday  = key === td;
+        html += `<div class="photo-day ${hasPhoto ? 'has-photo' : ''} ${isToday ? 'today-marker' : ''}"
+                      data-date="${key}">${d}</div>`;
+    }
+    document.getElementById('photoCalGrid').innerHTML = html;
+    document.querySelectorAll('.photo-day[data-date]').forEach(el => {
+        el.addEventListener('click', () => {
+            document.getElementById('photoDateLabel').textContent = el.dataset.date;
+            document.getElementById('photoInput').click();
+        });
+    });
+}
+
+function handlePhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+        S.photos[todayKey()] = ev.target.result;
+        saveState();
+        renderPhotoCalendar();
+        checkBadges();
+        renderBadges();
+        showToast('Photo saved!');
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+}
+
+function handlePhotoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const date = document.getElementById('photoDateLabel').textContent || todayKey();
+    const reader = new FileReader();
+    reader.onload = ev => {
+        S.photos[date] = ev.target.result;
+        saveState();
+        renderPhotoCalendar();
+        showToast('Photo saved for ' + date);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+}
+    // ══════════════════════════════════════
+// BUTTON EVENTS
+// ══════════════════════════════════════
+document.getElementById('checkinBtn').addEventListener('click', doCheckin);
+document.getElementById('logSetBtn').addEventListener('click', logExercise);
+document.getElementById('saveWorkoutBtn').addEventListener('click', logWorkout);
+document.getElementById('saveMeasurementBtn').addEventListener('click', logMeasurement);
+document.getElementById('saveGoalsBtn').addEventListener('click', saveGoals);
+document.getElementById('cancelGoalsBtn').addEventListener('click', cancelEditGoals);
+document.getElementById('logMealBtn').addEventListener('click', logMeal);
+document.getElementById('presetChicken').addEventListener('click', () => fillMealPreset('chicken'));
+document.getElementById('presetSalad').addEventListener('click', () => fillMealPreset('salad'));
+document.getElementById('presetShake').addEventListener('click', () => fillMealPreset('shake'));
+document.getElementById('workoutType').addEventListener('input', e => showWorkoutSuggestions(e.target.value));
+document.getElementById('mealDatePrev').addEventListener('click', () => {
+    const val = document.getElementById('mealHistoryDate').value;
+    const [y, m, day] = val.split('-').map(Number);
+    const d = new Date(y, m - 1, day - 1);
+    document.getElementById('mealHistoryDate').value = d.toISOString().slice(0, 10);
+    renderMealHistory();
+});
+document.getElementById('mealDateNext').addEventListener('click', () => {
+    const val = document.getElementById('mealHistoryDate').value;
+    const [y, m, day] = val.split('-').map(Number);
+    const d = new Date(y, m - 1, day + 1);
+    document.getElementById('mealHistoryDate').value = d.toISOString().slice(0, 10);
+    renderMealHistory();
+});
+document.getElementById('workoutDatePrev').addEventListener('click', () => {
+    const val = document.getElementById('workoutHistoryDate').value;
+    const [y, m, day] = val.split('-').map(Number);
+    const d = new Date(y, m - 1, day - 1);
+    document.getElementById('workoutHistoryDate').value = d.toISOString().slice(0, 10);
+    renderWorkoutHistory();
+});
+document.getElementById('workoutDateNext').addEventListener('click', () => {
+    const val = document.getElementById('workoutHistoryDate').value;
+    const [y, m, day] = val.split('-').map(Number);
+    const d = new Date(y, m - 1, day + 1);
+    document.getElementById('workoutHistoryDate').value = d.toISOString().slice(0, 10);
+    renderWorkoutHistory();
+});
       // ══════════════════════════════════════
 // ACHIEVEMENTS
 // ══════════════════════════════════════
