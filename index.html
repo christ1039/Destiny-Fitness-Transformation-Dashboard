@@ -364,6 +364,20 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 .pct-bar{height:4px;background:var(--bar-track);border-radius:2px;overflow:hidden;margin-top:4px}
 .pct-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--pink-mid),var(--pink-deep));transition:transform 0.5s ease;transform:scaleX(0);transform-origin:left}
 .all-macros-banner{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;text-align:center;padding:10px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;margin-bottom:12px}
+
+  /* STREAK RING */
+.streak-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.streak-ring-label{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px}
+
+/* HEATMAP */
+.heatmap-wrap{flex:1}
+.heatmap-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.heatmap-days-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;max-width:300px;margin-bottom:4px}
+.heatmap-day-label{font-size:9px;color:var(--text-3);text-align:center}
+
+.chain-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.chain-gold-badge{display:none;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:linear-gradient(135deg,var(--gold-light),var(--gold-classic));color:#7a4a10}
+
 </style>
  
 </head>
@@ -743,4 +757,176 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0}
 </div>
 
 </div><!-- closes page-nutrition -->
-  
+
+  <!-- STREAK PAGE -->
+<div class="page" id="page-streak">
+
+    <div class="card">
+        <div class="metric-grid">
+            <div class="metric-card">
+                <div class="metric-label">Current streak</div>
+                <div class="metric-value" id="curStreak">0<span class="metric-unit"> days</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Best streak</div>
+                <div class="metric-value" id="bestStreak">0<span class="metric-unit"> days</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">This month</div>
+                <div class="metric-value" id="monthCount">0<span class="metric-unit"> workouts</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">All time</div>
+                <div class="metric-value" id="totalCount">0<span class="metric-unit"> days</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ticker-wrap">
+        <div class="ticker-inner" id="tickerInner"></div>
+    </div>
+
+  <!-- Ring + Heatmap -->
+<div class="card">
+    <div class="card-static">
+        <div class="streak-section">
+            <div class="streak-ring-wrap">
+                <svg width="90" height="90" viewBox="0 0 90 90" aria-hidden="true">
+                    <circle cx="45" cy="45" r="38" fill="none" stroke="#f0e8ea" stroke-width="8"/>
+                    <circle cx="45" cy="45" r="38" fill="none" id="streakRingFill"
+                        stroke="url(#ringGrad)" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="239" stroke-dashoffset="239"
+                        transform="rotate(-90 45 45)"/>
+                    <defs>
+                        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#E07A86"/>
+                            <stop offset="100%" stop-color="#C9586A"/>
+                        </linearGradient>
+                        <linearGradient id="ringGradGold" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#D4A35F"/>
+                            <stop offset="100%" stop-color="#B57A2A"/>
+                        </linearGradient>
+                    </defs>
+                    <text x="45" y="41" text-anchor="middle" font-size="20" font-weight="700" fill="#C9586A" font-family="Montserrat,sans-serif" id="ringNum">0</text>
+                    <text x="45" y="55" text-anchor="middle" font-size="9" fill="#b09090" font-family="Montserrat,sans-serif">days</text>
+                </svg>
+                <span class="streak-ring-label" id="streakRingLabel">Streak</span>
+            </div>
+            <div class="heatmap-wrap">
+                <div class="heatmap-title" id="heatmapMonthTitle"></div>
+                <div class="heatmap-days-row">
+                    <div class="heatmap-day-label">S</div>
+                    <div class="heatmap-day-label">M</div>
+                    <div class="heatmap-day-label">T</div>
+                    <div class="heatmap-day-label">W</div>
+                    <div class="heatmap-day-label">T</div>
+                    <div class="heatmap-day-label">F</div>
+                    <div class="heatmap-day-label">S</div>
+                </div>
+                <div class="heatmap-grid" id="heatmapGrid"></div>
+                <div class="streak-bonus-row">
+                    <div class="streak-bonus-label">
+                        <span>Next 7-day bonus</span>
+                        <span id="streakBonusCount">0/7</span>
+                    </div>
+                    <div class="streak-bonus-bar">
+                        <div class="streak-bonus-fill" id="streakBonusFill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 14-day chain -->
+<div class="card">
+    <div class="card-static">
+        <div class="chain-header">
+            <div class="section-label" style="margin:0">Last 14 days</div>
+            <div id="chainGoldBadge" class="chain-gold-badge">🔥 Chain Active</div>
+        </div>
+        <div class="chain-days" id="chainDays"></div>
+    </div>
+</div>
+
+<!-- Motivation -->
+<div id="motivationCard"></div>
+
+</div><!-- closes page-streak -->
+
+  <script>
+      // ══════════════════════════════════════
+// ACHIEVEMENTS
+// ══════════════════════════════════════
+const ALL_BADGES = [
+  {id:'first_meal',    icon:'🍽️', name:'First Meal',     desc:'Log your first meal',           condition:()=>Object.values(S.meals).some(d=>d.length>0)},
+  {id:'first_workout', icon:'💪', name:'First Workout',  desc:'Log your first workout',         condition:()=>S.streakDays.length>0},
+  {id:'first_photo',   icon:'📸', name:'First Photo',    desc:'Upload a progress photo',        condition:()=>Object.keys(S.photos).length>0},
+  {id:'week7',         icon:'🔗', name:'7-Day Chain',    desc:'7 days in a row',                condition:()=>getBestStreak()>=7},
+  {id:'month30',       icon:'📅', name:'30-Day Legend',  desc:'30 days in a row',               condition:()=>getBestStreak()>=30},
+  {id:'all_macros',    icon:'🥇', name:'Macro Master',   desc:'Hit all macro goals in one day', condition:()=>S.achievements.includes('all_macros')},
+  {id:'level_5',       icon:'⭐', name:'Level 5',        desc:'Reach level 5',                  condition:()=>getLevelInfo(S.xp).level>=5},
+  {id:'level_10',      icon:'🌟', name:'Level 10',       desc:'Reach level 10',                 condition:()=>getLevelInfo(S.xp).level>=10},
+  {id:'level_25',      icon:'👑', name:'Level 25',       desc:'Reach level 25',                 condition:()=>getLevelInfo(S.xp).level>=25},
+  {id:'log10meals',    icon:'🍴', name:'Foodie',         desc:'Log 10 meals total',             condition:()=>Object.values(S.meals).reduce((a,d)=>a+d.length,0)>=10},
+  {id:'log20workouts', icon:'🏋️', name:'Gym Rat',        desc:'Log 20 workouts total',          condition:()=>Object.values(S.workouts).reduce((a,d)=>a+d.length,0)>=20},
+  {id:'measurements5', icon:'📐', name:'Body Tracker',   desc:'Log 5 measurements',             condition:()=>S.measurements.length>=5},
+];
+function unlockAchievement(id) {
+  if(S.achievements.includes(id)) return;
+  S.achievements.push(id); saveState();
+  const b=ALL_BADGES.find(b=>b.id===id);
+  if(b) showToast('🏅 Unlocked: '+b.name);
+  renderBadges();
+}
+function checkBadges() {
+    ALL_BADGES.forEach(b => {
+        if (b.condition() && !S.achievements.includes(b.id)) unlockAchievement(b.id);
+    });
+}
+function renderBadges() {
+  const unlocked=S.achievements.length;
+  document.getElementById('badgeProgress').textContent=unlocked+'/'+ALL_BADGES.length;
+  document.getElementById('badgeProgressBar').style.transform = 
+    'scaleX(' + (unlocked / ALL_BADGES.length) + ')';
+  const recent=S.achievements.slice(-3);
+  document.getElementById('badgeGrid').innerHTML=ALL_BADGES.map(b=>{
+  const isUnlocked = S.achievements.includes(b.id);
+    return `
+    <div class="badge ${isUnlocked?'unlocked':'locked'}">
+      ${isUnlocked&&recent.includes(b.id)?'<div class="badge-new">NEW</div>':''}
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.desc}</div>
+    </div>`;
+  }).join('');
+}
+    // ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short', month: 'short', day: 'numeric'
+    });
+    const td = todayKey();
+    document.getElementById('mealHistoryDate').value = td;
+    document.getElementById('workoutHistoryDate').value = td;
+    updateXPUI();
+    updateCheckinBtn();
+    renderGoalsUI();
+    renderMacroUI();
+    renderMealHistory();
+    renderWorkoutHistory();
+    renderGymMetrics();
+    renderMeasureHistory();
+    renderWeightChart();
+    renderStreakUI();
+    renderChainDays();
+    checkBadges();
+    renderBadges();
+    initPhotoCalendar();
+    updateTicker();
+});
+    </script>
+</body>
+</html>
