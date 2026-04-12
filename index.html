@@ -118,7 +118,93 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .level-banner-sub{font-size:13px;color:var(--text-2);margin-bottom:8px}
 .level-banner-tier{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,var(--gold-light),var(--gold-classic));color:#7a4a10;margin-bottom:16px}
 .level-banner-btn{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;width:100%}
-  </style> 
+
+  /* PAGES */
+  .page {
+    display: none;
+    opacity: 0;
+    padding: 16px;
+    padding-bottom: 80px;
+}
+.page.active {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+/* CARDS */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+.card.champion-glow {
+    animation: championGlow 3s ease-in-out infinite;
+    will-change: box-shadow;
+}
+@keyframes championGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(212,163,95,0.3); }
+    50%       { box-shadow: 0 0 22px rgba(212,163,95,0.7), 0 0 40px rgba(212,163,95,0.2); }
+}
+.card-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+}
+.card-header:focus-visible {
+    outline: 2px solid var(--pink-deep);
+    outline-offset: 2px;
+}
+.card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.2px;
+}
+.card-toggle {
+    font-size: 18px;
+    color: var(--text-3);
+    transition: transform 0.25s;
+}
+.card-toggle.open {
+    transform: rotate(180deg);
+}
+.card-body {
+    display: block;
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease, visibility 0.25s;
+    padding: 0 16px;
+}
+.card-body.open {
+    visibility: visible;
+    max-height: 600px;
+    padding: 0 16px 16px;
+}
+@media (prefers-reduced-motion: reduce) {
+    .card.champion-glow {
+        animation: none;
+    }
+    .card-body.open {
+        animation: none;
+    }
+}
+.card-static {
+    padding: 16px;
+}
+
+</style> 
 
 </head>
 <body>
