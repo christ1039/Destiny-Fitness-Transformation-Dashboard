@@ -949,7 +949,7 @@
               </svg>
               <div class="ring-center">
                 <p class="font-display text-2xl font-semibold leading-none"><span id="ring-protein-val">0</span><span class="text-xs font-normal" style="color: var(--ink-soft);">g</span></p>
-                <p class="text-[9px] tracking-[0.18em] uppercase mt-1 font-semibold" style="color: var(--ink-soft);" id="ring-protein-target">/ 140g</p>
+                <p class="text-[9px] tracking-[0.18em] uppercase mt-1 font-semibold" style="color: var(--ink-soft);" id="ring-protein-target">/ 0g</p>
               </div>
             </div>
             <p class="text-[11px] tracking-[0.18em] uppercase font-semibold mt-3" style="color: var(--c-protein);">Protein</p>
@@ -963,7 +963,7 @@
               </svg>
               <div class="ring-center">
                 <p class="font-display text-2xl font-semibold leading-none"><span id="ring-carbs-val">0</span><span class="text-xs font-normal" style="color: var(--ink-soft);">g</span></p>
-                <p class="text-[9px] tracking-[0.18em] uppercase mt-1 font-semibold" style="color: var(--ink-soft);" id="ring-carbs-target">/ 220g</p>
+                <p class="text-[9px] tracking-[0.18em] uppercase mt-1 font-semibold" style="color: var(--ink-soft);" id="ring-carbs-target">/ 0g</p>
               </div>
             </div>
             <p class="text-[11px] tracking-[0.18em] uppercase font-semibold mt-3" style="color: var(--c-carbs);">Carbs</p>
@@ -977,7 +977,7 @@
               </svg>
               <div class="ring-center">
                 <p class="font-display text-2xl font-semibold leading-none"><span id="ring-fats-val">0</span><span class="text-xs font-normal" style="color: var(--ink-soft);">g</span></p>
-                <p class="text-[9px] tracking-[0.18em] uppercase mt-1 font-semibold" style="color: var(--ink-soft);" id="ring-fats-target">/ 65g</p>
+                <p class="text-[9px] tracking-[0.18em] uppercase mt-1 font-semibold" style="color: var(--ink-soft);" id="ring-fats-target">/ 0g</p>
               </div>
             </div>
             <p class="text-[11px] tracking-[0.18em] uppercase font-semibold mt-3" style="color: var(--c-fats);">Fats</p>
@@ -989,7 +989,7 @@
         <!-- Macro logger -->
         <div class="glass-deep rounded-3xl p-6 lg:col-span-2">
           <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Add Food</p>
-          <h3 class="font-display text-3xl font-semibold mt-1">Macro Logger</h3>
+          <h3 class="font-display text-3xl font-semibold mt-1">Macro Tracker</h3>
           <p class="text-sm mt-1" style="color: var(--ink-soft);">Track every meal & snack with full macro breakdown.</p>
 
           <form id="food-form" class="mt-5 grid grid-cols-2 sm:grid-cols-6 gap-3">
@@ -1180,7 +1180,7 @@
                 </div>
                 <div>
                   <label class="lbl">Daily water goal (L)</label>
-                  <input class="field" id="set-water-goal" type="number" step="0.1" min="0.5" placeholder="2.5" />
+                  <input class="field" id="set-water-goal" type="number" step="0.1" min="0.5" placeholder="-" />
                 </div>
               </div>
             </div>
@@ -1195,15 +1195,15 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
               <div>
                 <label class="lbl">Workouts / week</label>
-                <input class="field" id="set-weekly-workout-goal" type="number" min="0" max="14" step="1" placeholder="4" />
+                <input class="field" id="set-weekly-workout-goal" type="number" min="0" max="14" step="1" placeholder="-" />
               </div>
               <div>
                 <label class="lbl">Daily step goal</label>
-                <input class="field" id="set-step-goal" type="number" min="0" step="100" placeholder="8000" />
+                <input class="field" id="set-step-goal" type="number" min="0" step="100" placeholder="-" />
               </div>
               <div>
                 <label class="lbl">Active minutes / day</label>
-                <input class="field" id="set-active-min-goal" type="number" min="0" step="5" placeholder="30" />
+                <input class="field" id="set-active-min-goal" type="number" min="0" step="5" placeholder="-" />
               </div>
             </div>
           </div>
@@ -1217,64 +1217,25 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
               <div>
                 <label class="lbl" style="color: var(--c-cal);">Calories</label>
-                <input class="field" id="set-cal-goal" type="number" min="0" step="1" placeholder="2000" />
+                <input class="field" id="set-cal-goal" type="number" min="0" step="1" placeholder="-" />
               </div>
               <div>
                 <label class="lbl" style="color: var(--c-protein);">Protein (g)</label>
-                <input class="field" id="set-protein-goal" type="number" min="0" step="1" placeholder="140" />
+                <input class="field" id="set-protein-goal" type="number" min="0" step="1" placeholder="-" />
               </div>
               <div>
                 <label class="lbl" style="color: var(--c-carbs);">Carbs (g)</label>
-                <input class="field" id="set-carbs-goal" type="number" min="0" step="1" placeholder="220" />
+                <input class="field" id="set-carbs-goal" type="number" min="0" step="1" placeholder="-" />
               </div>
               <div>
                 <label class="lbl" style="color: var(--c-fats);">Fats (g)</label>
-                <input class="field" id="set-fats-goal" type="number" min="0" step="1" placeholder="65" />
+                <input class="field" id="set-fats-goal" type="number" min="0" step="1" placeholder="-" />
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Reminders + Backup -->
-        <div class="space-y-5">
-          <div class="glass-deep rounded-3xl p-6">
-            <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Reminders</p>
-            <h3 class="font-display text-3xl font-semibold mt-1">Whop notifications</h3>
-            <p class="text-sm mt-1" style="color: var(--ink-soft);">Get a push notification via the Whop App.</p>
-
-            <div class="mt-5 space-y-4">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm font-medium">Workout reminders</p>
-                  <p class="text-xs" style="color: var(--ink-soft);">Daily nudge at 7:30 am</p>
-                </div>
-                <label class="switch"><input type="checkbox" id="pref-workout" /><span class="slider"></span></label>
-              </div>
-              <div class="divider-thin"></div>
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm font-medium">Hydration nudges</p>
-                  <p class="text-xs" style="color: var(--ink-soft);">Every 2 hours</p>
-                </div>
-                <label class="switch"><input type="checkbox" id="pref-hydration" /><span class="slider"></span></label>
-              </div>
-              <div class="divider-thin"></div>
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm font-medium">Weekly summary</p>
-                  <p class="text-xs" style="color: var(--ink-soft);">Sunday evenings</p>
-                </div>
-                <label class="switch"><input type="checkbox" id="pref-summary" /><span class="slider"></span></label>
-              </div>
-            </div>
-
-            <div class="divider-thin my-4"></div>
-            <button id="test-notif-btn" class="btn-ghost w-full rounded-xl py-2.5 text-xs font-medium tracking-[0.14em] uppercase flex items-center justify-center gap-2">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-              Test Notification
-            </button>
-          </div>
-
+        <!-- Backup -->
           <div class="glass-deep rounded-3xl p-6">
             <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Data</p>
             <h3 class="font-display text-3xl font-semibold mt-1">Your journey</h3>
@@ -1411,16 +1372,16 @@ const defaultState = () => ({
     name:           'Member',
     avatar:         null,    // base64 data URL
     targetWeight:   null,
-    waterGoalL:     2.5,
-    calorieGoal:    2000,
-    proteinGoal:    140,
-    carbsGoal:      220,
-    fatsGoal:       65,
+    waterGoalL:     0,
+    calorieGoal:    0,
+    proteinGoal:    0,
+    carbsGoal:      0,
+    fatsGoal:       0,
     /* NEW v1.3 — fitness targets */
     fitnessTargets: {
-      weeklyWorkoutGoal: 4,
-      dailyStepGoal:     8000,
-      dailyActiveMin:    30,
+      weeklyWorkoutGoal: 0,
+      dailyStepGoal:     0,
+      dailyActiveMin:    0,
     },
     prefs: { workout: true, hydration: true, summary: false },
   },
