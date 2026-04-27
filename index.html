@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Destiny Fitness — Transformation Dashboard · v1.2</title>
+<title>Destiny Dashboard V1.3 — Transformation Dashboard</title>
 
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -14,7 +14,7 @@
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -431,6 +431,150 @@
     overflow: hidden;
   }
   .macro-bar > div { height: 100%; border-radius: 99px; transition: width .55s cubic-bezier(.2,.8,.2,1); }
+
+  /* === V1.3 ADDITIONS === */
+
+  /* Brand logo */
+  .brand-logo { display: block; max-width: 100%; height: auto; }
+  .brand-logo-sidebar { width: 180px; }
+  .brand-logo-mobile { height: 30px; width: auto; }
+
+  /* Avatar */
+  .avatar-circle {
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #D9A679, #B76E79);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.7);
+    box-shadow: 0 4px 14px -6px rgba(183, 110, 121, 0.5);
+  }
+  .avatar-circle img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+
+  /* Avatar uploader */
+  .avatar-uploader {
+    position: relative;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .avatar-uploader .avatar-overlay {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: rgba(63, 42, 45, 0.6);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .avatar-uploader:hover .avatar-overlay { opacity: 1; }
+  .avatar-uploader input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; border-radius: 50%;
+  }
+  .avatar-remove-btn {
+    margin-top: 6px;
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: rgba(183,110,121,0.4);
+  }
+  .avatar-remove-btn:hover { color: var(--rose-gold-dk); }
+
+  /* Sidebar nav notification dot */
+  .nav-dot {
+    position: absolute;
+    right: 14px;
+    top: 50%; transform: translateY(-50%);
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E5BD8C, #B76E79);
+    box-shadow: 0 0 0 0 rgba(183, 110, 121, 0.5);
+    animation: dotPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(183, 110, 121, 0.5); }
+    50%      { box-shadow: 0 0 0 6px rgba(183, 110, 121, 0); }
+  }
+
+  /* Empty-state pulse for log workout card */
+  @keyframes attentionPulse {
+    0%, 100% { box-shadow:
+      0 1px 0 rgba(255,255,255,0.9) inset,
+      0 30px 60px -28px rgba(183, 110, 121, 0.30),
+      0 0 0 0 rgba(183, 110, 121, 0); }
+    50%      { box-shadow:
+      0 1px 0 rgba(255,255,255,0.9) inset,
+      0 30px 60px -28px rgba(183, 110, 121, 0.30),
+      0 0 0 6px rgba(183, 110, 121, 0.18); }
+  }
+  .pulse-attention { animation: attentionPulse 2.6s ease-in-out infinite; }
+
+  /* Beat-your-last badge */
+  .beat-last-badge {
+    margin-top: 8px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 248, 240, 0.85), rgba(252, 222, 222, 0.7));
+    border: 1px solid rgba(217, 166, 121, 0.4);
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+    color: var(--ink);
+    animation: fadeUp .35s ease;
+  }
+  .beat-last-badge .ico-trophy {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, #FBE6C7, #E5BD8C);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 14px;
+  }
+  .beat-last-badge p { margin: 0; line-height: 1.35; }
+  .beat-last-badge .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-weight: 600;
+    color: #8B5E3C;
+  }
+  .beat-last-badge .value {
+    font-weight: 600;
+    color: var(--rose-gold-dk);
+  }
+
+  /* Rookie badge */
+  .rookie-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255, 248, 240, 0.9), rgba(252, 222, 222, 0.7));
+    border: 1px solid rgba(217, 166, 121, 0.45);
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: #8B5E3C;
+  }
+
+  /* Subtle link in info bar */
+  .info-link {
+    color: var(--rose-gold-dk);
+    text-decoration: underline;
+    text-decoration-color: rgba(183, 110, 121, 0.35);
+    text-underline-offset: 3px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: text-decoration-color .25s ease, color .25s ease;
+  }
+  .info-link:hover {
+    color: var(--rose-gold);
+    text-decoration-color: var(--rose-gold);
+  }
 </style>
 </head>
 
@@ -448,10 +592,7 @@
   <button id="menu-btn" class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,0.6); border: 1px solid var(--line);" aria-label="Menu">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--rose-gold-dk);"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
-  <div class="flex items-center gap-2">
-    <div class="w-7 h-7 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #C58695, #8E5560); color: #fff; font-family: 'Cormorant Garamond', serif; font-weight: 700;">D</div>
-    <span class="font-display text-xl text-rosegold font-semibold">Destiny Fitness</span>
-  </div>
+  <div id="brand-logo-mobile" class="flex items-center"></div>
   <div class="w-10"></div>
 </div>
 
@@ -462,15 +603,9 @@
   <!-- ======================= SIDEBAR ======================= -->
   <aside id="sidebar" class="lg:w-72 lg:flex-shrink-0 lg:sticky lg:top-0 lg:h-screen p-5 glass-deep lg:bg-transparent lg:backdrop-blur-0 lg:border-0 lg:shadow-none flex flex-col">
 
-    <div class="hidden lg:flex items-center gap-3 px-2 pt-2 pb-6">
-      <div class="w-11 h-11 rounded-2xl flex items-center justify-center"
-           style="background: linear-gradient(135deg, #F8C9C0, #B76E79); box-shadow: 0 10px 24px -10px rgba(183, 110, 121, 0.55);">
-        <span class="font-display font-bold text-white text-2xl leading-none">D</span>
-      </div>
-      <div>
-        <p class="font-display text-2xl font-semibold text-rosegold leading-none">Destiny</p>
-        <p class="text-[10px] tracking-[0.3em] uppercase text-[color:var(--ink-soft)] mt-1.5">Fitness · v1.2</p>
-      </div>
+    <div class="hidden lg:block px-2 pt-2 pb-6">
+      <div id="brand-logo-sidebar"></div>
+      <p class="text-[10px] tracking-[0.3em] uppercase text-[color:var(--ink-soft)] mt-2 text-center font-semibold">Dashboard · v1.3</p>
     </div>
 
     <div class="divider-thin hidden lg:block mb-4"></div>
@@ -484,27 +619,30 @@
       </a>
       <a class="nav-item" data-tab="gym">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6 L6 18"/><path d="M18 6 L18 18"/><path d="M2 9 L2 15"/><path d="M22 9 L22 15"/><path d="M6 12 L18 12"/></svg>
-        Gym Progress
+        Fitness Progress
       </a>
       <a class="nav-item" data-tab="nutrition">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 C8 6 8 10 12 14 C16 10 16 6 12 2 Z"/><path d="M5 14 C9 14 13 18 13 22"/><path d="M19 14 C15 14 11 18 11 22"/></svg>
         Nutrition
       </a>
-      <a class="nav-item" data-tab="settings">
+      <a class="nav-item" data-tab="settings" id="nav-settings">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Settings
+        <span id="settings-dot" class="nav-dot" style="display:none;"></span>
       </a>
     </nav>
 
     <div class="glass rounded-2xl p-5 mt-6 relative overflow-hidden">
       <div class="absolute -top-6 -right-6 w-24 h-24 rounded-full" style="background: radial-gradient(circle, #F8C9C0, transparent 70%);"></div>
-      <p class="text-[10px] tracking-[0.24em] uppercase font-semibold" style="color: var(--rose-gold);">Inspiration</p>
-      <p class="font-display italic text-lg leading-snug mt-2" style="color: var(--ink);">"She believed she could, so she did."</p>
-      <p class="text-xs mt-3" style="color: var(--ink-soft);">Small wins compound. Begin where you are.</p>
+      <p class="text-[10px] tracking-[0.24em] uppercase font-semibold" style="color: var(--rose-gold);">Daily Inspiration</p>
+      <p class="font-display italic text-lg leading-snug mt-2" style="color: var(--ink);" id="daily-quote">"She believed she could, so she did."</p>
+      <p class="text-xs mt-3" style="color: var(--ink-soft);" id="daily-quote-sub">A new spark every morning.</p>
     </div>
 
     <div class="flex items-center gap-3 mt-5 px-2">
-      <div class="w-10 h-10 rounded-full flex items-center justify-center font-display font-semibold text-white" style="background: linear-gradient(135deg, #D9A679, #B76E79);" id="sidebar-initial">M</div>
+      <div class="avatar-circle" style="width: 40px; height: 40px; font-size: 16px;" id="sidebar-avatar">
+        <span id="sidebar-initial">M</span>
+      </div>
       <div class="flex-1 min-w-0">
         <p class="text-sm font-medium truncate" id="sidebar-name">Member</p>
         <p class="text-[11px] truncate" style="color: var(--ink-soft);">Destiny · Premium</p>
@@ -517,12 +655,17 @@
 
     <!-- Header -->
     <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-      <div>
-        <p class="text-[11px] tracking-[0.3em] uppercase font-semibold" style="color: var(--rose-gold);" id="header-date">—</p>
-        <h1 class="font-display text-4xl sm:text-5xl font-semibold leading-none mt-2">
-          <span id="greeting">Welcome</span>, <span class="text-rosegold italic" id="header-name">Member</span>
-        </h1>
-        <p class="text-sm mt-3" style="color: var(--ink-soft);">A clean canvas — let's shape your story.</p>
+      <div class="flex items-center gap-4">
+        <div class="avatar-circle hidden sm:flex" style="width: 56px; height: 56px; font-size: 22px;" id="header-avatar">
+          <span id="header-initial">M</span>
+        </div>
+        <div>
+          <p class="text-[11px] tracking-[0.3em] uppercase font-semibold" style="color: var(--rose-gold);" id="header-date">—</p>
+          <h1 class="font-display text-4xl sm:text-5xl font-semibold leading-none mt-2">
+            <span id="greeting">Welcome</span>, <span class="text-rosegold italic" id="header-name">Member</span>
+          </h1>
+          <p class="text-sm mt-3" style="color: var(--ink-soft);">A clean canvas — let's shape your story.</p>
+        </div>
       </div>
       <div class="flex items-center gap-3 flex-wrap">
         <span id="save-pill" class="save-pill"><span class="dot"></span><span id="save-pill-text">All changes saved</span></span>
@@ -646,10 +789,15 @@
       <!-- This Week Activity Strip -->
       <div class="glass rounded-3xl p-6 mt-5">
         <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-          <h3 class="font-display text-2xl font-semibold">This Week</h3>
+          <div>
+            <h3 class="font-display text-2xl font-semibold">This Week</h3>
+            <p class="text-xs mt-1" style="color: var(--ink-soft);">
+              <span id="weekly-workout-counter">0/4 sessions done</span> · <span id="weekly-meals-counter">0/7 days on target</span>
+            </p>
+          </div>
           <div class="flex items-center gap-3 text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">
             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Workout</span>
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Meals</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Meals on target</span>
             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Water goal</span>
           </div>
         </div>
@@ -657,11 +805,22 @@
       </div>
     </section>
 
-    <!-- ======================= GYM PROGRESS ======================= -->
+    <!-- ======================= FITNESS PROGRESS ======================= -->
     <section class="tab-panel" data-panel="gym">
+
+      <!-- Info bar -->
+      <div class="glass rounded-2xl px-5 py-3 mb-5 flex items-center gap-3 flex-wrap">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(217, 166, 121, 0.18);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B5E3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <p class="text-sm" style="color: var(--ink);">
+          Aiming for your weekly goal? <a class="info-link" id="link-fitness-targets">See targets in Settings → Fitness Targets</a>
+        </p>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
         <!-- Form -->
-        <div class="glass-deep rounded-3xl p-6 lg:col-span-2 self-start">
+        <div id="workout-form-card" class="glass-deep rounded-3xl p-6 lg:col-span-2 self-start">
           <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Workout Log</p>
           <h3 class="font-display text-3xl font-semibold mt-1">Log a session</h3>
           <p class="text-sm mt-1" style="color: var(--ink-soft);">Beat your last lift — earn the 🏆.</p>
@@ -669,7 +828,8 @@
           <form id="workout-form" class="mt-6 space-y-4">
             <div>
               <label class="lbl">Exercise</label>
-              <input class="field" name="exerciseName" placeholder="e.g. Romanian Deadlift" required />
+              <input class="field" name="exerciseName" id="exercise-name-input" placeholder="e.g. Romanian Deadlift" autocomplete="off" required />
+              <div id="beat-last-badge" style="display: none;"></div>
             </div>
             <div class="grid grid-cols-3 gap-3">
               <div>
@@ -704,10 +864,11 @@
             </div>
             <div class="rounded-2xl p-4 col-span-2 flex items-center gap-3" style="background: linear-gradient(135deg, rgba(255,248,240,0.7), rgba(252,222,222,0.6)); border: 1px solid rgba(217, 166, 121, 0.3);">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style="background: linear-gradient(135deg, #FBE6C7, #E5BD8C);">🏆</div>
-              <div>
+              <div class="flex-1 min-w-0">
                 <p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">Personal Records</p>
                 <p class="font-display text-2xl font-semibold leading-none mt-0.5"><span id="gym-prs">0</span></p>
               </div>
+              <div id="rookie-badge-slot"></div>
             </div>
           </div>
         </div>
@@ -979,53 +1140,97 @@
     <!-- ======================= SETTINGS ======================= -->
     <section class="tab-panel" data-panel="settings">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <!-- Profile + Goals -->
-        <div class="glass-deep rounded-3xl p-6 lg:col-span-2">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <div>
-              <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Profile</p>
-              <h3 class="font-display text-3xl font-semibold mt-1">Your details</h3>
-              <p class="text-sm mt-1" style="color: var(--ink-soft);">Changes save automatically as you type.</p>
+        <!-- Profile + Goals stack -->
+        <div class="lg:col-span-2 space-y-5">
+
+          <!-- 1. PROFILE DETAILS -->
+          <div class="glass-deep rounded-3xl p-6">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">1 · Profile Details</p>
+                <h3 class="font-display text-3xl font-semibold mt-1">Your details</h3>
+                <p class="text-sm mt-1" style="color: var(--ink-soft);">Changes save automatically as you type.</p>
+              </div>
+              <span class="text-[10px] tracking-[0.18em] uppercase px-3 py-1.5 rounded-full font-semibold" style="background: rgba(183, 233, 192, 0.3); color: #4A8260; border: 1px solid rgba(143, 184, 142, 0.4);">Auto-save on</span>
             </div>
-            <span class="text-[10px] tracking-[0.18em] uppercase px-3 py-1.5 rounded-full font-semibold" style="background: rgba(183, 233, 192, 0.3); color: #4A8260; border: 1px solid rgba(143, 184, 142, 0.4);">Auto-save on</span>
+
+            <div class="flex items-start gap-5 mt-6 flex-wrap">
+              <!-- Avatar uploader -->
+              <div class="flex flex-col items-center">
+                <label class="avatar-uploader" for="avatar-input">
+                  <div class="avatar-circle" style="width:80px; height:80px; font-size:34px;" id="settings-avatar">
+                    <span id="settings-initial">M</span>
+                  </div>
+                  <div class="avatar-overlay">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  </div>
+                  <input type="file" id="avatar-input" accept="image/*" />
+                </label>
+                <button type="button" id="avatar-remove-btn" class="avatar-remove-btn" style="display:none;">Remove photo</button>
+              </div>
+
+              <div class="flex-1 min-w-[220px] grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="sm:col-span-2">
+                  <label class="lbl">Display name</label>
+                  <input class="field" id="set-name" placeholder="Member" autocomplete="off" />
+                </div>
+                <div>
+                  <label class="lbl">Goal weight (lbs)</label>
+                  <input class="field" id="set-target-weight" type="number" step="0.1" min="0" placeholder="—" />
+                </div>
+                <div>
+                  <label class="lbl">Daily water goal (L)</label>
+                  <input class="field" id="set-water-goal" type="number" step="0.1" min="0.5" placeholder="2.5" />
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-            <div>
-              <label class="lbl">Display name</label>
-              <input class="field" id="set-name" placeholder="Member" autocomplete="off" />
-            </div>
-            <div>
-              <label class="lbl">Goal weight (lbs)</label>
-              <input class="field" id="set-target-weight" type="number" step="0.1" min="0" placeholder="—" />
-            </div>
-            <div>
-              <label class="lbl">Daily water goal (L)</label>
-              <input class="field" id="set-water-goal" type="number" step="0.1" min="0.5" placeholder="2.5" />
+          <!-- 2. FITNESS TARGETS (NEW) -->
+          <div class="glass-deep rounded-3xl p-6">
+            <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">2 · Fitness Targets</p>
+            <h3 class="font-display text-3xl font-semibold mt-1">Weekly movement goals</h3>
+            <p class="text-sm mt-1" style="color: var(--ink-soft);">Drive your weekly counters and "This Week" streak.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+              <div>
+                <label class="lbl">Workouts / week</label>
+                <input class="field" id="set-weekly-workout-goal" type="number" min="0" max="14" step="1" placeholder="4" />
+              </div>
+              <div>
+                <label class="lbl">Daily step goal</label>
+                <input class="field" id="set-step-goal" type="number" min="0" step="100" placeholder="8000" />
+              </div>
+              <div>
+                <label class="lbl">Active minutes / day</label>
+                <input class="field" id="set-active-min-goal" type="number" min="0" step="5" placeholder="30" />
+              </div>
             </div>
           </div>
 
-          <div class="divider-thin my-6"></div>
+          <!-- 3. NUTRITION TARGETS -->
+          <div class="glass-deep rounded-3xl p-6">
+            <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">3 · Nutrition Targets</p>
+            <h3 class="font-display text-3xl font-semibold mt-1">Daily macros</h3>
+            <p class="text-sm mt-1" style="color: var(--ink-soft);">Drives the macro rings on the Nutrition tab.</p>
 
-          <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Nutrition Targets</p>
-          <h3 class="font-display text-2xl font-semibold mt-1 mb-4">Daily macros</h3>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div>
-              <label class="lbl" style="color: var(--c-cal);">Calories</label>
-              <input class="field" id="set-cal-goal" type="number" min="0" step="1" placeholder="2000" />
-            </div>
-            <div>
-              <label class="lbl" style="color: var(--c-protein);">Protein (g)</label>
-              <input class="field" id="set-protein-goal" type="number" min="0" step="1" placeholder="140" />
-            </div>
-            <div>
-              <label class="lbl" style="color: var(--c-carbs);">Carbs (g)</label>
-              <input class="field" id="set-carbs-goal" type="number" min="0" step="1" placeholder="220" />
-            </div>
-            <div>
-              <label class="lbl" style="color: var(--c-fats);">Fats (g)</label>
-              <input class="field" id="set-fats-goal" type="number" min="0" step="1" placeholder="65" />
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+              <div>
+                <label class="lbl" style="color: var(--c-cal);">Calories</label>
+                <input class="field" id="set-cal-goal" type="number" min="0" step="1" placeholder="2000" />
+              </div>
+              <div>
+                <label class="lbl" style="color: var(--c-protein);">Protein (g)</label>
+                <input class="field" id="set-protein-goal" type="number" min="0" step="1" placeholder="140" />
+              </div>
+              <div>
+                <label class="lbl" style="color: var(--c-carbs);">Carbs (g)</label>
+                <input class="field" id="set-carbs-goal" type="number" min="0" step="1" placeholder="220" />
+              </div>
+              <div>
+                <label class="lbl" style="color: var(--c-fats);">Fats (g)</label>
+                <input class="field" id="set-fats-goal" type="number" min="0" step="1" placeholder="65" />
+              </div>
             </div>
           </div>
         </div>
@@ -1033,8 +1238,9 @@
         <!-- Reminders + Backup -->
         <div class="space-y-5">
           <div class="glass-deep rounded-3xl p-6">
-            <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Preferences</p>
-            <h3 class="font-display text-3xl font-semibold mt-1">Reminders</h3>
+            <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Reminders</p>
+            <h3 class="font-display text-3xl font-semibold mt-1">Whop notifications</h3>
+            <p class="text-sm mt-1" style="color: var(--ink-soft);">Get a push notification via the Whop App.</p>
 
             <div class="mt-5 space-y-4">
               <div class="flex items-center justify-between">
@@ -1055,18 +1261,24 @@
               <div class="divider-thin"></div>
               <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-sm font-medium">Weekly summary email</p>
+                  <p class="text-sm font-medium">Weekly summary</p>
                   <p class="text-xs" style="color: var(--ink-soft);">Sunday evenings</p>
                 </div>
                 <label class="switch"><input type="checkbox" id="pref-summary" /><span class="slider"></span></label>
               </div>
             </div>
+
+            <div class="divider-thin my-4"></div>
+            <button id="test-notif-btn" class="btn-ghost w-full rounded-xl py-2.5 text-xs font-medium tracking-[0.14em] uppercase flex items-center justify-center gap-2">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              Test Notification
+            </button>
           </div>
 
           <div class="glass-deep rounded-3xl p-6">
             <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Data</p>
             <h3 class="font-display text-3xl font-semibold mt-1">Your journey</h3>
-            <p class="text-sm mt-2" style="color: var(--ink-soft);">Download an encrypted-friendly JSON copy of every weight, workout, meal & setting.</p>
+            <p class="text-sm mt-2" style="color: var(--ink-soft);">Download a JSON copy of every weight, workout, meal & setting.</p>
 
             <button id="backup-btn" class="btn-rose w-full rounded-xl py-3 mt-4 text-sm font-medium flex items-center justify-center gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -1084,7 +1296,7 @@
     </section>
 
     <footer class="text-center mt-12 mb-2">
-      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Fitness · v1.2 · <span id="year"></span></p>
+      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Dashboard V1.3 · <span id="year"></span></p>
     </footer>
 
   </main>
@@ -1092,44 +1304,157 @@
 
 <script>
 /* ============================================================
-   Destiny Fitness — V1.2
-   Weight history · Macro logger · PR badges · JSON backup
+   Destiny Dashboard V1.3
+   Branded · Avatar · Fitness Targets · Smart Tracking · Whop
    ============================================================ */
-const STORE_KEY = 'destinyFitnessV1_2';
-const APP_VERSION = '1.2';
+
+/* ----------- LOCKED ADMIN CONFIG ----------- */
+const APP_CONFIG = Object.freeze({
+  appName:        'Destiny Dashboard',
+  version:        'V1.3',
+  storageKey:     'destinyFitnessV1_3',
+  legacyKeys:     ['destinyFitnessV1_2', 'destinyFitnessV1_1', 'destinyFitnessV1'],
+
+  /* Hard-coded brand SVG logo — rose-gold gradient, script "Destiny",
+     gold "FITNESS" subtext, and a swept underline ribbon.
+     Inline <style> uses Allura (loaded via Google Fonts) for the script,
+     with a Cormorant italic fallback so it still renders on any device. */
+  logoSVG: `
+<svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg" class="brand-logo" role="img" aria-label="Destiny Fitness">
+  <defs>
+    <linearGradient id="dfRose" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#F7C7CC"/>
+      <stop offset="35%" stop-color="#E59D8E"/>
+      <stop offset="75%" stop-color="#C58695"/>
+      <stop offset="100%" stop-color="#9A5C66"/>
+    </linearGradient>
+    <linearGradient id="dfGold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#C58A5A"/>
+      <stop offset="50%"  stop-color="#D9A679"/>
+      <stop offset="100%" stop-color="#A87648"/>
+    </linearGradient>
+    <linearGradient id="dfSweep" x1="0" y1="0" x2="1" y2="0.3">
+      <stop offset="0%"   stop-color="#E59D8E"/>
+      <stop offset="50%"  stop-color="#D9A679"/>
+      <stop offset="100%" stop-color="#B58A5C"/>
+    </linearGradient>
+    <linearGradient id="dfSparkle" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F8C9C0"/>
+      <stop offset="100%" stop-color="#D9A679"/>
+    </linearGradient>
+    <style><![CDATA[
+      .df-script  { font-family: 'Allura', 'Cormorant Garamond', cursive; font-style: italic; font-weight: 400; }
+      .df-sub     { font-family: 'Montserrat', sans-serif; font-weight: 500; letter-spacing: 0.45em; }
+    ]]></style>
+  </defs>
+
+  <!-- Script "Destiny" -->
+  <text x="240" y="125" text-anchor="middle" class="df-script"
+        font-size="142" fill="url(#dfRose)">Destiny</text>
+
+  <!-- Sparkle accent -->
+  <g transform="translate(395, 48)">
+    <path d="M0 -22 L4 -4 L22 0 L4 4 L0 22 L-4 4 L-22 0 L-4 -4 Z" fill="url(#dfSparkle)" opacity="0.95"/>
+    <circle cx="0" cy="0" r="3" fill="#FFFFFF" opacity="0.9"/>
+  </g>
+
+  <!-- "FITNESS" subtext -->
+  <text x="240" y="158" text-anchor="middle" class="df-sub"
+        font-size="18" fill="url(#dfGold)">FITNESS</text>
+
+  <!-- Swept ribbon underneath -->
+  <path d="M 95 188 Q 240 215 385 175"
+        stroke="url(#dfSweep)" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 110 196 Q 240 218 380 183"
+        stroke="url(#dfSweep)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+</svg>`,
+});
+
+/* ----------- INSPIRATIONAL QUOTES ----------- */
+const INSPIRATION_QUOTES = [
+  { q: "She believed she could, so she did.",                              s: "Small wins compound. Begin where you are." },
+  { q: "Strong women lift each other — and heavier weights.",              s: "Bring power to today's session." },
+  { q: "The body achieves what the mind believes.",                        s: "Set the intention before the rep." },
+  { q: "You are your only competition.",                                   s: "Beat yesterday — that's the only score that matters." },
+  { q: "Discipline is choosing what you want most over what you want now.",s: "Future you is watching this choice." },
+  { q: "Your only limit is your soul.",                                    s: "Push past the comfortable middle." },
+  { q: "Sweat is just fat crying.",                                        s: "Earn the glow." },
+  { q: "Train like a beauty, lift like a beast.",                          s: "Grace and grit, hand in hand." },
+  { q: "Progress, not perfection.",                                        s: "Showing up is winning." },
+  { q: "Difficult roads lead to beautiful destinations.",                  s: "Every step is the path." },
+  { q: "Be the energy you want to attract.",                               s: "Soft heart. Strong hustle." },
+  { q: "She is clothed in strength and dignity.",                          s: "Carry both into every set." },
+  { q: "Wake up. Work out. Glow up.",                                      s: "A simple ritual, repeated." },
+  { q: "Don't wish for it — work for it.",                                 s: "Action is the prettiest thing you'll wear today." },
+  { q: "Your future self is begging you not to skip today.",               s: "She'll thank you tomorrow." },
+  { q: "Small steps every day.",                                           s: "Tiny is mighty when it's consistent." },
+  { q: "Bloom where you're planted, then transplant.",                     s: "Outgrow what once held you." },
+  { q: "Soft girl. Iron will.",                                            s: "Both can be true at once." },
+  { q: "You weren't born to just pay bills and lose weight.",              s: "Live, then train. Train, then live." },
+  { q: "The comeback is always stronger than the setback.",                s: "Today is a comeback day." },
+];
+
+/* ----------- STATE ----------- */
+const STORE_KEY = APP_CONFIG.storageKey;
+const APP_VERSION = APP_CONFIG.version;
 
 const defaultState = () => ({
-  workouts:      [],   // [{id, exerciseName, sets, reps, weight, date, isPR}]
-  foodLog:       [],   // [{id, name, calories, protein, carbs, fats, date}]
-  waterEntries:  [],   // [{id, amount (ml), date}]
-  weightHistory: [],   // [{id, date: 'YYYY-MM-DD', weight (lbs)}]
+  workouts:      [],
+  foodLog:       [],
+  waterEntries:  [],
+  weightHistory: [],
+  rewards: {
+    rookieUnlocked: false,
+  },
   settings: {
     name:           'Member',
-    targetWeight:   null,    // lbs
+    avatar:         null,    // base64 data URL
+    targetWeight:   null,
     waterGoalL:     2.5,
     calorieGoal:    2000,
     proteinGoal:    140,
     carbsGoal:      220,
     fatsGoal:       65,
+    /* NEW v1.3 — fitness targets */
+    fitnessTargets: {
+      weeklyWorkoutGoal: 4,
+      dailyStepGoal:     8000,
+      dailyActiveMin:    30,
+    },
     prefs: { workout: true, hydration: true, summary: false },
   },
 });
 
 let state = loadState();
 
+function deepMerge(base, override) {
+  if (!override || typeof override !== 'object' || Array.isArray(override)) return override ?? base;
+  const out = Array.isArray(base) ? [...base] : { ...base };
+  for (const key of Object.keys(override)) {
+    if (override[key] && typeof override[key] === 'object' && !Array.isArray(override[key])
+        && base && typeof base[key] === 'object' && !Array.isArray(base[key])) {
+      out[key] = deepMerge(base[key], override[key]);
+    } else {
+      out[key] = override[key];
+    }
+  }
+  return out;
+}
+
 function loadState() {
   try {
-    const raw = localStorage.getItem(STORE_KEY);
+    /* Try v1.3 first, then migrate from any legacy key */
+    let raw = localStorage.getItem(STORE_KEY);
+    if (!raw) {
+      for (const k of APP_CONFIG.legacyKeys) {
+        const legacy = localStorage.getItem(k);
+        if (legacy) { raw = legacy; break; }
+      }
+    }
     if (!raw) return defaultState();
     const parsed = JSON.parse(raw);
-    const def = defaultState();
-    return {
-      ...def, ...parsed,
-      settings: {
-        ...def.settings, ...(parsed.settings || {}),
-        prefs: { ...def.settings.prefs, ...((parsed.settings && parsed.settings.prefs) || {}) },
-      },
-    };
+    return deepMerge(defaultState(), parsed);
   } catch { return defaultState(); }
 }
 function saveState() {
@@ -1210,9 +1535,34 @@ document.getElementById('sidebar-backdrop').addEventListener('click', () => {
   document.getElementById('sidebar-backdrop').classList.remove('open');
 });
 
+/* ----------- Inject brand logo SVG ----------- */
+(function injectBrandLogo() {
+  const sidebarMount = document.getElementById('brand-logo-sidebar');
+  const mobileMount  = document.getElementById('brand-logo-mobile');
+  if (sidebarMount) {
+    sidebarMount.innerHTML = APP_CONFIG.logoSVG;
+    const svg = sidebarMount.querySelector('svg');
+    if (svg) svg.classList.add('brand-logo-sidebar');
+  }
+  if (mobileMount) {
+    mobileMount.innerHTML = APP_CONFIG.logoSVG;
+    const svg = mobileMount.querySelector('svg');
+    if (svg) svg.classList.add('brand-logo-mobile');
+  }
+})();
+
 /* ============================================================
-   HEADER
+   HEADER + AVATAR + DAILY QUOTE
    ============================================================ */
+function setAvatar(el, initialEl, initial) {
+  if (!el) return;
+  if (state.settings.avatar) {
+    el.innerHTML = `<img src="${state.settings.avatar}" alt="avatar" />`;
+  } else {
+    el.innerHTML = `<span>${escapeHtml(initial)}</span>`;
+  }
+}
+
 function renderHeader() {
   const now = new Date();
   const h = now.getHours();
@@ -1223,7 +1573,29 @@ function renderHeader() {
   const name = state.settings.name || 'Member';
   document.getElementById('header-name').textContent = name;
   document.getElementById('sidebar-name').textContent = name;
-  document.getElementById('sidebar-initial').textContent = name.charAt(0).toUpperCase();
+
+  const initial = name.charAt(0).toUpperCase();
+
+  // Sync avatars across sidebar, header, settings
+  setAvatar(document.getElementById('sidebar-avatar'),  null, initial);
+  setAvatar(document.getElementById('header-avatar'),   null, initial);
+  setAvatar(document.getElementById('settings-avatar'), null, initial);
+
+  // Avatar remove btn visibility
+  const removeBtn = document.getElementById('avatar-remove-btn');
+  if (removeBtn) removeBtn.style.display = state.settings.avatar ? '' : 'none';
+
+  // Daily rotating quote
+  renderDailyQuote();
+}
+
+function renderDailyQuote() {
+  const idx = new Date().getDate() % INSPIRATION_QUOTES.length;
+  const { q, s } = INSPIRATION_QUOTES[idx];
+  const qEl = document.getElementById('daily-quote');
+  const sEl = document.getElementById('daily-quote-sub');
+  if (qEl) qEl.textContent = `"${q}"`;
+  if (sEl) sEl.textContent = s;
 }
 
 /* ============================================================
@@ -1383,6 +1755,7 @@ workoutForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const fd = new FormData(workoutForm);
   const dateISO = new Date().toISOString();
+  const isFirstEver = state.workouts.length === 0;
   const entry = {
     id: uid(),
     exerciseName: fd.get('exerciseName').trim(),
@@ -1395,11 +1768,22 @@ workoutForm.addEventListener('submit', (e) => {
   entry.isPR = isPersonalRecord(entry.exerciseName, entry.weight, dateISO);
 
   state.workouts.unshift(entry);
+
+  // Unlock Rookie badge on first-ever workout
+  let rookieJustUnlocked = false;
+  if (isFirstEver && !state.rewards.rookieUnlocked) {
+    state.rewards.rookieUnlocked = true;
+    rookieJustUnlocked = true;
+  }
+
   saveState();
   renderAll();
   workoutForm.reset();
+  hideBeatLastBadge();
 
-  if (entry.isPR) {
+  if (rookieJustUnlocked) {
+    toast('First Session Complete! 🎉 Rookie badge unlocked.', 'pr');
+  } else if (entry.isPR) {
     toast(`New PR! ${entry.exerciseName} — ${entry.weight} lbs 🏆`, 'pr');
   } else {
     toast(`"${entry.exerciseName}" logged · ${entry.sets}×${entry.reps} @ ${entry.weight} lbs`);
@@ -1469,6 +1853,21 @@ function renderWorkouts() {
   const volume = state.workouts.reduce((sum, w) => sum + (w.sets * w.reps * w.weight), 0);
   document.getElementById('gym-volume').textContent = volume.toLocaleString(undefined, { maximumFractionDigits: 0 });
   document.getElementById('gym-prs').textContent = state.workouts.filter(w => w.isPR).length;
+
+  // Pulse the workout form card while there's no history yet
+  const formCard = document.getElementById('workout-form-card');
+  if (formCard) {
+    if (state.workouts.length === 0) formCard.classList.add('pulse-attention');
+    else formCard.classList.remove('pulse-attention');
+  }
+
+  // Rookie badge slot
+  const rookieSlot = document.getElementById('rookie-badge-slot');
+  if (rookieSlot) {
+    rookieSlot.innerHTML = state.rewards.rookieUnlocked
+      ? `<span class="rookie-badge"><span style="font-size:13px;">🌹</span>Rookie</span>`
+      : '';
+  }
 }
 
 function recomputePRs() {
@@ -1490,6 +1889,53 @@ function recomputePRs() {
   // Map back into state.workouts in the same order it was stored (newest first)
   const byId = Object.fromEntries(sorted.map(w => [w.id, w]));
   state.workouts = state.workouts.map(w => byId[w.id]);
+}
+
+/* ----------- Beat Your Last Lift ----------- */
+const exerciseNameInput = document.getElementById('exercise-name-input');
+const beatLastBadge = document.getElementById('beat-last-badge');
+
+function findLastLift(name) {
+  const target = name.toLowerCase().trim();
+  if (!target) return null;
+  // Search descending by date
+  const sorted = [...state.workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  return sorted.find(w => w.exerciseName.toLowerCase().trim() === target) || null;
+}
+
+function showBeatLastBadge(last) {
+  if (!beatLastBadge) return;
+  beatLastBadge.style.display = '';
+  beatLastBadge.className = 'beat-last-badge';
+  beatLastBadge.innerHTML = `
+    <div class="ico-trophy">🏆</div>
+    <div>
+      <p class="label">Target</p>
+      <p>Last: <span class="value">${last.weight} lbs × ${last.reps}</span> · Beat it!</p>
+    </div>`;
+}
+function hideBeatLastBadge() {
+  if (!beatLastBadge) return;
+  beatLastBadge.style.display = 'none';
+  beatLastBadge.innerHTML = '';
+}
+
+if (exerciseNameInput) {
+  let beatLastTimer = null;
+  exerciseNameInput.addEventListener('input', () => {
+    clearTimeout(beatLastTimer);
+    const v = exerciseNameInput.value;
+    if (!v.trim()) { hideBeatLastBadge(); return; }
+    // Tiny debounce so it doesn't flash on every keystroke
+    beatLastTimer = setTimeout(() => {
+      const last = findLastLift(v);
+      if (last) showBeatLastBadge(last);
+      else hideBeatLastBadge();
+    }, 150);
+  });
+  exerciseNameInput.addEventListener('blur', () => {
+    if (!exerciseNameInput.value.trim()) hideBeatLastBadge();
+  });
 }
 
 /* ============================================================
@@ -1725,7 +2171,7 @@ function renderWater() {
 }
 
 /* ============================================================
-   WEEK STRIP
+   WEEK STRIP — smart on-target logic
    ============================================================ */
 function getWeekStart() {
   const now = new Date();
@@ -1735,22 +2181,51 @@ function getWeekStart() {
   return ws;
 }
 
+const MEAL_TOLERANCE = 100; // ±100 kcal of target counts as "on target"
+
 function renderWeekStrip() {
   const ws = getWeekStart();
   const todayKey = todayStr();
   const goalMl = state.settings.waterGoalL * 1000;
+  const calGoal = state.settings.calorieGoal;
 
-  const workoutSet = new Set(state.workouts.map(w => dayKey(w.date)));
+  // Build per-day buckets within this week
+  const inWeek = d => {
+    const dt = new Date(d);
+    return dt >= ws && dt < new Date(ws.getTime() + 7 * 86400000);
+  };
+
+  const workoutSet = new Set(state.workouts.filter(w => inWeek(w.date)).map(w => dayKey(w.date)));
+
   const dailyWater = {};
-  state.waterEntries.forEach(w => {
+  state.waterEntries.filter(w => inWeek(w.date)).forEach(w => {
     const k = dayKey(w.date);
     dailyWater[k] = (dailyWater[k] || 0) + w.amount;
   });
-  const foodSet = new Set(state.foodLog.map(f => dayKey(f.date)));
+
+  const dailyCal = {};
+  state.foodLog.filter(f => inWeek(f.date)).forEach(f => {
+    const k = dayKey(f.date);
+    dailyCal[k] = (dailyCal[k] || 0) + (f.calories || 0);
+  });
+
+  /* Per-day meal status:
+     'on'      = within ±100 of target AND target > 0
+     'logged'  = some food logged but outside the ±100 window
+     'none'    = nothing logged */
+  const mealStatus = (k) => {
+    const c = dailyCal[k];
+    if (c === undefined) return 'none';
+    if (calGoal > 0 && Math.abs(c - calGoal) <= MEAL_TOLERANCE) return 'on';
+    return 'logged';
+  };
 
   const strip = document.getElementById('week-strip');
   strip.innerHTML = '';
   const dayInitials = ['S','M','T','W','T','F','S'];
+  let workoutCount = 0;
+  let mealsOnTargetCount = 0;
+
   for (let i = 0; i < 7; i++) {
     const d = new Date(ws);
     d.setDate(ws.getDate() + i);
@@ -1763,19 +2238,56 @@ function renderWeekStrip() {
     if (isFuture) cell.style.opacity = '.55';
 
     const wDone = workoutSet.has(k);
-    const mDone = foodSet.has(k);
+    if (wDone) workoutCount++;
+
+    const mState = mealStatus(k);
+    if (mState === 'on') mealsOnTargetCount++;
+
     const hDone = (dailyWater[k] || 0) >= goalMl;
+
+    // Build meal indicator: filled, partial ring, or empty
+    let mealIndicator;
+    if (mState === 'on') {
+      mealIndicator = `<span class="ind-dot on" title="Meals on target"></span>`;
+    } else if (mState === 'logged') {
+      // Partial ring SVG — shows progress toward target ±100 window
+      const c = dailyCal[k];
+      const pct = calGoal > 0 ? Math.max(0, Math.min(1, c / calGoal)) : 0;
+      const C = 2 * Math.PI * 4; // r=4
+      const off = (C * (1 - pct)).toFixed(2);
+      mealIndicator = `
+        <span title="Meals logged, off target by ${Math.round(Math.abs(c - calGoal))} kcal" style="display:inline-block;width:10px;height:10px;line-height:0;">
+          <svg viewBox="0 0 12 12" width="10" height="10" style="transform:rotate(-90deg);">
+            <circle cx="6" cy="6" r="4" stroke="rgba(183,110,121,0.18)" stroke-width="2" fill="none"/>
+            <circle cx="6" cy="6" r="4" stroke="#B76E79" stroke-width="2" fill="none"
+                    stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${off}" stroke-linecap="round"/>
+          </svg>
+        </span>`;
+    } else {
+      mealIndicator = `<span class="ind-dot" title="No meals logged"></span>`;
+    }
 
     cell.innerHTML = `
       <p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">${dayInitials[i]}</p>
       <p class="font-display text-2xl font-semibold mt-1" style="color: ${isToday ? 'var(--rose-gold-dk)' : 'var(--ink)'};">${d.getDate()}</p>
       <div class="indicators">
         <span class="ind-dot ${wDone ? 'on' : ''}" title="Workout"></span>
-        <span class="ind-dot ${mDone ? 'on' : ''}" title="Meals"></span>
+        ${mealIndicator}
         <span class="ind-dot ${hDone ? 'on' : ''}" title="Water goal"></span>
       </div>`;
     strip.appendChild(cell);
   }
+
+  // Weekly counters
+  const goal = state.settings.fitnessTargets.weeklyWorkoutGoal || 0;
+  const wcEl = document.getElementById('weekly-workout-counter');
+  if (wcEl) {
+    wcEl.textContent = goal > 0
+      ? `${workoutCount}/${goal} sessions done`
+      : `${workoutCount} session${workoutCount === 1 ? '' : 's'} this week`;
+  }
+  const mcEl = document.getElementById('weekly-meals-counter');
+  if (mcEl) mcEl.textContent = `${mealsOnTargetCount}/7 days on target`;
 }
 
 /* ============================================================
@@ -1875,6 +2387,7 @@ function renderTrendChart() {
    AUTOSAVE BINDINGS
    ============================================================ */
 function bindAutosave(el, handler) {
+  if (!el) return;
   el.addEventListener('input', () => {
     handler(el.value);
     saveState();
@@ -1883,6 +2396,7 @@ function bindAutosave(el, handler) {
 }
 
 function bindToggle(el, key) {
+  if (!el) return;
   el.addEventListener('change', () => {
     state.settings.prefs[key] = el.checked;
     saveState();
@@ -1898,6 +2412,11 @@ const setProteinGoal   = document.getElementById('set-protein-goal');
 const setCarbsGoal     = document.getElementById('set-carbs-goal');
 const setFatsGoal      = document.getElementById('set-fats-goal');
 
+/* NEW v1.3 — fitness targets */
+const setWeeklyWorkoutGoal = document.getElementById('set-weekly-workout-goal');
+const setStepGoal          = document.getElementById('set-step-goal');
+const setActiveMinGoal     = document.getElementById('set-active-min-goal');
+
 bindAutosave(setName, v => { state.settings.name = (v || '').trim() || 'Member'; });
 bindAutosave(setWaterGoal, v => { state.settings.waterGoalL = num(v, 2.5) > 0 ? num(v, 2.5) : 2.5; });
 bindAutosave(setTargetWeight, v => { const n = num(v, NaN); state.settings.targetWeight = isNaN(n) || n <= 0 ? null : n; });
@@ -1906,9 +2425,144 @@ bindAutosave(setProteinGoal, v => { state.settings.proteinGoal = Math.max(0, Mat
 bindAutosave(setCarbsGoal, v => { state.settings.carbsGoal = Math.max(0, Math.round(num(v, 220))); });
 bindAutosave(setFatsGoal, v => { state.settings.fatsGoal = Math.max(0, Math.round(num(v, 65))); });
 
+bindAutosave(setWeeklyWorkoutGoal, v => {
+  state.settings.fitnessTargets.weeklyWorkoutGoal = Math.max(0, Math.round(num(v, 4)));
+});
+bindAutosave(setStepGoal, v => {
+  state.settings.fitnessTargets.dailyStepGoal = Math.max(0, Math.round(num(v, 8000)));
+});
+bindAutosave(setActiveMinGoal, v => {
+  state.settings.fitnessTargets.dailyActiveMin = Math.max(0, Math.round(num(v, 30)));
+});
+
 bindToggle(document.getElementById('pref-workout'),   'workout');
 bindToggle(document.getElementById('pref-hydration'), 'hydration');
 bindToggle(document.getElementById('pref-summary'),   'summary');
+
+/* ----------- Avatar upload ----------- */
+const avatarInput = document.getElementById('avatar-input');
+const avatarRemoveBtn = document.getElementById('avatar-remove-btn');
+
+if (avatarInput) {
+  avatarInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast('Please choose an image file');
+      return;
+    }
+    if (file.size > 1.5 * 1024 * 1024) {
+      // Compress via canvas if too large
+      compressImage(file, 320, 0.82).then(dataUrl => {
+        state.settings.avatar = dataUrl;
+        saveState();
+        renderAll();
+        toast('Profile photo updated ✨');
+      }).catch(() => {
+        toast('Could not load that image — try a smaller one');
+      });
+    } else {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Still pass through compression to keep storage tight
+        compressImage(file, 320, 0.85).then(dataUrl => {
+          state.settings.avatar = dataUrl;
+          saveState();
+          renderAll();
+          toast('Profile photo updated ✨');
+        }).catch(() => {
+          state.settings.avatar = reader.result;
+          saveState();
+          renderAll();
+          toast('Profile photo updated ✨');
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+    avatarInput.value = ''; // allow re-uploading same file
+  });
+}
+
+if (avatarRemoveBtn) {
+  avatarRemoveBtn.addEventListener('click', () => {
+    state.settings.avatar = null;
+    saveState();
+    renderAll();
+    toast('Profile photo removed');
+  });
+}
+
+function compressImage(file, maxSize = 320, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const ratio = Math.min(1, maxSize / Math.max(img.width, img.height));
+      const w = Math.round(img.width * ratio);
+      const h = Math.round(img.height * ratio);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      try {
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      } catch (e) { reject(e); }
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('image load failed')); };
+    img.src = url;
+  });
+}
+
+/* ----------- Settings notification dot ----------- */
+function updateSettingsDot() {
+  const dot = document.getElementById('settings-dot');
+  if (!dot) return;
+  const hasGoalWeight = state.settings.targetWeight !== null && state.settings.targetWeight > 0;
+  const hasMacros = state.settings.calorieGoal > 0
+                 && state.settings.proteinGoal > 0
+                 && state.settings.carbsGoal > 0
+                 && state.settings.fatsGoal > 0;
+  const hasFitness = state.settings.fitnessTargets.weeklyWorkoutGoal > 0;
+  const allSet = hasGoalWeight && hasMacros && hasFitness;
+  dot.style.display = allSet ? 'none' : '';
+}
+
+/* ----------- Info link → Settings + Fitness Targets ----------- */
+const linkFitnessTargets = document.getElementById('link-fitness-targets');
+if (linkFitnessTargets) {
+  linkFitnessTargets.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.nav-item[data-tab="settings"]').click();
+    // Smooth scroll to fitness targets after the panel appears
+    setTimeout(() => {
+      if (setWeeklyWorkoutGoal) {
+        setWeeklyWorkoutGoal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setWeeklyWorkoutGoal.focus({ preventScroll: true });
+      }
+    }, 300);
+  });
+}
+
+/* ----------- Whop test notification ----------- */
+const testNotifBtn = document.getElementById('test-notif-btn');
+if (testNotifBtn) {
+  testNotifBtn.addEventListener('click', () => {
+    /* Stub for Whop SDK integration. In the actual Whop deployment the
+       SDK can subscribe to this event and dispatch a real push notif. */
+    const payload = {
+      app:     APP_CONFIG.appName,
+      version: APP_CONFIG.version,
+      type:    'test_notification',
+      title:   'Destiny Dashboard',
+      body:    `Hi ${state.settings.name || 'Member'} — your nudges are working ✨`,
+      sentAt:  new Date().toISOString(),
+    };
+    // eslint-disable-next-line no-console
+    console.log('[WHOP SDK] dispatch push notification →', payload);
+    toast('Test sent — check the console for the Whop SDK payload');
+  });
+}
 
 /* ============================================================
    BACKUP & RESET
@@ -1950,7 +2604,7 @@ document.getElementById('reset-all').addEventListener('click', () => {
    ============================================================ */
 function loadAllInputsFromState() {
   const f = document.activeElement;
-  const set = (el, val) => { if (el !== f) el.value = val; };
+  const set = (el, val) => { if (el !== f && el) el.value = val; };
 
   set(setName, state.settings.name === 'Member' ? '' : state.settings.name);
   set(setWaterGoal, state.settings.waterGoalL);
@@ -1959,6 +2613,10 @@ function loadAllInputsFromState() {
   set(setProteinGoal, state.settings.proteinGoal);
   set(setCarbsGoal, state.settings.carbsGoal);
   set(setFatsGoal, state.settings.fatsGoal);
+
+  set(setWeeklyWorkoutGoal, state.settings.fitnessTargets.weeklyWorkoutGoal ?? '');
+  set(setStepGoal,          state.settings.fitnessTargets.dailyStepGoal ?? '');
+  set(setActiveMinGoal,     state.settings.fitnessTargets.dailyActiveMin ?? '');
 
   document.getElementById('pref-workout').checked   = !!state.settings.prefs.workout;
   document.getElementById('pref-hydration').checked = !!state.settings.prefs.hydration;
@@ -1978,6 +2636,7 @@ function renderAll() {
   renderWeekStrip();
   renderTrendChart();
   loadAllInputsFromState();
+  updateSettingsDot();
 }
 
 document.getElementById('year').textContent = new Date().getFullYear();
