@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Destiny Dashboard V1.5 — Reactive QA Transformation Dashboard</title>
+<title>Destiny Dashboard V1.5.1</title>
 
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -277,17 +277,21 @@
     pointer-events: none;
   }
 
-  /* Mobile sidebar overlay (v1.4 — bulletproof) */
-  /* Default state: hidden everywhere, never blocks interaction */
+  /* Mobile sidebar overlay hotfix — explicit stacking + pointer event cleanup */
+  main {
+    position: relative;
+    z-index: 0;
+  }
+
   #sidebar-backdrop {
     position: fixed;
     inset: 0;
     background: rgba(63, 42, 45, 0.42);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
-    z-index: 55;
+    z-index: 80;
     opacity: 0;
-    visibility: hidden;       /* removes it from hit-testing entirely when closed */
+    visibility: hidden;
     pointer-events: none;
     transition: opacity .3s ease, visibility 0s linear .3s;
   }
@@ -297,22 +301,37 @@
     pointer-events: auto;
     transition: opacity .3s ease, visibility 0s linear 0s;
   }
+  #sidebar-backdrop[hidden] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
 
   @media (max-width: 1023px) {
     #sidebar {
-      position: fixed; inset: 0 auto 0 0; width: 280px; z-index: 60;
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 280px;
+      max-width: min(86vw, 280px);
+      z-index: 100;
       transform: translateX(-105%);
       transition: transform .35s cubic-bezier(.2,.8,.2,1);
       overflow-y: auto;
       will-change: transform;
     }
     #sidebar.open { transform: translateX(0); }
-    body.menu-open { overflow: hidden; }   /* lock scroll while open */
+    body.menu-open { overflow: hidden; }
   }
 
   /* Desktop: backdrop must NEVER appear */
   @media (min-width: 1024px) {
-    #sidebar-backdrop { display: none !important; }
+    #sidebar { z-index: auto; }
+    #sidebar-backdrop {
+      display: none !important;
+      pointer-events: none !important;
+      visibility: hidden !important;
+    }
   }
 
   .divider-thin {
@@ -789,9 +808,9 @@
   html, body { max-width: 100%; overflow-x: hidden; }
   button, .nav-item, .ft-tab, .ft-create-btn, .water-chip, .field { min-height: 44px; }
   #sidebar { max-width: min(86vw, 280px); }
-  #sidebar-backdrop { z-index: 55; }
-  #sidebar { z-index: 60; }
-  main { position: relative; z-index: 1; }
+  #sidebar-backdrop { z-index: 80; }
+  #sidebar { z-index: 100; }
+  main { position: relative; z-index: 0; }
   .fitness-progress-grid { align-items: stretch; }
   .fitness-mini-card { background: rgba(255,255,255,0.6); border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
   .habit-skill-card { background: rgba(255,255,255,0.6); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; align-items: flex-start; gap: 12px; min-width: 0; }
@@ -808,13 +827,111 @@
   html, body { max-width: 100%; overflow-x: hidden; }
   button, .nav-item, .ft-tab, .ft-create-btn, .water-chip, .field { min-height: 44px; }
   #sidebar { max-width: min(86vw, 280px); }
-  main { position: relative; z-index: 1; }
-  #sidebar-backdrop[hidden] { display: none !important; pointer-events: none !important; visibility: hidden !important; }
+  main { position: relative; z-index: 0; }
+  #sidebar-backdrop[hidden] { display: none !important; opacity: 0 !important; pointer-events: none !important; visibility: hidden !important; }
   @media (max-width: 640px) {
     .week-day { padding: 12px 4px; border-radius: 14px; }
     .week-day .indicators { gap: 3px; }
     .dft-tbl th, .dft-tbl td { padding: 12px 10px; }
     .fitness-progress-grid { grid-template-columns: 1fr !important; }
+  }
+
+
+  /* === V1.5.2 PRODUCTION MOBILE NAVIGATION HOTFIX ===
+     Critical: .app-shell intentionally has no z-index so the fixed sidebar
+     can live in the same root stacking context as the fixed backdrop.
+     This prevents Cloudflare/Whop iframe deployments from placing the
+     backdrop above the drawer and stealing pointer events. */
+  .app-shell {
+    position: relative;
+    z-index: auto !important;
+    isolation: auto !important;
+  }
+
+  main {
+    position: relative;
+    z-index: 0 !important;
+  }
+
+  .mobile-topbar {
+    z-index: 70 !important;
+  }
+
+  #sidebar-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 80 !important;
+    background: rgba(63, 42, 45, 0.42);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .3s ease, visibility 0s linear .3s;
+  }
+
+  #sidebar-backdrop.open {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition: opacity .3s ease, visibility 0s linear 0s;
+  }
+
+  #sidebar-backdrop[hidden] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  @media (max-width: 1023px) {
+    #sidebar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      width: min(86vw, 280px) !important;
+      max-width: min(86vw, 280px) !important;
+      z-index: 100 !important;
+      transform: translateX(-105%);
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+      overflow-y: auto;
+      pointer-events: auto !important;
+      will-change: transform;
+    }
+
+    #sidebar.open {
+      transform: translateX(0) !important;
+    }
+
+    body.menu-open {
+      overflow: hidden !important;
+      touch-action: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-topbar { display: none !important; }
+
+    #sidebar {
+      position: sticky !important;
+      transform: none !important;
+      z-index: auto !important;
+      width: 18rem;
+      max-width: none !important;
+    }
+
+    #sidebar-backdrop {
+      display: none !important;
+      pointer-events: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+
+    body.menu-open {
+      overflow: auto !important;
+      touch-action: auto;
+    }
   }
 
 </style>
@@ -830,7 +947,7 @@
 <div id="toast-stack"></div>
 
 <!-- Mobile top bar -->
-<div class="lg:hidden fixed top-0 inset-x-0 z-40 px-4 py-3 flex items-center justify-between glass-deep">
+<div class="mobile-topbar lg:hidden fixed top-0 inset-x-0 px-4 py-3 flex items-center justify-between glass-deep">
   <button id="menu-btn" class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,0.6); border: 1px solid var(--line);" aria-label="Menu">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--rose-gold-dk);"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
@@ -838,16 +955,16 @@
   <div class="w-10"></div>
 </div>
 
-<div id="sidebar-backdrop"></div>
+<div id="sidebar-backdrop" class="pointer-events-none opacity-0" aria-hidden="true" hidden></div>
 
-<div class="relative z-10 lg:flex min-h-screen">
+<div class="app-shell relative lg:flex min-h-screen">
 
   <!-- ======================= SIDEBAR ======================= -->
   <aside id="sidebar" class="lg:w-72 lg:flex-shrink-0 lg:sticky lg:top-0 lg:h-screen p-5 glass-deep lg:bg-transparent lg:backdrop-blur-0 lg:border-0 lg:shadow-none flex flex-col">
 
     <div class="hidden lg:block px-2 pt-2 pb-6">
       <div id="brand-logo-sidebar"></div>
-      <p class="text-[10px] tracking-[0.3em] uppercase text-[color:var(--ink-soft)] mt-2 text-center font-semibold">Dashboard · v1.5</p>
+      <p class="text-[10px] tracking-[0.3em] uppercase text-[color:var(--ink-soft)] mt-2 text-center font-semibold">Dashboard · v1.5.2</p>
     </div>
 
     <div class="divider-thin hidden lg:block mb-4"></div>
@@ -887,7 +1004,7 @@
       </div>
       <div class="flex-1 min-w-0">
         <p class="text-sm font-medium truncate" id="sidebar-name">Member</p>
-        <p class="text-[11px] truncate" style="color: var(--ink-soft);">Dashboard v1.5.1</p>
+        <p class="text-[11px] truncate" style="color: var(--ink-soft);">Destiny Fitness Dashboard v1.5.2</p>
       </div>
     </div>
   </aside>
@@ -1592,7 +1709,7 @@
     </section>
 
     <footer class="text-center mt-12 mb-2">
-      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Dashboard V1.5.1 · <span id="year"></span></p>
+      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Dashboard V1.5.2 · <span id="year"></span></p>
     </footer>
 
   </main>
@@ -1649,6 +1766,104 @@ const APP_CONFIG = Object.freeze({
       .df-script  { font-family: 'Allura', 'Cormorant Garamond', cursive; font-style: italic; font-weight: 400; }
       .df-sub     { font-family: 'Montserrat', sans-serif; font-weight: 500; letter-spacing: 0.45em; }
     ]]>
+
+
+  /* === V1.5.2 PRODUCTION MOBILE NAVIGATION HOTFIX ===
+     Critical: .app-shell intentionally has no z-index so the fixed sidebar
+     can live in the same root stacking context as the fixed backdrop.
+     This prevents Cloudflare/Whop iframe deployments from placing the
+     backdrop above the drawer and stealing pointer events. */
+  .app-shell {
+    position: relative;
+    z-index: auto !important;
+    isolation: auto !important;
+  }
+
+  main {
+    position: relative;
+    z-index: 0 !important;
+  }
+
+  .mobile-topbar {
+    z-index: 70 !important;
+  }
+
+  #sidebar-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 80 !important;
+    background: rgba(63, 42, 45, 0.42);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .3s ease, visibility 0s linear .3s;
+  }
+
+  #sidebar-backdrop.open {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition: opacity .3s ease, visibility 0s linear 0s;
+  }
+
+  #sidebar-backdrop[hidden] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  @media (max-width: 1023px) {
+    #sidebar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      width: min(86vw, 280px) !important;
+      max-width: min(86vw, 280px) !important;
+      z-index: 100 !important;
+      transform: translateX(-105%);
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+      overflow-y: auto;
+      pointer-events: auto !important;
+      will-change: transform;
+    }
+
+    #sidebar.open {
+      transform: translateX(0) !important;
+    }
+
+    body.menu-open {
+      overflow: hidden !important;
+      touch-action: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-topbar { display: none !important; }
+
+    #sidebar {
+      position: sticky !important;
+      transform: none !important;
+      z-index: auto !important;
+      width: 18rem;
+      max-width: none !important;
+    }
+
+    #sidebar-backdrop {
+      display: none !important;
+      pointer-events: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+
+    body.menu-open {
+      overflow: auto !important;
+      touch-action: auto;
+    }
+  }
 
 </style>
   </defs>
@@ -1991,10 +2206,12 @@ const NavigationController = (() => {
     backdrop.hidden = false;
     backdrop.setAttribute('aria-hidden', 'false');
     menuBtn?.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('menu-open');
     requestAnimationFrame(() => {
       sidebar.classList.add('open');
       backdrop.classList.add('open');
-      document.body.classList.add('menu-open');
+      backdrop.classList.remove('pointer-events-none', 'opacity-0');
+      backdrop.classList.add('pointer-events-auto', 'opacity-100');
     });
   }
 
@@ -2002,6 +2219,8 @@ const NavigationController = (() => {
     if (!sidebar || !backdrop) return;
     sidebar.classList.remove('open');
     backdrop.classList.remove('open');
+    backdrop.classList.remove('pointer-events-auto', 'opacity-100');
+    backdrop.classList.add('pointer-events-none', 'opacity-0');
     document.body.classList.remove('menu-open');
     backdrop.setAttribute('aria-hidden', 'true');
     menuBtn?.setAttribute('aria-expanded', 'false');
@@ -2033,6 +2252,8 @@ const NavigationController = (() => {
     if (backdrop) {
       backdrop.hidden = true;
       backdrop.setAttribute('aria-hidden', 'true');
+      backdrop.classList.remove('open', 'pointer-events-auto', 'opacity-100');
+      backdrop.classList.add('pointer-events-none', 'opacity-0');
     }
     if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
 
@@ -2041,7 +2262,7 @@ const NavigationController = (() => {
       item.dataset.navBound = 'true';
       item.setAttribute('role', 'button');
       item.setAttribute('tabindex', '0');
-      item.addEventListener('click', e => { e.preventDefault(); goTo(item.dataset.tab); });
+      item.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); goTo(item.dataset.tab); });
       item.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(item.dataset.tab); }
       });
@@ -2049,7 +2270,7 @@ const NavigationController = (() => {
 
     if (menuBtn && menuBtn.dataset.navBound !== 'true') {
       menuBtn.dataset.navBound = 'true';
-      menuBtn.addEventListener('click', toggleMenu);
+      menuBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); toggleMenu(); });
     }
     if (backdrop && backdrop.dataset.navBound !== 'true') {
       backdrop.dataset.navBound = 'true';
