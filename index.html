@@ -1217,7 +1217,7 @@
           <div>
             <h3 class="font-display text-2xl font-semibold">This Week</h3>
             <p class="text-xs mt-1" style="color: var(--ink-soft);">
-              <span id="weekly-workout-counter">0/4 sessions done</span> · <span id="weekly-meals-counter">0/7 days on target</span>
+              <span id="weekly-workout-counter">0 sessions done</span> · <span id="weekly-meals-counter">0/7 days on target</span>
             </p>
           </div>
           <div class="flex items-center gap-3 text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">
@@ -1650,7 +1650,7 @@
           <div class="glass-deep rounded-3xl p-6">
             <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">2 · Fitness Targets</p>
             <h3 class="font-display text-3xl font-semibold mt-1">Your performance system</h3>
-            <p class="text-sm mt-1" style="color: var(--ink-soft);">Define your own goals — no presets, no templates.</p>
+            <p class="text-sm mt-1" style="color: var(--ink-soft);">Define your goals.</p>
 
             <!-- Tab strip -->
             <div class="ft-tabs mt-5" role="tablist" id="ft-tabs">
@@ -1775,7 +1775,7 @@
     </section>
 
     <footer class="text-center mt-12 mb-2">
-      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Dashboard V1.4.1 · <span id="year"></span></p>
+      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Dashboard V1.5.2 · <span id="year"></span></p>
     </footer>
 
   </main>
@@ -3116,7 +3116,7 @@ function renderWeekStrip() {
   if (wcEl) wcEl.textContent = `${workoutCount}/${goal} sessions done`;
   const mcEl = document.getElementById('weekly-meals-counter');
   if (mcEl) mcEl.textContent = calGoal > 0
-    ? `${mealsOnTargetCount}/7 days on target · ${waterGoalCount}/7 water goals hit`
+    ? `${mealsOnTargetCount}/7 days on target · ${waterGoalCount} daily water goals hit`
     : `${mealsOnTargetCount} day${mealsOnTargetCount === 1 ? '' : 's'} logged · ${hasWaterGoal ? `${waterGoalCount}/7 water goals hit` : 'set water goal in Settings'}`;
 }
 
