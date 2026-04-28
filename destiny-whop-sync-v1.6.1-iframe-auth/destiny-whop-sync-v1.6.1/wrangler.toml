@@ -1,0 +1,12 @@
+name = "destiny-fitness-dashboard"
+compatibility_date = "2026-04-28"
+pages_build_output_dir = "public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "destiny_fitness_dashboard"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[vars]
+WHOP_APP_ID = "app_TjZTITQN5j5ULh"
+ALLOW_DEV_AUTH = "false"

@@ -1,0 +1,19 @@
+{
+  "name": "destiny-fitness-dashboard-whop-sync",
+  "version": "1.6.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev public --d1 DB=destiny_fitness_dashboard",
+    "deploy": "wrangler pages deploy public",
+    "db:create": "wrangler d1 create destiny_fitness_dashboard",
+    "db:migrate:local": "wrangler d1 execute destiny_fitness_dashboard --local --file=schema.sql",
+    "db:migrate:remote": "wrangler d1 execute destiny_fitness_dashboard --remote --file=schema.sql"
+  },
+  "dependencies": {
+    "@whop/sdk": "latest"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
