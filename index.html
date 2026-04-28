@@ -2202,6 +2202,7 @@ window.DestinySyncManager = (() => {
         credentials: 'include',
         body: JSON.stringify({
           appVersion: APP_VERSION,
+          appId: APP_CONFIG.appId, //
           clientUpdatedAt: new Date().toISOString(),
           state: snapshot,
         }),
