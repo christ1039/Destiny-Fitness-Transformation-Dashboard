@@ -5,8 +5,8 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "destiny_fitness_dashboard"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "1dbf9619-e46d-46ba-856f-679c2ebd867d"
 
 [vars]
-WHOP_APP_ID = "app_TjZTITQN5j5ULh"
+WHOP_APP_ID = "app_cv4W2wj4fEkMD4"
 ALLOW_DEV_AUTH = "false"
