@@ -1,4 +1,4 @@
-# Destiny Fitness Dashboard v1.6.0 — Whop Cross-Device Sync
+# Destiny Fitness Dashboard v1.6.0 — Whop Cross-Device Sync 
 
 This package turns the dashboard from localStorage-only into account-level sync.
 
