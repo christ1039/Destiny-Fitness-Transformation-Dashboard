@@ -62,7 +62,7 @@ async function getWhopUserId(request, env) {
 
 async function handleGet(request, env) {
   const { userId, authMode } = await getWhopUserId(request, env);
-  const appId = env.NEXT_PUBLIC_WHOP_APP_ID || "app_cv4W2wj4fEkMD4";
+  const appId = "app_cv4W2wj4fEkMD4";
 
   const row = await env.DB.prepare(
     `SELECT state_json, app_version, client_updated_at, updated_at
@@ -101,7 +101,7 @@ async function handleGet(request, env) {
 
 async function handlePut(request, env) {
   const { userId, authMode } = await getWhopUserId(request, env);
-  const appId = env.NEXT_PUBLIC_WHOP_APP_ID || "app_cv4W2wj4fEkMD4";
+  const appId = "app_cv4W2wj4fEkMD4";
 
   let body;
   try {
