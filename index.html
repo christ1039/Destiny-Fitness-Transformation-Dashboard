@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Destiny Dashboard V1.5.1</title>
+<title>Destiny Dashboard V1.5.1 — Reactive QA Transformation Dashboard</title>
 
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -934,6 +934,72 @@
     }
   }
 
+  /* ============================================================
+     === V1.5.3 SCROLL & PERFORMANCE HOTFIX ===
+     Purely additive. Targets the four causes of mobile scroll
+     jank diagnosed in the audit: background-attachment:fixed,
+     stacked backdrop-filter blur layers, fixed noise overlay,
+     and dual html/body horizontal clipping.
+     Mobile-scoped where possible; desktop is preserved.
+     ============================================================ */
+
+  /* (1) Replace background-attachment:fixed (silently demoted on
+         iOS Safari, expensive on every device) with scroll. The
+         soft radial gradients are visually identical in motion. */
+  body {
+    background-attachment: scroll !important;
+    min-height: 100dvh;          /* dynamic viewport — accounts for iOS URL bar */
+  }
+
+  /* (2) Switch html overflow strategy: clip horizontally on body
+         only, never on both html AND body (a known iOS jitter source). */
+  html { overflow-x: visible !important; max-width: none !important; }
+  body { overflow-x: hidden; max-width: 100vw; }
+
+  /* (3) Failsafe for stuck menu state: if body.menu-open ever
+         doesn't get cleared (browser back, JS error mid-toggle),
+         pan-y still lets the user scroll instead of fully locking. */
+  @media (max-width: 1023px) {
+    body.menu-open {
+      touch-action: pan-y !important;
+    }
+  }
+
+  /* (4) Mobile only: drop expensive compositing layers.
+         Each backdrop-filter:blur is a separate compositor pass
+         every scroll frame. Four+ of them inside an iframe is the
+         single biggest cause of "hesitating" scroll on iOS. We
+         compensate visually by raising the background opacity. */
+  @media (max-width: 1023px) {
+    .glass,
+    .glass-deep,
+    .mobile-topbar,
+    #sidebar-backdrop,
+    .toast,
+    .modal-backdrop {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    .glass         { background: rgba(255, 255, 255, 0.85) !important; }
+    .glass-deep    { background: rgba(255, 255, 255, 0.92) !important; }
+    .mobile-topbar { background: rgba(255, 249, 247, 0.96) !important; }
+
+    /* Hide the fixed noise-texture pseudo-element on mobile —
+       it's a constant-cost paint layer that adds nothing visible
+       at small sizes. */
+    body::before { display: none !important; }
+
+    /* Hide decorative blur blooms on mobile — same reason. */
+    .bloom { display: none !important; }
+
+    /* Momentum scrolling on the only nested scroll container that
+       genuinely exists at mobile widths: the open sidebar. */
+    #sidebar {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+  }
+
 </style>
 </head>
 
@@ -1709,7 +1775,7 @@
     </section>
 
     <footer class="text-center mt-12 mb-2">
-      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Dashboard V1.5.2 · <span id="year"></span></p>
+      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Dashboard V1.4.1 · <span id="year"></span></p>
     </footer>
 
   </main>
@@ -1763,9 +1829,9 @@ const APP_CONFIG = Object.freeze({
       <stop offset="100%" stop-color="#D9A679"/>
     </linearGradient>
     <style>
-  .df-script { font-family: 'Allura', 'Cormorant Garamond', cursive; font-style: italic; font-weight: 400; }
-  .df-sub    { font-family: 'Montserrat', sans-serif; font-weight: 500; letter-spacing: 0.45em; }
-</style>
+      .df-script { font-family: 'Allura', 'Cormorant Garamond', cursive; font-style: italic; font-weight: 400; }
+      .df-sub    { font-family: 'Montserrat', sans-serif; font-weight: 500; letter-spacing: 0.45em; }
+    </style>
   </defs>
 
   <!-- Script "Destiny" -->
