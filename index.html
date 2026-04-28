@@ -1217,12 +1217,12 @@
           <div>
             <h3 class="font-display text-2xl font-semibold">This Week</h3>
             <p class="text-xs mt-1" style="color: var(--ink-soft);">
-              <span id="weekly-workout-counter">0 sessions done</span> · <span id="weekly-meals-counter">0/7 days on target</span>
+              <span id="weekly-workout-counter">set workout goal in Settings</span> · <span id="weekly-meals-counter">set nutrition goal in Settings · set water goal in Settings</span>
             </p>
           </div>
           <div class="flex items-center gap-3 text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">
             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Workout</span>
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Meals on target</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Nutrition goal</span>
             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Water goal</span>
           </div>
         </div>
@@ -1241,6 +1241,53 @@
         <p class="text-sm" style="color: var(--ink);">
           Aiming for your weekly goal? <a class="info-link" id="link-fitness-targets">See targets in Settings → Fitness Targets</a>
         </p>
+      </div>
+
+      <!-- Daily Workout Session — drives the weekly workout dot in This Week -->
+      <div id="daily-session-card" class="glass-deep rounded-3xl p-6 mb-5">
+        <div class="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Daily Workout Session</p>
+            <h3 class="font-display text-3xl font-semibold mt-1">Did you work out?</h3>
+            <p class="text-sm mt-1" style="color: var(--ink-soft);">Mark a day complete — this updates your weekly progress on the Overview.</p>
+          </div>
+          <div id="daily-session-progress" class="text-right" style="display: none;">
+            <p class="font-display text-3xl font-semibold leading-none"><span id="ds-week-count">0</span><span class="text-sm font-normal" style="color: var(--ink-soft);">/<span id="ds-week-goal">0</span></span></p>
+            <p class="text-[10px] tracking-[0.22em] uppercase mt-1 font-semibold" style="color: var(--ink-soft);">this week</p>
+          </div>
+        </div>
+
+        <!-- Empty state: no frequency goal set -->
+        <div id="daily-session-empty" class="mt-5" style="display: none;">
+          <div class="rounded-2xl p-5 flex items-center gap-3" style="background: linear-gradient(135deg, rgba(255,248,240,0.7), rgba(252,222,222,0.6)); border: 1px solid rgba(217, 166, 121, 0.3);">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style="background: linear-gradient(135deg, #FBE6C7, #E5BD8C);">🎯</div>
+            <p class="text-sm flex-1" style="color: var(--ink);">No weekly workout goal yet. <a class="info-link" id="link-create-frequency-goal">Create a Frequency goal in Settings → Fitness Targets</a> to start tracking sessions.</p>
+          </div>
+        </div>
+
+        <!-- Active state: logging UI -->
+        <div id="daily-session-active" class="mt-5" style="display: none;">
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 items-end">
+            <div class="sm:col-span-3">
+              <label class="lbl">Date</label>
+              <input class="field" id="ds-date-input" type="date" required />
+            </div>
+            <div class="sm:col-span-2 flex">
+              <button id="ds-toggle-btn" type="button" class="btn-rose w-full rounded-xl py-3 text-sm font-medium flex items-center justify-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="ds-toggle-label">Mark complete</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Week dot row: tap any dot to toggle that day -->
+          <div class="mt-5">
+            <p class="text-[10px] tracking-[0.18em] uppercase font-semibold mb-2" style="color: var(--ink-soft);">This week — tap a day to toggle</p>
+            <div id="ds-week-dots" class="flex gap-2"></div>
+          </div>
+
+          <p id="ds-status-line" class="text-xs mt-3" style="color: var(--ink-soft);"></p>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-5 fitness-progress-grid">
@@ -1271,8 +1318,8 @@
         <!-- Form -->
         <div id="workout-form-card" class="glass-deep rounded-3xl p-6 lg:col-span-2 self-start">
           <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Workout Log</p>
-          <h3 class="font-display text-3xl font-semibold mt-1">Log a session</h3>
-          <p class="text-sm mt-1" style="color: var(--ink-soft);">Beat your last lift — earn the 🏆.</p>
+          <h3 class="font-display text-3xl font-semibold mt-1">Log a workout</h3>
+          <p class="text-sm mt-1" style="color: var(--ink-soft);">Track individual lifts &amp; routines — beat your last lift, earn the 🏆.</p>
 
           <form id="workout-form" class="mt-6 space-y-4">
             <div>
@@ -1307,7 +1354,7 @@
 
           <div class="grid grid-cols-2 gap-3">
             <div class="rounded-2xl p-4" style="background: rgba(255,255,255,0.55); border: 1px solid var(--line);">
-              <p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">Total Sessions</p>
+              <p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">Total Routines</p>
               <p class="font-display text-3xl font-semibold mt-1" id="gym-total">0</p>
             </div>
             <div class="rounded-2xl p-4" style="background: rgba(255,255,255,0.55); border: 1px solid var(--line);">
@@ -1330,7 +1377,7 @@
           <div class="flex items-center justify-between mb-4">
             <div>
               <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">History</p>
-              <h3 class="font-display text-3xl font-semibold mt-1">Your sessions</h3>
+              <h3 class="font-display text-3xl font-semibold mt-1">Your routines</h3>
             </div>
             <button id="clear-workouts" class="btn-ghost rounded-xl px-3 py-2 text-xs font-medium hidden items-center gap-2">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
@@ -1358,7 +1405,7 @@
             <div class="inline-flex w-16 h-16 rounded-full items-center justify-center mb-4" style="background: rgba(183, 110, 121, 0.1);">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#B76E79" stroke-width="1.6"><path d="M6 6 L6 18M18 6 L18 18M2 9 L2 15M22 9 L22 15M6 12 L18 12"/></svg>
             </div>
-            <p class="font-display text-2xl font-semibold">No sessions yet</p>
+            <p class="font-display text-2xl font-semibold">No routines yet</p>
             <p class="text-sm mt-1" style="color: var(--ink-soft);">Your transformation begins with the first rep.</p>
           </div>
         </div>
@@ -1650,7 +1697,7 @@
           <div class="glass-deep rounded-3xl p-6">
             <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">2 · Fitness Targets</p>
             <h3 class="font-display text-3xl font-semibold mt-1">Your performance system</h3>
-            <p class="text-sm mt-1" style="color: var(--ink-soft);">Define your goals.</p>
+            <p class="text-sm mt-1" style="color: var(--ink-soft);">Define your own goals — no presets, no templates.</p>
 
             <!-- Tab strip -->
             <div class="ft-tabs mt-5" role="tablist" id="ft-tabs">
@@ -1775,7 +1822,7 @@
     </section>
 
     <footer class="text-center mt-12 mb-2">
-      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Dashboard V1.5.2 · <span id="year"></span></p>
+      <p class="text-xs" style="color: var(--ink-soft);">Crafted with love · Destiny Dashboard V1.4.1 · <span id="year"></span></p>
     </footer>
 
   </main>
@@ -1906,6 +1953,7 @@ const defaultState = () => ({
   sleepLog:   [],    // [{id, date, hours}]
   restLog:    [],    // [{id, date}]
   skillLog:   [],    // [{id, goalId, date, note}]
+  workoutSessions: [],  // [{id, date}]  v1.5.4 — daily "I worked out today" check-ins
   settings: {
     name:           'Member',
     avatar:         null,
@@ -3050,13 +3098,21 @@ function renderWeekStrip() {
   const goalMl = state.settings.waterGoalMl;
   const hasWaterGoal = goalMl != null && goalMl > 0;
   const calGoal = state.settings.calorieGoal;
+  const hasCalGoal = calGoal != null && calGoal > 0;
+  const freqGoal = (state.fitnessGoals.frequency && state.fitnessGoals.frequency[0]) || null;
+  const workoutGoalPerWeek = freqGoal ? Number(freqGoal.perWeek) : null;
+  const hasWorkoutGoal = workoutGoalPerWeek != null && workoutGoalPerWeek > 0;
 
   const inWeek = d => {
     const dt = new Date(d);
     return dt >= ws && dt < new Date(ws.getTime() + 7 * 86400000);
   };
 
-  const workoutSet = new Set(state.workouts.filter(w => inWeek(w.date)).map(w => dayKey(w.date)));
+  /* v1.5.4 — week-strip workout dot is driven by the new daily session
+     log only. The legacy state.workouts entries (now: "routines") are
+     preserved for history but no longer feed the weekly counter. */
+  const sessions = Array.isArray(state.workoutSessions) ? state.workoutSessions : [];
+  const sessionSet = new Set(sessions.filter(s => inWeek(s.date)).map(s => dayKey(s.date)));
   const dailyWater = {};
   state.waterEntries.filter(w => inWeek(w.date)).forEach(w => {
     const k = dayKey(w.date);
@@ -3070,7 +3126,7 @@ function renderWeekStrip() {
   const mealStatus = k => {
     const c = dailyCal[k];
     if (c === undefined) return 'none';
-    if (calGoal > 0 && Math.abs(c - calGoal) <= MEAL_TOLERANCE) return 'on';
+    if (hasCalGoal && Math.abs(c - calGoal) <= MEAL_TOLERANCE) return 'on';
     return 'logged';
   };
 
@@ -3087,7 +3143,7 @@ function renderWeekStrip() {
     const k = dayKey(d);
     const isToday = k === todayKey;
     const isFuture = d > now;
-    const wDone = !isFuture && workoutSet.has(k);
+    const wDone = !isFuture && sessionSet.has(k);
     if (wDone) workoutCount++;
     const mState = isFuture ? 'none' : mealStatus(k);
     if (mState === 'on') mealsOnTargetCount++;
@@ -3097,27 +3153,37 @@ function renderWeekStrip() {
     cell.className = 'week-day' + (isToday ? ' today' : '');
     if (isFuture) cell.style.opacity = '.55';
     const mealIndicator = mState === 'on'
-      ? `<span class="ind-dot on" title="Meals on target"></span>`
-      : `<span class="ind-dot" title="Meals not on target"></span>`;
+      ? `<span class="ind-dot on" title="Nutrition goal hit"></span>`
+      : `<span class="ind-dot" title="Nutrition goal not hit"></span>`;
     cell.innerHTML = `
       <p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">${dayInitials[i]}</p>
       <p class="font-display text-2xl font-semibold mt-1" style="color: ${isToday ? 'var(--rose-gold-dk)' : 'var(--ink)'};">${d.getDate()}</p>
       <div class="indicators">
-        <span class="ind-dot ${wDone ? 'on' : ''}" title="Workout"></span>
+        <span class="ind-dot ${wDone ? 'on' : ''}" title="Workout session"></span>
         ${mealIndicator}
         <span class="ind-dot ${waterDone ? 'on' : ''}" title="Water goal"></span>
       </div>`;
     strip.appendChild(cell);
   }
 
-  const freqGoal = (state.fitnessGoals.frequency && state.fitnessGoals.frequency[0]) || null;
-  const goal = Number(freqGoal?.perWeek || state.settings.fitnessTargets?.weeklyWorkoutGoal || 4);
+  /* Three independent segments — each shows progress if its goal is set,
+     otherwise prompts to Settings. v1.5.4. */
   const wcEl = document.getElementById('weekly-workout-counter');
-  if (wcEl) wcEl.textContent = `${workoutCount}/${goal} sessions done`;
+  if (wcEl) {
+    wcEl.textContent = hasWorkoutGoal
+      ? `${workoutCount}/${workoutGoalPerWeek} sessions done`
+      : 'set workout goal in Settings';
+  }
   const mcEl = document.getElementById('weekly-meals-counter');
-  if (mcEl) mcEl.textContent = calGoal > 0
-    ? `${mealsOnTargetCount}/7 days on target · ${waterGoalCount} daily water goals hit`
-    : `${mealsOnTargetCount} day${mealsOnTargetCount === 1 ? '' : 's'} logged · ${hasWaterGoal ? `${waterGoalCount}/7 water goals hit` : 'set water goal in Settings'}`;
+  if (mcEl) {
+    const nutritionPart = hasCalGoal
+      ? `${mealsOnTargetCount}/7 nutrition goal hit`
+      : 'set nutrition goal in Settings';
+    const waterPart = hasWaterGoal
+      ? `${waterGoalCount}/7 water goal hit`
+      : 'set water goal in Settings';
+    mcEl.textContent = `${nutritionPart} · ${waterPart}`;
+  }
 }
 
 /* ============================================================
@@ -4090,15 +4156,27 @@ function renderStrengthTracker() {
 function renderActivityTracker() {
   const weekWorkouts = getThisWeekWorkouts();
   const weeklyVolume = weekWorkouts.reduce((sum, w) => sum + Number(w.sets || 0) * Number(w.reps || 0) * Number(w.weight || 0), 0);
-  const frequencyGoal = Number((state.fitnessGoals.frequency || [])[0]?.perWeek || state.settings.fitnessTargets?.weeklyWorkoutGoal || 4);
-  const frequencyPct = frequencyGoal > 0 ? Math.min(100, Math.round((weekWorkouts.length / frequencyGoal) * 100)) : 0;
+
+  /* v1.5.4 — frequency now driven by daily session check-ins,
+     not by routines logged. Volume still reflects routines. */
+  const ws = getWeekStart();
+  const weekEnd = new Date(ws.getTime() + 7 * 86400000);
+  const sessionsThisWeek = (state.workoutSessions || []).filter(s => {
+    const d = new Date(s.date);
+    return d >= ws && d < weekEnd;
+  });
+  const sessionsCount = new Set(sessionsThisWeek.map(s => dayKey(s.date))).size;
+
+  const freqGoalObj = (state.fitnessGoals.frequency || [])[0];
+  const frequencyGoal = freqGoalObj ? Number(freqGoalObj.perWeek) : 0;
+  const frequencyPct = frequencyGoal > 0 ? Math.min(100, Math.round((sessionsCount / frequencyGoal) * 100)) : 0;
   const frequencyEl = document.getElementById('activity-weekly-frequency');
   const volumeEl = document.getElementById('activity-weekly-volume');
   const labelEl = document.getElementById('activity-frequency-label');
   const barEl = document.getElementById('activity-frequency-bar');
-  if (frequencyEl) frequencyEl.textContent = weekWorkouts.length;
+  if (frequencyEl) frequencyEl.textContent = sessionsCount;
   if (volumeEl) volumeEl.textContent = weeklyVolume.toLocaleString(undefined, { maximumFractionDigits: 0 });
-  if (labelEl) labelEl.textContent = `${weekWorkouts.length}/${frequencyGoal}`;
+  if (labelEl) labelEl.textContent = frequencyGoal > 0 ? `${sessionsCount}/${frequencyGoal}` : '—';
   if (barEl) barEl.style.width = `${frequencyPct}%`;
 }
 function renderHabitSkillTracker() {
@@ -4115,6 +4193,175 @@ function renderHabitSkillTracker() {
   empty.style.display = 'none';
   grid.innerHTML = items.map(item => `<div class="habit-skill-card"><div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#FBE6C7,#E5BD8C);">${item.icon}</div><div class="min-w-0"><p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color:var(--ink-soft);">${item.type}</p><p class="font-semibold truncate">${escapeHtml(item.name)}</p><p class="text-xs mt-1" style="color:var(--ink-soft);">${escapeHtml(item.label)}</p></div></div>`).join('');
 }
+
+/* ============================================================
+   v1.5.4 — DAILY WORKOUT SESSION CONTROLLER
+   ------------------------------------------------------------
+   Independent log of "I worked out today" check-ins. One entry
+   per day max. Drives the workout dot on the Overview week
+   strip and the Frequency stat on this tab.
+   Routines (state.workouts) remain a separate, richer log.
+   ============================================================ */
+function hasSessionOnDate(dateStr) {
+  return (state.workoutSessions || []).some(s => dayKey(s.date) === dateStr);
+}
+function addSessionForDate(dateStr) {
+  if (hasSessionOnDate(dateStr)) return false;
+  state.workoutSessions = [...(state.workoutSessions || []), { id: uid(), date: dateStr }];
+  return true;
+}
+function removeSessionForDate(dateStr) {
+  const before = (state.workoutSessions || []).length;
+  state.workoutSessions = (state.workoutSessions || []).filter(s => dayKey(s.date) !== dateStr);
+  return state.workoutSessions.length < before;
+}
+
+function renderDailySessionWidget() {
+  const card        = document.getElementById('daily-session-card');
+  const emptyEl     = document.getElementById('daily-session-empty');
+  const activeEl    = document.getElementById('daily-session-active');
+  const progressEl  = document.getElementById('daily-session-progress');
+  const dateInput   = document.getElementById('ds-date-input');
+  const toggleBtn   = document.getElementById('ds-toggle-btn');
+  const toggleLabel = document.getElementById('ds-toggle-label');
+  const dotsEl      = document.getElementById('ds-week-dots');
+  const statusEl    = document.getElementById('ds-status-line');
+  const weekCountEl = document.getElementById('ds-week-count');
+  const weekGoalEl  = document.getElementById('ds-week-goal');
+  if (!card || !dateInput) return;
+
+  const freqGoalObj = (state.fitnessGoals.frequency || [])[0];
+  const hasFreqGoal = freqGoalObj && Number(freqGoalObj.perWeek) > 0;
+
+  if (!hasFreqGoal) {
+    emptyEl.style.display    = '';
+    activeEl.style.display   = 'none';
+    progressEl.style.display = 'none';
+    return;
+  }
+
+  emptyEl.style.display    = 'none';
+  activeEl.style.display   = '';
+  progressEl.style.display = '';
+
+  /* Default date to today on first paint, but preserve user's picked
+     date across re-renders (they may be retroactively logging). */
+  const today = todayStr();
+  if (!dateInput.value) dateInput.value = today;
+  /* Don't allow selecting future dates */
+  dateInput.max = today;
+
+  const selectedDate = dateInput.value || today;
+  const isLogged = hasSessionOnDate(selectedDate);
+
+  /* Toggle button reflects state of currently selected date */
+  if (isLogged) {
+    toggleBtn.style.background = 'rgba(183, 110, 121, 0.10)';
+    toggleBtn.style.color = 'var(--rose-gold-dk)';
+    toggleBtn.style.boxShadow = 'none';
+    toggleBtn.style.border = '1px solid var(--line)';
+    toggleLabel.textContent = '✓ Complete · undo';
+  } else {
+    toggleBtn.style.background = '';
+    toggleBtn.style.color = '';
+    toggleBtn.style.boxShadow = '';
+    toggleBtn.style.border = '';
+    toggleLabel.textContent = 'Mark complete';
+  }
+
+  /* Week dot row */
+  const ws = getWeekStart();
+  const dayInitials = ['S','M','T','W','T','F','S'];
+  const nowEnd = new Date();
+  nowEnd.setHours(23, 59, 59, 999);
+  let weekCount = 0;
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(ws);
+    d.setDate(ws.getDate() + i);
+    d.setHours(0, 0, 0, 0);
+    const k = dayKey(d);
+    const isFuture = d > nowEnd;
+    const done = !isFuture && hasSessionOnDate(k);
+    if (done) weekCount++;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'flex-1 rounded-xl py-2 text-[11px] font-semibold flex flex-col items-center gap-1 transition';
+    btn.style.cssText = `min-height:44px;background:${done ? 'linear-gradient(135deg, rgba(255,248,240,0.85), rgba(252,222,222,0.7))' : 'rgba(255,255,255,0.55)'};border:1px solid ${done ? 'rgba(217, 166, 121, 0.4)' : 'var(--line)'};color:${done ? 'var(--rose-gold-dk)' : 'var(--ink-soft)'};cursor:${isFuture ? 'not-allowed' : 'pointer'};opacity:${isFuture ? '.45' : '1'};`;
+    btn.innerHTML = `<span style="letter-spacing:.14em;">${dayInitials[i]}</span><span style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;line-height:1;">${d.getDate()}</span><span style="font-size:11px;">${done ? '✓' : '·'}</span>`;
+    if (!isFuture) {
+      btn.addEventListener('click', () => {
+        const wasLogged = hasSessionOnDate(k);
+        if (wasLogged) {
+          removeSessionForDate(k);
+          toast(`Session removed for ${formatShortDate(k)}`);
+        } else {
+          addSessionForDate(k);
+          toast(`Workout logged for ${formatShortDate(k)} 🌹`);
+        }
+        /* Sync the date input so the toggle button reflects the day they tapped */
+        dateInput.value = k;
+      });
+    }
+    dotsEl.appendChild(btn);
+  }
+
+  weekCountEl.textContent = weekCount;
+  weekGoalEl.textContent  = freqGoalObj.perWeek;
+
+  /* Status line */
+  const remaining = Math.max(0, Number(freqGoalObj.perWeek) - weekCount);
+  if (weekCount >= Number(freqGoalObj.perWeek)) {
+    statusEl.textContent = '🌹 Weekly goal hit — beautifully done.';
+    statusEl.style.color = 'var(--rose-gold-dk)';
+    statusEl.style.fontWeight = '500';
+  } else {
+    statusEl.textContent = `${remaining} more session${remaining === 1 ? '' : 's'} to hit this week's goal.`;
+    statusEl.style.color = 'var(--ink-soft)';
+    statusEl.style.fontWeight = '';
+  }
+}
+
+/* Bind date input + toggle button once at init */
+(function bindDailySessionWidget() {
+  const dateInput = document.getElementById('ds-date-input');
+  const toggleBtn = document.getElementById('ds-toggle-btn');
+  if (dateInput && dateInput.dataset.bound !== 'true') {
+    dateInput.dataset.bound = 'true';
+    dateInput.addEventListener('change', () => renderDailySessionWidget());
+  }
+  if (toggleBtn && toggleBtn.dataset.bound !== 'true') {
+    toggleBtn.dataset.bound = 'true';
+    toggleBtn.addEventListener('click', () => {
+      const di = document.getElementById('ds-date-input');
+      const dateStr = (di && di.value) || todayStr();
+      const wasLogged = hasSessionOnDate(dateStr);
+      if (wasLogged) {
+        removeSessionForDate(dateStr);
+        toast(`Session removed for ${formatShortDate(dateStr)}`);
+      } else {
+        addSessionForDate(dateStr);
+        toast(`Workout logged for ${formatShortDate(dateStr)} 🌹`);
+      }
+    });
+  }
+  /* Empty-state CTA → settings → frequency tab */
+  const cta = document.getElementById('link-create-frequency-goal');
+  if (cta && cta.dataset.bound !== 'true') {
+    cta.dataset.bound = 'true';
+    cta.addEventListener('click', (e) => {
+      e.preventDefault();
+      NavigationController.goTo('settings');
+      setTimeout(() => {
+        const freqTab = document.querySelector('.ft-tab[data-fttab="frequency"]');
+        if (freqTab) freqTab.click();
+        const ftTabs = document.getElementById('ft-tabs');
+        if (ftTabs) ftTabs.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    });
+  }
+})();
+
 function updateUI() {
   const tasks = [
     ['header', renderHeader],
@@ -4127,6 +4374,7 @@ function updateUI() {
     ['trend chart', renderTrendChart],
     ['fitness goals', renderFitnessGoals],
     ['fitness progress', renderFitnessProgressDashboard],
+    ['daily session', renderDailySessionWidget],
     ['settings inputs', loadAllInputsFromState],
     ['settings dot', updateSettingsDot],
   ];
