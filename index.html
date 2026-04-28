@@ -1800,16 +1800,33 @@
         <!-- Sidebar column -->
         <div class="space-y-5">
 
-          <!-- Data: PDF export + reset -->
+          <!-- Data: PDF export, JSON backup, restore, reset -->
           <div class="glass-deep rounded-3xl p-6">
             <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Data</p>
             <h3 class="font-display text-3xl font-semibold mt-1">Your journey</h3>
-            <p class="text-sm mt-2" style="color: var(--ink-soft);">Download a clean, printable report of every goal, log, and measurement.</p>
 
-            <button id="export-pdf-btn" class="btn-rose w-full rounded-xl py-3 mt-4 text-sm font-medium flex items-center justify-center gap-2">
+            <!-- Share / PDF -->
+            <p class="text-[10px] tracking-[0.22em] uppercase font-semibold mt-5 mb-2" style="color: var(--ink-soft);">Share</p>
+            <p class="text-xs" style="color: var(--ink-soft);">A clean, printable report of every goal, log, and measurement.</p>
+            <button id="export-pdf-btn" class="btn-rose w-full rounded-xl py-3 mt-3 text-sm font-medium flex items-center justify-center gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
               Export Journey as PDF
             </button>
+
+            <div class="divider-thin my-4"></div>
+
+            <!-- Backup / JSON -->
+            <p class="text-[10px] tracking-[0.22em] uppercase font-semibold mb-2" style="color: var(--ink-soft);">Backup &amp; Move Devices</p>
+            <p class="text-xs" style="color: var(--ink-soft);">Save a backup file to keep your data safe — or to load it on another device. Keep the file private; it contains everything in your dashboard.</p>
+            <button id="export-json-btn" class="btn-ghost w-full rounded-xl py-3 mt-3 text-sm font-medium flex items-center justify-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download backup file
+            </button>
+            <button id="import-json-btn" class="btn-ghost w-full rounded-xl py-3 mt-2 text-sm font-medium flex items-center justify-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Restore from backup file
+            </button>
+            <input type="file" id="import-json-input" accept="application/json,.json" style="display:none;" />
 
             <div class="divider-thin my-4"></div>
 
@@ -4078,6 +4095,155 @@ function exportJourneyPDF() {
 
 const exportPdfBtn = document.getElementById('export-pdf-btn');
 if (exportPdfBtn) exportPdfBtn.addEventListener('click', exportJourneyPDF);
+
+/* ============================================================
+   v1.5.5 — JSON BACKUP & RESTORE
+   ------------------------------------------------------------
+   Export the full state as a portable JSON file so users can
+   move their dashboard between devices. Import re-hydrates state
+   via replaceState, which deep-merges into defaultState — so
+   backups from older versions won't crash on missing fields.
+   ============================================================ */
+
+const BACKUP_FORMAT = 'destiny-dashboard-backup';
+const BACKUP_FORMAT_VERSION = 1;
+
+function exportBackupJSON() {
+  try {
+    const payload = {
+      format: BACKUP_FORMAT,
+      formatVersion: BACKUP_FORMAT_VERSION,
+      appVersion: APP_CONFIG.version,
+      exportedAt: new Date().toISOString(),
+      data: toRaw(state),
+    };
+    const json = JSON.stringify(payload, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const safeName = (state.settings.name || 'Member').replace(/[^a-z0-9]/gi, '-').toLowerCase() || 'member';
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `destiny-backup-${safeName}-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast('Backup file downloaded ✨');
+  } catch (err) {
+    console.error('Backup export failed', err);
+    toast('Could not create backup file. Please try again.');
+  }
+}
+
+/* Reusable on-brand confirmation modal — Promise<boolean>.
+   Used here for the destructive restore step so the user
+   can't accidentally overwrite their data with a misclick. */
+function confirmModal({ title, body, confirmLabel = 'Confirm', cancelLabel = 'Cancel', danger = false }) {
+  return new Promise(resolve => {
+    if (!modalContent || !modalBackdrop) { resolve(window.confirm(body)); return; }
+    const dangerStyle = danger
+      ? 'background: linear-gradient(135deg, #C58695 0%, #9A4444 60%, #7A3838 100%); color: #FFF8F6;'
+      : '';
+    modalContent.innerHTML = `
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-2xl font-semibold">${escapeHtml(title)}</h3>
+        <button type="button" id="cm-x" class="delete-btn" title="Close" style="width:32px;height:32px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>
+      </div>
+      <p class="text-sm mb-5" style="color: var(--ink-soft); line-height: 1.55;">${escapeHtml(body)}</p>
+      <div class="flex gap-2 justify-end">
+        <button type="button" id="cm-cancel" class="btn-ghost rounded-xl px-4 py-2.5 text-sm font-medium">${escapeHtml(cancelLabel)}</button>
+        <button type="button" id="cm-confirm" class="btn-rose rounded-xl px-4 py-2.5 text-sm font-medium" style="${dangerStyle}">${escapeHtml(confirmLabel)}</button>
+      </div>`;
+    modalBackdrop.classList.add('open');
+    const finish = (result) => { closeModal(); resolve(result); };
+    document.getElementById('cm-x').addEventListener('click', () => finish(false));
+    document.getElementById('cm-cancel').addEventListener('click', () => finish(false));
+    document.getElementById('cm-confirm').addEventListener('click', () => finish(true));
+    setTimeout(() => {
+      const btn = document.getElementById('cm-confirm');
+      if (btn) btn.focus();
+    }, 100);
+  });
+}
+
+async function importBackupJSON(file) {
+  if (!file) return;
+  if (!/\.json$/i.test(file.name) && file.type && !file.type.includes('json')) {
+    toast('Please choose a .json backup file.');
+    return;
+  }
+  let parsed;
+  try {
+    const text = await file.text();
+    parsed = JSON.parse(text);
+  } catch (err) {
+    console.error('Backup parse failed', err);
+    toast('That file isn\'t a valid backup (could not read JSON).');
+    return;
+  }
+
+  /* Validate it's actually a Destiny backup, not random JSON */
+  if (!parsed || typeof parsed !== 'object' || parsed.format !== BACKUP_FORMAT || !parsed.data || typeof parsed.data !== 'object') {
+    toast('That file doesn\'t look like a Destiny backup.');
+    return;
+  }
+  if (Number(parsed.formatVersion) > BACKUP_FORMAT_VERSION) {
+    toast('This backup was made by a newer version of Destiny. Please update first.');
+    return;
+  }
+
+  /* Build a friendly description of what's about to happen */
+  const d = parsed.data;
+  const counts = [
+    `${(d.workouts || []).length} routine${(d.workouts || []).length === 1 ? '' : 's'}`,
+    `${(d.foodLog || []).length} food entries`,
+    `${(d.weightHistory || []).length} weights`,
+    `${(d.workoutSessions || []).length} sessions`,
+  ];
+  const exportedDate = parsed.exportedAt
+    ? new Date(parsed.exportedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+    : 'unknown date';
+
+  const ok = await confirmModal({
+    title: 'Restore from backup?',
+    body: `This will REPLACE everything currently in your dashboard with the contents of this backup. Backup contains: ${counts.join(', ')}. Exported ${exportedDate}. This cannot be undone.`,
+    confirmLabel: 'Replace my data',
+    cancelLabel: 'Cancel',
+    danger: true,
+  });
+  if (!ok) {
+    toast('Restore cancelled.');
+    return;
+  }
+
+  try {
+    replaceState(parsed.data);
+    loadAllInputsFromState();
+    if (typeof weightDateInput !== 'undefined' && weightDateInput) weightDateInput.value = todayStr();
+    firstTrendRender = true;
+    renderAll();
+    toast('Backup restored ✨ Your dashboard is now up to date.');
+  } catch (err) {
+    console.error('Backup restore failed', err);
+    toast('Could not restore that backup. Your existing data is unchanged.');
+  }
+}
+
+const exportJsonBtn  = document.getElementById('export-json-btn');
+const importJsonBtn  = document.getElementById('import-json-btn');
+const importJsonInput = document.getElementById('import-json-input');
+if (exportJsonBtn) exportJsonBtn.addEventListener('click', exportBackupJSON);
+if (importJsonBtn && importJsonInput) {
+  importJsonBtn.addEventListener('click', () => importJsonInput.click());
+  importJsonInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    importBackupJSON(file);
+    e.target.value = ''; // allow re-importing same file
+  });
+}
 
 document.getElementById('reset-all').addEventListener('click', () => {
   if (confirm('Reset all data? This will erase weights, workouts, foods & settings. This cannot be undone.')) {
