@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Destiny Dashboard V1.5.1 — Reactive QA Transformation Dashboard</title>
+<title>Destiny Dashboard V1.6.0 — Whop Sync</title>
 
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -1030,7 +1030,7 @@
 
     <div class="hidden lg:block px-2 pt-2 pb-6">
       <div id="brand-logo-sidebar"></div>
-      <p class="text-[10px] tracking-[0.3em] uppercase text-[color:var(--ink-soft)] mt-2 text-center font-semibold">Dashboard · v1.5.2</p>
+      <p class="text-[10px] tracking-[0.3em] uppercase text-[color:var(--ink-soft)] mt-2 text-center font-semibold">Dashboard · v1.6.0</p>
     </div>
 
     <div class="divider-thin hidden lg:block mb-4"></div>
@@ -1070,7 +1070,7 @@
       </div>
       <div class="flex-1 min-w-0">
         <p class="text-sm font-medium truncate" id="sidebar-name">Member</p>
-        <p class="text-[11px] truncate" style="color: var(--ink-soft);">Destiny Fitness Dashboard v1.5.2</p>
+        <p class="text-[11px] truncate" style="color: var(--ink-soft);">Destiny Fitness Dashboard v1.6.0</p>
       </div>
     </div>
   </aside>
@@ -1094,6 +1094,7 @@
       </div>
       <div class="flex items-center gap-3 flex-wrap">
         <span id="save-pill" class="save-pill"><span class="dot"></span><span id="save-pill-text">All changes saved</span></span>
+        <span id="sync-status-pill" class="save-pill" style="display:none;"><span class="dot"></span>Local only</span>
         <button class="btn-rose rounded-xl px-5 py-2.5 text-sm font-medium flex items-center gap-2" id="quick-log-btn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
           Log Workout
@@ -1860,7 +1861,7 @@
 /* ----------- LOCKED ADMIN CONFIG ----------- */
 const APP_CONFIG = Object.freeze({
   appName:        'Destiny Dashboard',
-  version:        'V1.5',
+  version:        'V1.6.0',
   storageKey:     'destinyFitnessV1_4',
   legacyKeys:     ['destinyFitnessV1_3', 'destinyFitnessV1_2', 'destinyFitnessV1_1', 'destinyFitnessV1'],
 
@@ -2016,7 +2017,9 @@ function scheduleStateCommit() {
   queueMicrotask(() => {
     __renderScheduled = false;
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify(toRaw(state)));
+      const snapshot = toRaw(state);
+      localStorage.setItem(STORE_KEY, JSON.stringify(snapshot));
+      if (window.DestinySyncManager) window.DestinySyncManager.queueSave(snapshot);
       flashSavePill();
     } catch (err) {
       console.error('Destiny Dashboard persist failed', err);
@@ -2050,10 +2053,14 @@ function makeReactive(target) {
   __proxyCache.set(target, proxy);
   return proxy;
 }
-function replaceState(nextState) {
+function replaceState(nextState, options = {}) {
   __rawState = deepMerge(defaultState(), toRaw(nextState));
   state = makeReactive(__rawState);
-  localStorage.setItem(STORE_KEY, JSON.stringify(toRaw(state)));
+  const snapshot = toRaw(state);
+  localStorage.setItem(STORE_KEY, JSON.stringify(snapshot));
+  if (!options.skipRemoteSync && window.DestinySyncManager) {
+    window.DestinySyncManager.queueSave(snapshot, { immediate: true });
+  }
   if (typeof updateUI === 'function') updateUI();
 }
 let state = makeReactive(__rawState);
@@ -2109,7 +2116,9 @@ function loadState() {
 function saveState() {
   /* Legacy compatibility shim. New code should mutate state only; the Proxy commits automatically. */
   try {
-    localStorage.setItem(STORE_KEY, JSON.stringify(toRaw(state)));
+    const snapshot = toRaw(state);
+    localStorage.setItem(STORE_KEY, JSON.stringify(snapshot));
+    if (window.DestinySyncManager) window.DestinySyncManager.queueSave(snapshot);
     flashSavePill();
   } catch (err) {
     console.error('Destiny Dashboard manual persist failed', err);
@@ -2117,6 +2126,165 @@ function saveState() {
   }
   if (typeof updateUI === 'function') updateUI();
 }
+
+/* ============================================================
+   WHOP CROSS-DEVICE SYNC MANAGER
+   ------------------------------------------------------------
+   localStorage remains a fast/offline cache. The account-level
+   source of truth is /api/dashboard/state, which is authenticated
+   by Whop's iframe x-whop-user-token header on same-origin calls.
+   ============================================================ */
+window.DestinySyncManager = (() => {
+  const API_URL = '/api/dashboard/state';
+  const QUEUE_KEY = `${STORE_KEY}:pendingRemoteSync`;
+  const META_KEY = `${STORE_KEY}:syncMeta`;
+  const DEBOUNCE_MS = 1200;
+  let saveTimer = null;
+  let isBooted = false;
+  let isSyncing = false;
+  let lastSavedJson = '';
+
+  function readMeta() {
+    try { return JSON.parse(localStorage.getItem(META_KEY) || '{}'); }
+    catch { return {}; }
+  }
+
+  function writeMeta(patch) {
+    try {
+      const next = { ...readMeta(), ...patch };
+      localStorage.setItem(META_KEY, JSON.stringify(next));
+    } catch {}
+  }
+
+  function setSyncStatus(status, detail = '') {
+    writeMeta({ status, detail, updatedAt: new Date().toISOString() });
+    const el = document.getElementById('sync-status-pill');
+    if (!el) return;
+    el.textContent = status === 'synced' ? 'Cloud synced'
+      : status === 'syncing' ? 'Cloud syncing…'
+      : status === 'offline' ? 'Offline cache'
+      : status === 'auth' ? 'Whop login needed'
+      : 'Local only';
+    el.title = detail || '';
+    el.style.display = 'inline-flex';
+  }
+
+  async function fetchRemoteState() {
+    const res = await fetch(API_URL, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      credentials: 'include',
+      cache: 'no-store',
+    });
+    if (res.status === 401 || res.status === 403) {
+      setSyncStatus('auth', 'Whop authentication was not available to this iframe request.');
+      return null;
+    }
+    if (!res.ok) throw new Error(`Remote load failed: ${res.status}`);
+    return res.json();
+  }
+
+  async function pushRemoteState(snapshot) {
+    if (!snapshot || isSyncing) return;
+    const json = JSON.stringify(snapshot);
+    if (json === lastSavedJson) return;
+
+    isSyncing = true;
+    setSyncStatus('syncing');
+    try {
+      const res = await fetch(API_URL, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          appVersion: APP_VERSION,
+          clientUpdatedAt: new Date().toISOString(),
+          state: snapshot,
+        }),
+      });
+      if (res.status === 401 || res.status === 403) {
+        localStorage.setItem(QUEUE_KEY, json);
+        setSyncStatus('auth', 'Whop authentication unavailable. Saved locally and queued.');
+        return;
+      }
+      if (!res.ok) throw new Error(`Remote save failed: ${res.status}`);
+      lastSavedJson = json;
+      localStorage.removeItem(QUEUE_KEY);
+      setSyncStatus('synced');
+    } catch (err) {
+      console.warn('Destiny Dashboard remote sync queued', err);
+      try { localStorage.setItem(QUEUE_KEY, json); } catch {}
+      setSyncStatus('offline', 'Remote save failed. Changes are safe locally and will retry.');
+    } finally {
+      isSyncing = false;
+    }
+  }
+
+  function queueSave(snapshot = null, options = {}) {
+    const payload = snapshot || toRaw(state);
+    clearTimeout(saveTimer);
+    if (options.immediate) {
+      pushRemoteState(payload);
+      return;
+    }
+    saveTimer = setTimeout(() => pushRemoteState(payload), DEBOUNCE_MS);
+  }
+
+  async function boot() {
+    if (isBooted) return;
+    isBooted = true;
+    setSyncStatus('syncing', 'Loading account data…');
+
+    try {
+      const remote = await fetchRemoteState();
+      if (remote && remote.ok && remote.state) {
+        lastSavedJson = JSON.stringify(remote.state);
+        replaceState(remote.state, { skipRemoteSync: true });
+        setSyncStatus('synced', 'Loaded from Whop account sync.');
+      } else if (remote && remote.ok && !remote.state) {
+        queueSave(toRaw(state), { immediate: true });
+      }
+    } catch (err) {
+      console.warn('Destiny Dashboard remote load unavailable', err);
+      setSyncStatus('offline', 'Using local cache. Remote sync will retry.');
+    }
+
+    const pending = localStorage.getItem(QUEUE_KEY);
+    if (pending) {
+      try { queueSave(JSON.parse(pending), { immediate: true }); }
+      catch { localStorage.removeItem(QUEUE_KEY); }
+    }
+
+    window.addEventListener('online', () => {
+      const queued = localStorage.getItem(QUEUE_KEY);
+      if (queued) {
+        try { queueSave(JSON.parse(queued), { immediate: true }); }
+        catch { localStorage.removeItem(QUEUE_KEY); }
+      } else {
+        queueSave(toRaw(state));
+      }
+    });
+  }
+
+  async function forcePull() {
+    const remote = await fetchRemoteState();
+    if (remote && remote.ok && remote.state) {
+      replaceState(remote.state, { skipRemoteSync: true });
+      setSyncStatus('synced', 'Manually refreshed from cloud.');
+      toast('Cloud data refreshed.');
+    }
+  }
+
+  async function forcePush() {
+    await pushRemoteState(toRaw(state));
+    toast('Cloud sync saved.');
+  }
+
+  return { boot, queueSave, forcePull, forcePush, setSyncStatus };
+})();
 
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const todayStr = () => {
@@ -4559,6 +4727,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 NavigationController.init();
 loadAllInputsFromState();
 renderAll();
+window.DestinySyncManager?.boot();
 </script>
 </body>
 </html>
