@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Destiny Dashboard V1.6.0 — Whop Sync</title>
+<title>Destiny Dashboard V1.6.1 — Fitness Target Cleanup</title>
 
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -813,7 +813,6 @@
   main { position: relative; z-index: 0; }
   .fitness-progress-grid { align-items: stretch; }
   .fitness-mini-card { background: rgba(255,255,255,0.6); border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
-  .habit-skill-card { background: rgba(255,255,255,0.6); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; align-items: flex-start; gap: 12px; min-width: 0; }
   @media (max-width: 640px) {
     .week-day { padding: 12px 4px; border-radius: 14px; }
     .week-day .indicators { gap: 3px; }
@@ -1030,7 +1029,7 @@
 
     <div class="hidden lg:block px-2 pt-2 pb-6">
       <div id="brand-logo-sidebar"></div>
-      <p class="text-[10px] tracking-[0.3em] uppercase text-[color:var(--ink-soft)] mt-2 text-center font-semibold">Dashboard · v1.6.0</p>
+      <p class="text-[10px] tracking-[0.3em] uppercase text-[color:var(--ink-soft)] mt-2 text-center font-semibold">Dashboard · v1.6.1</p>
     </div>
 
     <div class="divider-thin hidden lg:block mb-4"></div>
@@ -1070,7 +1069,7 @@
       </div>
       <div class="flex-1 min-w-0">
         <p class="text-sm font-medium truncate" id="sidebar-name">Member</p>
-        <p class="text-[11px] truncate" style="color: var(--ink-soft);">Destiny Fitness Dashboard v1.6.0</p>
+        <p class="text-[11px] truncate" style="color: var(--ink-soft);">Destiny Fitness Dashboard v1.6.1</p>
       </div>
     </div>
   </aside>
@@ -1212,25 +1211,6 @@
         </div>
       </div>
 
-      <!-- This Week Activity Strip -->
-      <div class="glass rounded-3xl p-6 mt-5">
-        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-          <div>
-            <h3 class="font-display text-2xl font-semibold">This Week</h3>
-            <p class="text-xs mt-1" style="color: var(--ink-soft);">
-              <span id="weekly-workout-counter">set workout goal in Settings</span> · <span id="weekly-meals-counter">set nutrition goal in Settings · set water goal in Settings</span>
-            </p>
-          </div>
-          <div class="flex items-center gap-3 text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Workout</span>
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Nutrition goal</span>
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background: linear-gradient(135deg, #E59D8E, #B76E79);"></span> Water goal</span>
-          </div>
-        </div>
-        <div class="flex gap-2 sm:gap-3" id="week-strip"></div>
-      </div>
-    </section>
-
     <!-- ======================= FITNESS PROGRESS ======================= -->
     <section class="tab-panel" data-panel="gym">
 
@@ -1240,7 +1220,7 @@
           <div>
             <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Daily Workout Session</p>
             <h3 class="font-display text-3xl font-semibold mt-1">Did you work out?</h3>
-            <p class="text-sm mt-1" style="color: var(--ink-soft);">Mark a day complete — this updates your weekly progress on the Overview.</p>
+            <p class="text-sm mt-1" style="color: var(--ink-soft);">Mark a day complete — this updates Activity and your weekly progress on the Overview.</p>
           </div>
           <div id="daily-session-progress" class="text-right" style="display: none;">
             <p class="font-display text-3xl font-semibold leading-none"><span id="ds-week-count">0</span><span class="text-sm font-normal" style="color: var(--ink-soft);">/<span id="ds-week-goal">0</span></span></p>
@@ -1281,31 +1261,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-5 fitness-progress-grid">
-        <div class="glass-deep rounded-3xl p-6">
-          <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Strength Tracker</p>
-          <h3 class="font-display text-3xl font-semibold mt-1">Current vs. Target</h3>
-          <div id="strength-tracker-list" class="mt-5 space-y-3"></div>
-          <p id="strength-tracker-empty" class="text-sm mt-4" style="color: var(--ink-soft);">Create strength targets in Settings to track progress here.</p>
-        </div>
-        <div class="glass-deep rounded-3xl p-6">
-          <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Activity</p>
-          <h3 class="font-display text-3xl font-semibold mt-1">Weekly Output</h3>
-          <div class="grid grid-cols-2 gap-3 mt-5">
-            <div class="fitness-mini-card"><p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">This Week</p><p class="font-display text-3xl font-semibold mt-1" id="activity-weekly-frequency">0</p><p class="text-xs" style="color: var(--ink-soft);">sessions</p></div>
-            <div class="fitness-mini-card"><p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">Volume</p><p class="font-display text-3xl font-semibold mt-1" id="activity-weekly-volume">0</p><p class="text-xs" style="color: var(--ink-soft);">lbs moved</p></div>
-          </div>
-          <div class="mt-5"><div class="flex items-center justify-between text-xs mb-2" style="color: var(--ink-soft);"><span>Frequency Goal</span><span id="activity-frequency-label">0/0</span></div><div class="macro-bar"><div id="activity-frequency-bar" style="width:0%; background:linear-gradient(90deg,#D9A679,#B76E79);"></div></div></div>
-        </div>
-        <div class="glass-deep rounded-3xl p-6">
-          <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Habits & Skills</p>
-          <h3 class="font-display text-3xl font-semibold mt-1">Milestones</h3>
-          <div id="habit-skill-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3 mt-5"></div>
-          <p id="habit-skill-empty" class="text-sm mt-4" style="color: var(--ink-soft);">Create habits or skill goals in Settings to display them here.</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-5 mb-5">
         <!-- Form -->
         <div id="workout-form-card" class="glass-deep rounded-3xl p-6 lg:col-span-2 self-start">
           <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Workout Log</p>
@@ -1401,6 +1357,32 @@
           </div>
         </div>
       </div>
+
+      <div id="fitness-targets-prompt" class="rounded-2xl p-5 mb-5 flex items-center gap-3" style="background: linear-gradient(135deg, rgba(255,248,240,0.7), rgba(252,222,222,0.6)); border: 1px solid rgba(217, 166, 121, 0.3); display: none;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style="background: linear-gradient(135deg, #FBE6C7, #E5BD8C);">🎯</div>
+        <p class="text-sm flex-1" style="color: var(--ink);">Aiming for your weekly goal? See targets in <a class="info-link" id="link-fitness-targets">Settings → Fitness Targets</a>.</p>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-5 fitness-progress-grid">
+        <div class="glass-deep rounded-3xl p-6">
+          <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Strength Tracker</p>
+          <h3 class="font-display text-3xl font-semibold mt-1">Current vs. Target</h3>
+          <div id="strength-tracker-list" class="mt-5 space-y-3"></div>
+          <p id="strength-tracker-empty" class="text-sm mt-4" style="color: var(--ink-soft);">Create strength targets in Settings to track progress here.</p>
+        </div>
+        <div class="glass-deep rounded-3xl p-6">
+          <p class="text-[11px] tracking-[0.22em] uppercase font-semibold" style="color: var(--rose-gold);">Activity</p>
+          <h3 class="font-display text-3xl font-semibold mt-1">Weekly Output</h3>
+          <div class="grid grid-cols-2 gap-3 mt-5">
+            <div class="fitness-mini-card"><p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">This Week</p><p class="font-display text-3xl font-semibold mt-1" id="activity-weekly-frequency">0</p><p class="text-xs" style="color: var(--ink-soft);">sessions</p></div>
+            <div class="fitness-mini-card"><p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color: var(--ink-soft);">Volume</p><p class="font-display text-3xl font-semibold mt-1" id="activity-weekly-volume">0</p><p class="text-xs" style="color: var(--ink-soft);">lbs moved</p></div>
+          </div>
+          <div class="mt-5"><div class="flex items-center justify-between text-xs mb-2" style="color: var(--ink-soft);"><span>Frequency Goal</span><span id="activity-frequency-label">0/0</span></div><div class="macro-bar"><div id="activity-frequency-bar" style="width:0%; background:linear-gradient(90deg,#D9A679,#B76E79);"></div></div></div>
+          <div class="mt-5"><div class="flex items-center justify-between text-xs mb-2" style="color: var(--ink-soft);"><span>Volume Goal</span><span id="activity-volume-label">0/0</span></div><div class="macro-bar"><div id="activity-volume-bar" style="width:0%; background:linear-gradient(90deg,#D9A679,#B76E79);"></div></div></div>
+        </div>
+      </div>
+
+
     </section>
 
     <!-- ======================= NUTRITION ======================= -->
@@ -1695,9 +1677,6 @@
               <button class="ft-tab active" data-fttab="strength"  role="tab">Strength</button>
               <button class="ft-tab"        data-fttab="frequency" role="tab">Frequency</button>
               <button class="ft-tab"        data-fttab="volume"    role="tab">Volume</button>
-              <button class="ft-tab"        data-fttab="recovery"  role="tab">Recovery</button>
-              <button class="ft-tab"        data-fttab="habits"    role="tab">Habits</button>
-              <button class="ft-tab"        data-fttab="skills"    role="tab">Skills</button>
             </div>
 
             <!-- Strength -->
@@ -1728,36 +1707,6 @@
               </div>
               <div id="ft-list-volume" class="ft-list"></div>
               <button class="ft-create-btn" data-ftcreate="volume">+ Create Volume Goal</button>
-            </div>
-
-            <!-- Recovery -->
-            <div class="ft-pane" data-ftpane="recovery">
-              <div class="ft-empty" id="ft-empty-recovery">
-                <p class="ft-empty-title">Sleep & Rest Days</p>
-                <p class="ft-empty-sub">Recovery is performance. Log sleep hours and rest days to round out your week.</p>
-              </div>
-              <div id="ft-list-recovery" class="ft-list"></div>
-              <button class="ft-create-btn" data-ftcreate="recovery">+ Create Recovery Goal</button>
-            </div>
-
-            <!-- Habits -->
-            <div class="ft-pane" data-ftpane="habits">
-              <div class="ft-empty" id="ft-empty-habits">
-                <p class="ft-empty-title">Habit System</p>
-                <p class="ft-empty-sub">Tiny daily anchors — stretching, sun, journaling. Build streaks that build you.</p>
-              </div>
-              <div id="ft-list-habits" class="ft-list"></div>
-              <button class="ft-create-btn" data-ftcreate="habits">+ Create Habit</button>
-            </div>
-
-            <!-- Skills -->
-            <div class="ft-pane" data-ftpane="skills">
-              <div class="ft-empty" id="ft-empty-skills">
-                <p class="ft-empty-title">Skill / Athletic Goals</p>
-                <p class="ft-empty-sub">A pull-up, a 5k, a handstand — name what you're chasing and log attempts on Fitness Progress.</p>
-              </div>
-              <div id="ft-list-skills" class="ft-list"></div>
-              <button class="ft-create-btn" data-ftcreate="skills">+ Create Skill Goal</button>
             </div>
           </div>
 
@@ -1954,14 +1903,7 @@ const defaultState = () => ({
     strength:  [],   // [{id, name, currentLbs, targetLbs, createdAt}]
     frequency: [],   // [{id, name, perWeek, createdAt}]
     volume:    [],   // [{id, name, targetLbsPerWeek, createdAt}]
-    recovery:  [],   // [{id, name, type:'sleep'|'rest', targetPerWeek/targetHours, createdAt}]
-    habits:    [],   // [{id, name, frequency:'daily'|'weekly', target, createdAt}]
-    skills:    [],   // [{id, name, target, createdAt}]
   },
-  habitLog:   [],    // [{id, goalId, date}]
-  sleepLog:   [],    // [{id, date, hours}]
-  restLog:    [],    // [{id, date}]
-  skillLog:   [],    // [{id, goalId, date, note}]
   workoutSessions: [],  // [{id, date}]  v1.5.4 — daily "I worked out today" check-ins
   settings: {
     name:           'Member',
@@ -2044,8 +1986,21 @@ function makeReactive(target) {
   __proxyCache.set(target, proxy);
   return proxy;
 }
+function sanitizeStateForActiveGoals(snapshot) {
+  if (!snapshot || typeof snapshot !== 'object') return snapshot;
+  snapshot.fitnessGoals = {
+    strength:  Array.isArray(snapshot.fitnessGoals?.strength)  ? snapshot.fitnessGoals.strength  : [],
+    frequency: Array.isArray(snapshot.fitnessGoals?.frequency) ? snapshot.fitnessGoals.frequency : [],
+    volume:    Array.isArray(snapshot.fitnessGoals?.volume)    ? snapshot.fitnessGoals.volume    : [],
+  };
+  delete snapshot.habitLog;
+  delete snapshot.sleepLog;
+  delete snapshot.restLog;
+  delete snapshot.skillLog;
+  return snapshot;
+}
 function replaceState(nextState, options = {}) {
-  __rawState = deepMerge(defaultState(), toRaw(nextState));
+  __rawState = sanitizeStateForActiveGoals(deepMerge(defaultState(), toRaw(nextState)));
   state = makeReactive(__rawState);
   const snapshot = toRaw(state);
   localStorage.setItem(STORE_KEY, JSON.stringify(snapshot));
@@ -2101,7 +2056,8 @@ function loadState() {
       merged.exerciseLibrary = Array.from(seen.values()).sort((a, b) => a.localeCompare(b));
     }
 
-    return merged;
+    /* v1.6.1 cleanup: keep only active Fitness Target categories and remove legacy goal logs. */
+    return sanitizeStateForActiveGoals(merged);
   } catch { return defaultState(); }
 }
 function saveState() {
@@ -3583,7 +3539,7 @@ macroBind(setFatsGoal,    'fatsGoal');
 /* ============================================================
    FITNESS TARGETS — TABBED, USER-DEFINED GOALS
    ============================================================ */
-const ftCategories = ['strength', 'frequency', 'volume', 'recovery', 'habits', 'skills'];
+const ftCategories = ['strength', 'frequency', 'volume'];
 
 document.querySelectorAll('.ft-tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -3615,13 +3571,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 function openGoalModal(category) {
+  if (!ftCategories.includes(category)) return;
   const titleMap = {
     strength:  'Create Strength Goal',
     frequency: 'Create Frequency Goal',
     volume:    'Create Volume Goal',
-    recovery:  'Create Recovery Goal',
-    habits:    'Create Habit',
-    skills:    'Create Skill Goal',
   };
 
   let formHTML = '';
@@ -3640,32 +3594,6 @@ function openGoalModal(category) {
     formHTML = `
       <div><label class="lbl">Goal name</label><input class="field" name="name" placeholder="e.g. Weekly leg tonnage" required /></div>
       <div><label class="lbl">Target weekly volume (lbs)</label><input class="field" name="targetLbsPerWeek" type="number" min="0" step="100" required /></div>`;
-  } else if (category === 'recovery') {
-    formHTML = `
-      <div><label class="lbl">Goal name</label><input class="field" name="name" placeholder="e.g. nightly sleep target" required /></div>
-      <div><label class="lbl">Type</label>
-        <select class="field" name="type" required>
-          <option value="sleep">Sleep hours</option>
-          <option value="rest">Rest days per week</option>
-        </select>
-      </div>
-      <div><label class="lbl">Target value</label><input class="field" name="target" type="number" min="0" step="0.5" required /></div>`;
-  } else if (category === 'habits') {
-    formHTML = `
-      <div><label class="lbl">Habit name</label><input class="field" name="name" placeholder="e.g. Morning stretch" required /></div>
-      <div class="grid grid-cols-2 gap-3">
-        <div><label class="lbl">Frequency</label>
-          <select class="field" name="frequency">
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-          </select>
-        </div>
-        <div><label class="lbl">Target / period</label><input class="field" name="target" type="number" min="1" step="1" required /></div>
-      </div>`;
-  } else if (category === 'skills') {
-    formHTML = `
-      <div><label class="lbl">Skill name</label><input class="field" name="name" placeholder="e.g. First pull-up" required /></div>
-      <div><label class="lbl">Target description</label><input class="field" name="target" placeholder="describe what success looks like" required /></div>`;
   }
 
   modalContent.innerHTML = `
@@ -3687,16 +3615,16 @@ function openGoalModal(category) {
     const fd = new FormData(e.target);
     const goal = { id: uid(), createdAt: new Date().toISOString() };
     fd.forEach((v, k) => {
-      const isNumeric = ['currentLbs','targetLbs','perWeek','targetLbsPerWeek','target'].includes(k);
+      const isNumeric = ['currentLbs','targetLbs','perWeek','targetLbsPerWeek'].includes(k);
       goal[k] = isNumeric ? num(v) : v;
     });
     state.fitnessGoals[category] = [...(state.fitnessGoals[category] || []), goal];
     closeModal();
     e.target.reset();
     toast(`${titleMap[category].replace('Create ', '')} added ✨`);
+    renderAll();
   });
 
-  /* Auto-focus first input */
   setTimeout(() => {
     const first = modalContent.querySelector('input, select');
     if (first) first.focus();
@@ -3729,15 +3657,6 @@ function renderFitnessGoals() {
       } else if (cat === 'volume') {
         meta = `Target ${(g.targetLbsPerWeek || 0).toLocaleString()} lbs / week`;
         progress = `<div class="ft-goal-progress"><p class="ft-goal-progress-num">${(g.targetLbsPerWeek || 0).toLocaleString()}</p><p class="ft-goal-progress-lbl">lbs / wk</p></div>`;
-      } else if (cat === 'recovery') {
-        meta = g.type === 'sleep' ? `${g.target}h nightly` : `${g.target} rest days / week`;
-        progress = `<div class="ft-goal-progress"><p class="ft-goal-progress-num">${g.target}</p><p class="ft-goal-progress-lbl">${g.type === 'sleep' ? 'hours' : 'days'}</p></div>`;
-      } else if (cat === 'habits') {
-        meta = `${g.target}× ${g.frequency}`;
-        progress = `<div class="ft-goal-progress"><p class="ft-goal-progress-num">${g.target}</p><p class="ft-goal-progress-lbl">${g.frequency.slice(0,3)}</p></div>`;
-      } else if (cat === 'skills') {
-        meta = g.target;
-        progress = `<div class="ft-goal-progress"><p class="ft-goal-progress-num" style="font-size:18px;">🎯</p><p class="ft-goal-progress-lbl">target</p></div>`;
       }
 
       return `
@@ -3758,8 +3677,7 @@ function renderFitnessGoals() {
         const c = btn.dataset.ftCat;
         const id = btn.dataset.ftId;
         state.fitnessGoals[c] = state.fitnessGoals[c].filter(g => g.id !== id);
-        renderFitnessGoals();
-        updateSettingsDot();
+        renderAll();
         toast('Goal removed');
       });
     });
@@ -4089,9 +4007,6 @@ function exportJourneyPDF() {
         if (cat === 'strength')  line += ` — ${g.currentLbs || 0} → ${g.targetLbs} lbs`;
         if (cat === 'frequency') line += ` — ${g.perWeek}× per week`;
         if (cat === 'volume')    line += ` — ${g.targetLbsPerWeek?.toLocaleString()} lbs/wk`;
-        if (cat === 'recovery')  line += ` — ${g.target} ${g.type === 'sleep' ? 'h sleep' : 'rest days'}`;
-        if (cat === 'habits')    line += ` — ${g.target}× ${g.frequency}`;
-        if (cat === 'skills')    line += ` — ${g.target}`;
         ensure(16);
         doc.setTextColor(...INK);
         doc.setFont('helvetica', 'normal');
@@ -4192,36 +4107,12 @@ function exportJourneyPDF() {
     }
   }
 
-  /* ===== HYDRATION & RECOVERY ===== */
+  /* ===== HYDRATION SUMMARY ===== */
   newPage();
-  sectionHeader('05', 'Hydration & Recovery');
+  sectionHeader('05', 'Hydration Summary');
   const totalMl = state.waterEntries.reduce((s, w) => s + w.amount, 0);
   keyValue('Total water entries', state.waterEntries.length);
   keyValue('Total volume tracked', `${fmtWater(totalMl, wU, wU === 'ml' ? 0 : 1)} ${unitLabel(wU)}`);
-  keyValue('Sleep entries', state.sleepLog.length);
-  keyValue('Rest days logged', state.restLog.length);
-  keyValue('Habit check-ins', state.habitLog.length);
-
-  /* ===== HABIT TRACKING ===== */
-  if ((state.fitnessGoals.habits || []).length) {
-    y += 16;
-    doc.setTextColor(...ROSE_DK);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    ensure(20);
-    doc.text('Habit Targets', MARGIN, y);
-    y += 16;
-    state.fitnessGoals.habits.forEach(h => {
-      ensure(16);
-      const checks = state.habitLog.filter(l => l.goalId === h.id).length;
-      doc.setTextColor(...INK);
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`· ${h.name} — ${checks} check-in${checks === 1 ? '' : 's'}`, MARGIN, y);
-      y += 14;
-    });
-  }
-
   /* Final divider */
   ensure(60);
   y += 20;
@@ -4463,7 +4354,15 @@ function getBestLift(exerciseName) {
     .filter(w => String(w.exerciseName || '').trim().toLowerCase() === key)
     .reduce((best, w) => Math.max(best, Number(w.weight || 0)), 0);
 }
-function renderFitnessProgressDashboard() { renderStrengthTracker(); renderActivityTracker(); renderHabitSkillTracker(); }
+function renderFitnessProgressDashboard() { renderFitnessTargetPrompt(); renderStrengthTracker(); renderActivityTracker(); }
+function hasActiveFitnessGoal() {
+  return ftCategories.some(cat => (state.fitnessGoals[cat] || []).length > 0);
+}
+function renderFitnessTargetPrompt() {
+  const prompt = document.getElementById('fitness-targets-prompt');
+  if (!prompt) return;
+  prompt.style.display = hasActiveFitnessGoal() ? 'none' : 'flex';
+}
 function renderStrengthTracker() {
   const list = document.getElementById('strength-tracker-list');
   const empty = document.getElementById('strength-tracker-empty');
@@ -4483,8 +4382,6 @@ function renderActivityTracker() {
   const weekWorkouts = getThisWeekWorkouts();
   const weeklyVolume = weekWorkouts.reduce((sum, w) => sum + Number(w.sets || 0) * Number(w.reps || 0) * Number(w.weight || 0), 0);
 
-  /* v1.5.4 — frequency now driven by daily session check-ins,
-     not by routines logged. Volume still reflects routines. */
   const ws = getWeekStart();
   const weekEnd = new Date(ws.getTime() + 7 * 86400000);
   const sessionsThisWeek = (state.workoutSessions || []).filter(s => {
@@ -4494,30 +4391,27 @@ function renderActivityTracker() {
   const sessionsCount = new Set(sessionsThisWeek.map(s => dayKey(s.date))).size;
 
   const freqGoalObj = (state.fitnessGoals.frequency || [])[0];
+  const volumeGoalObj = (state.fitnessGoals.volume || [])[0];
   const frequencyGoal = freqGoalObj ? Number(freqGoalObj.perWeek) : 0;
+  const volumeGoal = volumeGoalObj ? Number(volumeGoalObj.targetLbsPerWeek) : 0;
   const frequencyPct = frequencyGoal > 0 ? Math.min(100, Math.round((sessionsCount / frequencyGoal) * 100)) : 0;
+  const volumePct = volumeGoal > 0 ? Math.min(100, Math.round((weeklyVolume / volumeGoal) * 100)) : 0;
+
   const frequencyEl = document.getElementById('activity-weekly-frequency');
   const volumeEl = document.getElementById('activity-weekly-volume');
-  const labelEl = document.getElementById('activity-frequency-label');
-  const barEl = document.getElementById('activity-frequency-bar');
+  const frequencyLabelEl = document.getElementById('activity-frequency-label');
+  const frequencyBarEl = document.getElementById('activity-frequency-bar');
+  const volumeLabelEl = document.getElementById('activity-volume-label');
+  const volumeBarEl = document.getElementById('activity-volume-bar');
+
   if (frequencyEl) frequencyEl.textContent = sessionsCount;
   if (volumeEl) volumeEl.textContent = weeklyVolume.toLocaleString(undefined, { maximumFractionDigits: 0 });
-  if (labelEl) labelEl.textContent = frequencyGoal > 0 ? `${sessionsCount}/${frequencyGoal}` : '—';
-  if (barEl) barEl.style.width = `${frequencyPct}%`;
-}
-function renderHabitSkillTracker() {
-  const grid = document.getElementById('habit-skill-grid');
-  const empty = document.getElementById('habit-skill-empty');
-  if (!grid || !empty) return;
-  const habits = state.fitnessGoals.habits || [];
-  const skills = state.fitnessGoals.skills || [];
-  const items = [
-    ...habits.map(h => ({ ...h, type: 'Habit', icon: '✓', label: `${h.target || 1}× ${h.frequency || 'weekly'}` })),
-    ...skills.map(s => ({ ...s, type: 'Skill', icon: '🎯', label: s.target || 'Target set' }))
-  ];
-  if (!items.length) { grid.innerHTML = ''; empty.style.display = ''; return; }
-  empty.style.display = 'none';
-  grid.innerHTML = items.map(item => `<div class="habit-skill-card"><div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#FBE6C7,#E5BD8C);">${item.icon}</div><div class="min-w-0"><p class="text-[10px] tracking-[0.18em] uppercase font-semibold" style="color:var(--ink-soft);">${item.type}</p><p class="font-semibold truncate">${escapeHtml(item.name)}</p><p class="text-xs mt-1" style="color:var(--ink-soft);">${escapeHtml(item.label)}</p></div></div>`).join('');
+  if (frequencyLabelEl) frequencyLabelEl.textContent = frequencyGoal > 0 ? `${sessionsCount}/${frequencyGoal}` : '—';
+  if (frequencyBarEl) frequencyBarEl.style.width = `${frequencyPct}%`;
+  if (volumeLabelEl) volumeLabelEl.textContent = volumeGoal > 0
+    ? `${weeklyVolume.toLocaleString(undefined, { maximumFractionDigits: 0 })}/${volumeGoal.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+    : '—';
+  if (volumeBarEl) volumeBarEl.style.width = `${volumePct}%`;
 }
 
 /* ============================================================
@@ -4627,6 +4521,7 @@ function renderDailySessionWidget() {
         }
         /* Sync the date input so the toggle button reflects the day they tapped */
         dateInput.value = k;
+        renderAll();
       });
     }
     dotsEl.appendChild(btn);
@@ -4669,6 +4564,7 @@ function renderDailySessionWidget() {
         addSessionForDate(dateStr);
         toast(`Workout logged for ${formatShortDate(dateStr)} 🌹`);
       }
+      renderAll();
     });
   }
   /* Empty-state CTA → settings → frequency tab */
